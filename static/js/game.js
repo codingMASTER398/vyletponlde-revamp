@@ -145,7 +145,7 @@ function setupGuesser(data) {
         makeYellowRedGreen("green");
         r({
           isCorrect: true,
-          input: title
+          input: title,
         });
         return;
       } else if (album == correctAlbum && !window.gameData.hidden) {
@@ -161,13 +161,17 @@ function setupGuesser(data) {
       // Already filled
       makeYellowRedGreen(data.color);
       element.querySelector(`input`).value = data.userGuess;
-      r({ isCorrect: data.color == "green", isYellow: data.color == "yellow", input: data.userGuess });
+      r({
+        isCorrect: data.color == "green",
+        isYellow: data.color == "yellow",
+        input: data.userGuess,
+      });
     } else if (data.hadCorrect) {
       // One above was correct, just return with grey
       makeYellowRedGreen("alreadyAbove");
       r({
         isCorrect: true,
-        input: ""
+        input: "",
       });
     }
   });
@@ -199,12 +203,10 @@ async function startNewRound() {
       );
     }
 
-    if (window.toLoad > 0) {
-      // Page is still loading
-      trackAudio[currentTrackNum].addEventListener(`canplaythrough`, () => {
-        window.toLoad--;
-      });
-    }
+    trackAudio[currentTrackNum].addEventListener(`canplaythrough`, () => {
+      window.toLoad--;
+      console.log(window.toLoad, "HERE")
+    });
   }
 
   gameState.tracks[currentTrackNum] ??= {
@@ -287,13 +289,13 @@ async function startNewRound() {
           : result.isYellow
             ? "yellow"
             : "red";
-    
+
     gameState.tracks[currentTrackNum].userGuess[num] = guess;
 
     if (result.isYellow && best == "red") best = "yellow";
     if (result.isCorrect) best = "green";
 
-    pushGameState()
+    pushGameState();
   };
 
   result = await setupGuesser({
@@ -306,7 +308,7 @@ async function startNewRound() {
     correctAlbum: currentTrackData.album,
     hadCorrect: result?.isCorrect,
     color: gameState.tracks[currentTrackNum].guesses[0] || null,
-    userGuess: gameState.tracks[currentTrackNum].userGuess[0] || null
+    userGuess: gameState.tracks[currentTrackNum].userGuess[0] || null,
   });
 
   calcBest(0, result.input);
@@ -322,7 +324,7 @@ async function startNewRound() {
     correctAlbum: currentTrackData.album,
     hadCorrect: result.isCorrect,
     color: gameState.tracks[currentTrackNum].guesses[1] || null,
-    userGuess: gameState.tracks[currentTrackNum].userGuess[1] || null
+    userGuess: gameState.tracks[currentTrackNum].userGuess[1] || null,
   });
 
   calcBest(1, result.input);
@@ -338,7 +340,7 @@ async function startNewRound() {
     correctAlbum: currentTrackData.album,
     hadCorrect: result.isCorrect,
     color: gameState.tracks[currentTrackNum].guesses[2] || null,
-    userGuess: gameState.tracks[currentTrackNum].userGuess[2] || null
+    userGuess: gameState.tracks[currentTrackNum].userGuess[2] || null,
   });
 
   calcBest(2, result.input);
@@ -370,7 +372,7 @@ function createGuessWrappers() {
 }
 
 function pushGameState() {
-  localStorage.setItem(window.runID, JSON.stringify(gameState))
+  localStorage.setItem(window.runID, JSON.stringify(gameState));
 }
 
 document.addEventListener(`DOMContentLoaded`, async () => {
@@ -383,10 +385,10 @@ document.addEventListener(`DOMContentLoaded`, async () => {
     (window.gameData.tracks[1].id + "-") +
     (window.gameData.tracks[2].id + "-") +
     (window.gameData.tracks[3].id + "-") +
-    (window.gameData.tracks[4].id);
+    window.gameData.tracks[4].id;
 
-  if(localStorage.getItem(window.runID)) {
-    gameState = JSON.parse(localStorage.getItem(window.runID))
+  if (localStorage.getItem(window.runID)) {
+    gameState = JSON.parse(localStorage.getItem(window.runID));
   }
   gameState.currentTrack = 0;
 
