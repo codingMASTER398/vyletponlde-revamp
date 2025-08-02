@@ -175,6 +175,15 @@
     });
   }
 
+  let loadedImages = []
+
+  function loadedImg(n) {
+    if(loadedImages.includes(n)) {
+      window.toLoad--;
+      loadedImages.push(n)
+    }
+  }
+
   document.addEventListener(`DOMContentLoaded`, async () => {
     loadingText.innerText = `loading content...`;
 

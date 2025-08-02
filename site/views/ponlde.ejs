@@ -10,7 +10,6 @@
       // Ignore the EJS error. We do this instead of calling the API
       // to save like 200ms. it's SO worth it.
       window.gameData = JSON.parse(<%- JSON.stringify(JSON.stringify(gameData)) %>);
-      window.toLoad++;
     </script>
 
     <!-- Preload some content -->
