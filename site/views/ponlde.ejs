@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include("blocks/preloads") %> <%- include("blocks/basicHead") %>
+
+    <link rel="stylesheet" href="/css/game.css" />
+    <link rel="stylesheet" href="/css/gameResults.css" />
+
+    <script>
+      // Ignore the EJS error. We do this instead of calling the API
+      // to save like 200ms. it's SO worth it.
+      window.gameData = JSON.parse(<%- JSON.stringify(JSON.stringify(gameData)) %>)
+    </script>
+
+    <!-- Preload some content -->
+    <link rel="preload" href="<%=gameData.tracks[0].audio%>" as="audio" />
+    <link rel="preload" href="/audio/click.ogg" as="audio" />
+
+    <% gameData.tracks.forEach((track)=>{ %>
+    <link rel="preload" href="/api/songData/thumbnail/<%=track.image%>.jpg" as="image" />
+    <% }) %>
+  </head>
+  <body>
+    <%- include("blocks/loader/html") %> <%- include("blocks/loader/script") %>
+    <%- include("blocks/titlebar") %>
+
+    <div class="center gameArea">
+      <div class="songIndicators">
+        <p style="margin: 0;margin-right: 1rem;"><%=gameData.copyDescription%></p>
+        <% for(i = 0; i < 5; i++) { %>
+        <div class="grey indicator"></div>
+        <% } %>
+      </div>
+
+      <%- include("blocks/game/songGuessWrapper") %>
+
+      <div class="roundEnd center">
+        <div class="finishedSong">
+          <img/>
+          <div class="data">
+            <h2>ANTONYMPH</h2>
+            <p>CUTIEMARKS (And the things that bind us)</p>
+            <a href="" target="_blank">Bandcamp</a>
+          </div>
+        </div>
+
+        <button class="nextButton shinyButton blueButton">next</button>
+      </div>
+    </div>
+
+    <div class="fullEnd center" style="display: none;">
+      <h1>Your results</h1>
+      <p style="margin: 0;"><%=gameData.copyDescription%></p>
+      <div class="resultsList">
+        <% for(let i = 0; i < 5; i++) { %>
+        <div class="result">
+          <img>
+          <p>N/A</p>
+          <div class="indicators">
+            <div class="indicator"></div>
+            <div class="indicator"></div>
+            <div class="indicator"></div>
+          </div>
+        </div>
+        <% } %>
+      </div>
+
+      <div class="score">
+        <div>
+          <h3 class="correctValue">0/5</h3>
+          <p>Correct</p>
+        </div>
+        <div>
+          <h3 class="scoreValue">0/15</h3>
+          <p>Score</p>
+        </div>
+        <div>
+          <h3 class="gradeValue">F</h3>
+          <p>Grade</p>
+        </div>
+      </div>
+
+      <div class="buttonArray">
+        <button class="shareButton shinyButton blueButton">share</button>
+        <button class="shinyButton homeButton">home</button>
+      </div>
+
+      <p class="copiedToClipboard">copied to clipboard!!</p>
+    </div>
+
+    <script src="/js/minisearch.js"></script>
+    <script src="/js/game.js"></script>
+    <script src="/js/gameUI.js"></script>
+  </body>
+</html>

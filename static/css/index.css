@@ -1,0 +1,168 @@
+/* Fonts */
+@font-face {
+  font-family: "MozillaText";
+  src: url(/font/MozillaText-VariableFont_wght.ttf);
+}
+
+/* Body */
+body {
+  background: white;
+  color: black;
+
+  margin: 3rem;
+  overflow-x: hidden;
+
+  font-family: "MozillaText";
+
+  --bxs-02: rgba(0, 0, 0, 0.2);
+  --bxs-04: rgba(0, 0, 0, 0.4);
+  --bxs-02-d: rgba(0, 0, 0, 0.2);
+  --bxs-04-d: rgba(0, 0, 0, 0.4);
+}
+
+body.dark {
+  background: #00000b;
+  color: #fff5e9;
+
+  --bxs-02: rgba(255, 255, 255, 0.2);
+  --bxs-04: rgba(255, 255, 255, 0.4);
+}
+
+/* Link styling */
+a {
+  color: #e670e2;
+}
+a:visited {
+  color: #883185;
+}
+body.dark a {
+  color: #ff93fb;
+}
+body.dark a:visited {
+  color: #e670e2;
+}
+
+/* Top uh bit of the page */
+
+.top {
+  width: 95%;
+  display: flex;
+  justify-content: space-between;
+
+  position: absolute;
+  top: 3rem;
+  left: 2.5%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.top .right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo {
+  cursor: pointer;
+  z-index: 99;
+  max-width: 100%;
+}
+
+/* Theme toggler */
+
+.themeToggle {
+  background-color: transparent;
+  border: none;
+  height: 64px;
+  cursor: pointer;
+}
+
+.themeToggle img {
+  height: 100%;
+  border-radius: 6px;
+  opacity: 0.5;
+}
+
+.themeToggle:hover img {
+  box-shadow: 0 12px 6px rgba(155, 155, 155, 0.5);
+  transition: 0.1s cubic-bezier(0.34, 1.56, 0.64, 1);
+  opacity: 1;
+}
+.themeToggle:active img {
+  box-shadow: none;
+  transform: translate(0, 12px);
+  transition: 0.1s;
+}
+
+/* Centered page content */
+.center {
+  display: flex;
+  align-items: center;
+  justify-self: center;
+  flex-direction: column;
+  width: 100%;
+  gap: 1rem;
+}
+
+.center .navigation {
+  text-align: center;
+}
+
+.navigation .tagline {
+  font-size: medium;
+}
+.navigation .authors {
+  font-size: small;
+}
+.navigation > * {
+  margin: 6px;
+}
+
+/* Shiny buttons */
+.shinyButton {
+  border-radius: 500px;
+  border: none;
+  background-color: #eee;
+  font-size: large;
+  padding: 0.3rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+
+  box-shadow:
+    0 -6px 12px var(--bxs-02-d) inset,
+    0 -2px 2px var(--bxs-02-d) inset,
+    0 6px 6px var(--bxs-02);
+  transition: 0.1s;
+
+  color: black;
+}
+
+.shinyButton.blueButton {
+  background: #b8deff;
+}
+
+.shinyButton:hover {
+  box-shadow:
+    0 -6px 12px var(--bxs-02-d) inset,
+    0 -2px 2px var(--bxs-04-d) inset,
+    0 6px 6px var(--bxs-04);
+  transition: 0.1s;
+  cursor: pointer;
+}
+
+.shinyButton:active {
+  box-shadow:
+    0 -6px 12px var(--bxs-02-d) inset,
+    0 -2px 2px var(--bxs-04-d) inset;
+  transform: translateY(3px);
+  transition: 0.1s;
+}
+
+/* Buttonarray */
+.buttonArray {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}

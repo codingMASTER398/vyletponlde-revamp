@@ -1,0 +1,185 @@
+<style>
+  #loaderWrap {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: white;
+    z-index: 999;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    font-size: small;
+    font-family:
+      monospace,
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      Oxygen,
+      Ubuntu,
+      Cantarell,
+      "Open Sans",
+      "Helvetica Neue",
+      sans-serif;
+  }
+  #loaderWrap.dark {
+    background: #00000b;
+    color: white;
+  }
+
+  #loaderWrap.out {
+    animation: loaderOut 0.2s ease-out forwards;
+  }
+  @keyframes loaderOut {
+    100% {
+      opacity: 0;
+      display: none;
+      pointer-events: none;
+    }
+  }
+
+  #loader {
+    max-width: 70%;
+    width: 600px;
+
+    animation: loaderIn 0.1s;
+  }
+
+  @keyframes loaderIn {
+    0% {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+  }
+
+  #loader .blocks {
+    aspect-ratio: 16/1;
+    display: flex;
+    justify-content: space-evenly;
+  }
+
+  #loader .blocks div {
+    height: 100%;
+    width: 100%;
+  }
+</style>
+
+<script>
+  const loadingColours = [
+    [
+      // Rainbow
+      "#622772",
+      "#2159a9",
+      "#358e3d",
+      "#f6eb1e",
+      "#f78a20",
+      "#e81f24",
+    ],
+    [
+      // blue yellow pink (forgot the flag)
+      "#20a5fd",
+      "#ffd202",
+      "#ff1e7f",
+    ],
+    [
+      // black purple white yellow (i know no flags)
+      "#000",
+      "#864fcc",
+      "#fff",
+      "#fcf028",
+    ],
+    [
+      // pink/white/orange (looks sick)
+      "#9a005c",
+      "#cd5a9b",
+      "#fff",
+      "#ff914c",
+      "#ca2e0c",
+    ],
+    [
+      // trans flag (finally one i remember)
+      "#50c6f9",
+      "#f99eb3",
+      "#fff",
+      "#f99eb3",
+      "#50c6f9",
+    ],
+    [
+      // yellow purple yellow (??)
+      "#fcd000",
+      "#6b069d",
+      "#fcd000",
+    ],
+    [
+      // blue purple pink (i think bisexual)
+      "#002c8a",
+      "#8e2c8e",
+      "#c9005e",
+    ],
+    [
+      // purple white grey black (i give up)
+      "#700072",
+      "#999",
+      "#fff",
+      "#000",
+    ],
+    [
+      // oh it's the the vylet one i think maybe what
+      "#ffc8c9",
+      "#c8cafe",
+      "#ff7d7f",
+      "#8a009f",
+      "#6296ff",
+      "#ff62db",
+    ],
+  ];
+
+  const loadingText = document.querySelector(`.loadingText`);
+
+  document.querySelector(`.loadingUA`).innerText = navigator.userAgent;
+
+  if (localStorage.getItem(`theme`) == "dark") {
+    document.querySelector(`#loaderWrap`).classList.add(`dark`);
+  }
+
+  window.toLoad = 2;
+
+  for (let i = 0; i < loadingColours.length; i++) {
+    setTimeout(() => {
+      document.querySelector(`#loader .blocks`).innerHTML = loadingColours[i]
+        .map((Colour) => {
+          return `<div style="background: ${Colour}"></div>`;
+        })
+        .join("");
+
+      if (i == loadingColours.length - 1) {
+        window.toLoad--;
+      }
+    }, i * 60);
+  }
+
+  function waitForZeroLoad() {
+    return new Promise((r) => {
+      let i = setInterval(() => {
+        if (window.toLoad <= 0) {
+          clearInterval(i);
+          r();
+        }
+      }, 100);
+    });
+  }
+
+  document.addEventListener(`DOMContentLoaded`, async () => {
+    loadingText.innerText = `loading content...`;
+
+    if(window.toLoad >= 1) await waitForZeroLoad();
+
+    document.querySelector(`#loaderWrap`).classList.add(`out`);
+  });
+</script>

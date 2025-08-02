@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include("blocks/preloads") %> <%- include("blocks/basicHead") %>
+  </head>
+  <body>
+    <%- include("blocks/loader/html") %> <%- include("blocks/loader/script") %>
+    <%- include("blocks/titlebar") %>
+
+    <div class="center">
+      <div style="text-align: left; width: 400px; max-width: 100%">
+        <h1>Songs</h1>
+        <p>every time you refresh this page, top five videos has to type this all out again. please thank vid for her work.</p>
+
+        <% tracks = Object.values(tracks).sort((a,b)=>a.album.localeCompare(b.album)) %>
+        <% let currentAlbum = ``, albumN = 0 %>
+        <% tracks.forEach((track)=>{ %>
+          <% if(currentAlbum != track.album) { %>
+            <% currentAlbum = track.album; albumN = 0; %>
+            <h3>> <%=track.album%></h3>
+          <% } %>
+
+          <% albumN++ %>
+
+          <p><%=albumN%>. <a href="https://vyletpony.bandcamp.com<%=track.url%>" target="_blank"><%=track.title%></a><br></p>
+        <% }) %>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include("blocks/preloads") %> <%- include("blocks/basicHead") %>
+  </head>
+  <body>
+    <%- include("blocks/loader/html") %> <%- include("blocks/loader/script") %>
+    <%- include("blocks/titlebar") %>
+
+    <div class="center">
+      <div style="text-align: left; width: 400px; max-width: 100%">
+        <h1>Archive - <%=archiveDescription%></h1>
+
+        <% data.forEach((d, i)=>{ %>
+          <p><a href="/archive/<%=d.date%>/<%=d.mode%>"><%=d.date%></a> <%=i == 0 ? "(today!)" : ""%></p><br>
+        <% }) %>
+      </div>
+    </div>
+  </body>
+</html>
