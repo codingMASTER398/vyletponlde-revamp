@@ -7,8 +7,6 @@ let gameState = {
   currentlyPlaying = false,
   audioStopShift = 0;
 
-window.toLoad++;
-
 // playTrack(trackAudio[0], 0, 10)
 // playTrack(trackAudio[0], 10, 12.9)
 // playTrack(trackAudio[0], 13, 13.9)
