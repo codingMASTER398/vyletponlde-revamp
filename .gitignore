@@ -2,3 +2,4 @@ node_modules
 webpunk/data/downloadCache/*
 db/ponlde.db
 package-lock.json
+site/.env

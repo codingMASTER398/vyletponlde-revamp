@@ -5,6 +5,8 @@ const config = require(`../config/site.json`);
 const express = require(`express`);
 const app = express();
 
+require('dotenv').config();
+
 app.use(require("compression")());
 
 const db = require(`../db/db`)
