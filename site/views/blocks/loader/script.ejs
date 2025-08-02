@@ -178,7 +178,7 @@
   let loadedImages = []
 
   function loadedImg(n) {
-    if(loadedImages.includes(n)) {
+    if(!loadedImages.includes(n)) {
       window.toLoad--;
       loadedImages.push(n)
     }
