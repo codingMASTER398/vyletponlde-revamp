@@ -26,7 +26,7 @@ function download(url, location) {
 
 // Process the bits
 
-(async () => {
+module.exports = (async () => {
   for (let i = 0; i < songs.length; i++) {
     const song = require(`./data/songs/${songs[i]}`);
 
@@ -34,4 +34,4 @@ function download(url, location) {
 
     download(song.download, `./data/downloadCache/${song.nameId}.mp3`);
   }
-})();
+});

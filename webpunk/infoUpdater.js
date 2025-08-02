@@ -219,13 +219,13 @@ async function updateSingles() {
   }
 }
 
-(async () => {
-  /*console.log(`Updating albums list...`);
+module.exports = (async () => {
+  console.log(`Updating albums list...`);
   await updateAlbumsList();
 
   console.log(`Updating albums...`);
-  await updateAlbums();*/
+  await updateAlbums();
 
   console.log(`Updating singles...`);
   await updateSingles();
-})();
+});

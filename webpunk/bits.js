@@ -48,7 +48,7 @@ function sleep(ms) {
   return new Promise((r)=>setTimeout(r, ms))
 }
 
-(async () => {
+module.exports =  (async () => {
   fs.rmdirSync(`./data/processingWork`, {
     recursive: true
   })
@@ -65,4 +65,4 @@ function sleep(ms) {
     //await sleep(2500)
     //return;
   }
-})();
+});

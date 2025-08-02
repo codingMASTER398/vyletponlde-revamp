@@ -14,8 +14,8 @@ function databaseInitialize() {
   days = db.addCollection("days");
   _lastDay = db.addCollection("lastDay");
 
-  days.removeWhere({});
-  _lastDay.removeWhere({});
+  //days.removeWhere({});
+  //_lastDay.removeWhere({});
 
   if (!_lastDay.findOne({})) {
     _lastDay.insertOne({
