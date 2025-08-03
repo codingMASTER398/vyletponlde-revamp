@@ -51,10 +51,10 @@
       </div>
     </div>
 
-    <div class="fullEnd <%=lb && 'lbContainer' || ''%>"  style="display: none;">
+    <div class="fullEnd <%=locals.lb && 'lbContainer' || ''%>"  style="display: none;">
       <!-- Leaderboard container -->
 
-      <div class="center <%=lb && 'lbLeft' || ''%>">
+      <div class="center <%=locals.lb && 'lbLeft' || ''%>">
         <!-- Results -->
         <h1>Your results</h1>
         <p style="margin: 0;"><%=gameData.copyDescription%></p>
@@ -99,7 +99,7 @@
       </div>
 
       <!-- Leaderboard -->
-      <% if(lb) { %>
+      <% if(locals.lb) { %>
         <%- include("blocks/leaderboard") %>
       <% } %>
     </div>
