@@ -31,4 +31,14 @@
   .result .indicators div {
     width: 24px !important;
   }
+
+  body .lbContainer {
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .lbContainer .leaderboard {
+    margin: 0;
+    padding: 0;
+    border-left: none;
+  }
 }

@@ -25,6 +25,7 @@
   overflow-y: scroll;
   text-align: center;
   font-family: monospace, "MozillaText";
+  color: black;
 }
 
 .leaderboard input[type=text] {
