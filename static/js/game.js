@@ -372,9 +372,9 @@ function createGuessWrappers() {
     text3 = `start of song`;
 
   if (window.gameData.lodestar) {
-    text1 = `0.1 seconds`;
-    text2 = `0.1 seconds`;
-    text3 = `0.1 seconds`;
+    text1 = `0.3 seconds`;
+    text2 = `0.3 seconds`;
+    text3 = `0.3 seconds`;
   } else if (window.gameData.hardcore) {
     text1 = `0.5 seconds`;
     text2 = `0.5 seconds`;
@@ -414,9 +414,9 @@ document.addEventListener(`DOMContentLoaded`, async () => {
   guess3End = 12.4;
 
   if (window.gameData.lodestar) {
-    guess1End = 14.1;
-    guess2End = 13.1;
-    guess3End = 11.6; // lodestar skips 1.5s into the start
+    guess1End = 14.3;
+    guess2End = 13.3;
+    guess3End = 11.8; // lodestar skips 1.5s into the start
   } else if (window.gameData.hardcore) {
     guess2End = 13.4;
     guess3End = 10.4;
