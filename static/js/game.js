@@ -417,8 +417,7 @@ document.addEventListener(`DOMContentLoaded`, async () => {
   // Get autocomplete data
   const autocompleteData = await (
     await fetch("/api/songData/autocomplete")
-  ) // TODO: prefetch
-    .json();
+  ).json();
 
   window.autocompleteData = autocompleteData;
 

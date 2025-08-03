@@ -216,6 +216,8 @@ function endGameUI() {
   lbButton.addEventListener(`click`, async () => {
     lbButton.classList.add(`disabled`);
 
+    clickSound();
+
     const name = document.querySelector(`.lbNick`).value;
     if (name.length != 5) {
       alert(`Nick must be 5 characters long!`);
