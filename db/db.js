@@ -70,6 +70,8 @@ function databaseInitialize() {
   for (let i = 0; i < allDays.length; i++) {
     let day = allDays[i];
 
+    console.log(day)
+
     if(day.date == "2025-08-04") {
       day.date = "2025-08-03"
       days.update(day)
