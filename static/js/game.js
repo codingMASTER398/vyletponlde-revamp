@@ -346,7 +346,7 @@ async function startNewRound() {
   result = await setupGuesser({
     // Sets it up and waits for the uh user to be done with it
     className: "sstart",
-    start: window.gameData.lodestar ? 11.5 : 10,
+    start: 10,
     end: guess3End,
     audio: trackAudio[currentTrackNum],
     correctId: currentTrackData.id,
@@ -371,11 +371,7 @@ function createGuessWrappers() {
     text2 = `1 second`,
     text3 = `start of song`;
 
-  if (window.gameData.lodestar) {
-    text1 = `0.3 seconds`;
-    text2 = `0.3 seconds`;
-    text3 = `0.3 seconds`;
-  } else if (window.gameData.hardcore) {
+  if (window.gameData.hardcore || window.gameData.lodestar) {
     text1 = `0.5 seconds`;
     text2 = `0.5 seconds`;
     text3 = `0.5s start`;
@@ -413,11 +409,7 @@ document.addEventListener(`DOMContentLoaded`, async () => {
   guess2End = 13.9;
   guess3End = 12.4;
 
-  if (window.gameData.lodestar) {
-    guess1End = 14.3;
-    guess2End = 13.3;
-    guess3End = 11.8; // lodestar skips 1.5s into the start
-  } else if (window.gameData.hardcore) {
+  if (window.gameData.hardcore || window.gameData.lodestar) {
     guess2End = 13.4;
     guess3End = 10.4;
   }

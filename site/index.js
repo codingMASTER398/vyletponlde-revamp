@@ -27,7 +27,7 @@ app.use("/archive", archives);
 app.use("/", ponlde);
 
 app.get("/", (_, res) => res.render("home"));
-app.get("/about", (_, res) => res.render("about"));
+app.get("/about", (_, res) => res.render("about", {config}));
 app.get("/songs", (_, res) => res.render("songs", {tracks}));
 
 app.use(

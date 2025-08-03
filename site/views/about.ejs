@@ -43,7 +43,22 @@
         <p><b>classic</b> is where albums don't light up yellow, like the lifelike.dev version.</p>
         <p><b>oneshot</b> fails you if you get a single song wrong.</p>
         <p><b>hardcore</b> is only the niche and old songs. also, only 0.5s ones.</p>
-        <p><b>lodestar</b> is oneshot, hidden, and hardcore combined. also only 0.3s.</p>
+        <p><b>lodestar</b> is oneshot, hidden, and hardcore combined.</p>
+
+        <br />
+        <p><b>.-* easy/hardcore albums</b></p>
+        <p>The <b>easy</b> mode only has these albums:</p>
+        <ul>
+          <% config.easyAlbums.forEach((al)=>{ %>
+          <li><%=al%></li>
+          <% }) %>
+        </ul>
+        <p>And <b>hardcore</b> mode has no easy albums or the below:</p>
+        <ul>
+          <% config.neutralAlbums.forEach((al)=>{ %>
+          <li><%=al%></li>
+          <% }) %>
+        </ul>
 
         <br />
         <p><b>.-* source</b></p>
