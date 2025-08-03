@@ -70,11 +70,11 @@ function databaseInitialize() {
   for (let i = 0; i < allDays.length; i++) {
     let day = allDays[i];
 
-    if(day.date == "2025-07-03") {
-      day.date = "2025-08-04"
+    if(day.date == "2025-08-03") {
+      day.date = "2025-08-02"
       days.update(day)
     }
-    if(day.date == "2025-07-02") {
+    if(day.date == "2025-08-04") {
       day.date = "2025-08-03"
       days.update(day)
     }
