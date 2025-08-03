@@ -34,7 +34,7 @@ function databaseInitialize() {
     console.log(`New day!`);
 
     const baseData = {
-      date: `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}-${String(new Date().getDate() + 1).padStart(2, "0")}`,
+      date: `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}-${String(new Date().getDate()).padStart(2, "0")}`,
       day: today,
     };
 
@@ -69,10 +69,6 @@ function databaseInitialize() {
   const allDays = days.find({})
   for (let i = 0; i < allDays.length; i++) {
     let day = allDays[i];
-
-    if(day.date == "2025-08-04") {
-      day.date = "2025-08-03"
-    }
     
     if(leaderboard.findOne({
       date: day.date,
