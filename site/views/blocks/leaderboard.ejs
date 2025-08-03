@@ -1,0 +1,10 @@
+<div class="center leaderboard lbRight">
+  <h1 style="margin: 0;">Leaderboard</h1>
+  <div class="leaderboardContent">
+    <%- include("./leaderboardContent")%>
+  </div>
+  <% if(lb.canSubmit) { %>
+  <input class="lbNick" type="text" placeholder="5-letter nick" maxlength="5" oninput="this.value = this.value.toUpperCase()">
+  <button class="leaderboardButton shinyButton blueButton" data-url="<%=lb.submitURL%>">post</button>
+  <% } %>
+</div>

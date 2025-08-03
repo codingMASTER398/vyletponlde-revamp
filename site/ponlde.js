@@ -4,6 +4,7 @@ const router = express.Router()
 const gameAPI = require(`../api/game`)
 
 const db = require(`../db/db`)
+const leaderboard = require(`../api/leaderboard.js`)
 
 // Infinites
 router.get(`/infinite`, (req, res)=>{
@@ -70,7 +71,8 @@ router.get(`/lodestar`, (req, res)=>{
     copyDescription: "🌠 LODESTAR",
     hidden: true,
     oneshot: true,
-    hardcore: true
+    hardcore: true,
+    lodestar: true
   };
 
   res.render(`ponlde.ejs`, {
@@ -84,11 +86,15 @@ router.get(`/daily`, (req, res)=>{
 
   const gameData = {
     ...mostRecent.data,
-    copyDescription: `daily ${mostRecent.date}`
+    copyDescription: `daily ${mostRecent.date}`,
+    daily: true
   };
 
+  const lb = leaderboard.dailyData(req, mostRecent.date, mostRecent.mode);
+
   res.render(`ponlde.ejs`, {
-    gameData
+    gameData,
+    lb
   })
 })
 
@@ -97,11 +103,15 @@ router.get(`/easy`, (req, res)=>{
 
   const gameData = {
     ...mostRecent.data,
-    copyDescription: `daily easy ${mostRecent.date}`
+    copyDescription: `daily easy ${mostRecent.date}`,
+    daily: true
   };
 
+  const lb = leaderboard.dailyData(req, mostRecent.date, mostRecent.mode);
+
   res.render(`ponlde.ejs`, {
-    gameData
+    gameData,
+    lb
   })
 })
 
@@ -118,11 +128,15 @@ router.get(`/archive/:date/:mode`, (req, res)=>{
 
   const gameData = {
     ...found.data,
-    copyDescription
+    copyDescription,
+    daily: true
   };
 
+  const lb = leaderboard.dailyData(req, found.date, found.mode);
+
   res.render(`ponlde.ejs`, {
-    gameData
+    gameData,
+    lb
   })
 })
 

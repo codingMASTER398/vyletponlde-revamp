@@ -9,7 +9,7 @@
 
     <div class="center">
       <div style="text-align: left; width: 400px; max-width: 100%">
-        <h1>Songs</h1>
+        <h1>Songs (<%=Object.keys(tracks).length%>)</h1>
         <p>every time you refresh this page, top five videos has to type this all out again. please thank vid for her work.</p>
 
         <% tracks = Object.values(tracks).sort((a,b)=>a.album.localeCompare(b.album)) %>

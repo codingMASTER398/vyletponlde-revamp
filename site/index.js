@@ -2,6 +2,7 @@
 
 const config = require(`../config/site.json`);
 
+const requestIp = require('request-ip');
 const express = require(`express`);
 const app = express();
 
@@ -18,6 +19,7 @@ const webpunker = require(`../webpunk/webpunkTask`)
 
 //
 app.set(`view engine`, `ejs`);
+app.use(requestIp.mw())
 
 app.use("/api", api);
 

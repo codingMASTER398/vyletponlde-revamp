@@ -217,32 +217,3 @@ body.dark .finishedSong {
     transform: translateY(12px);
   }
 }
-
-/* Indicators */
-.songIndicators {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 0.5rem;
-  gap: 0.2rem;
-}
-
-.songIndicators div {
-  width: 16px;
-  height: 16px;
-  background-color: #999;
-  box-shadow: 0 -2px 3px rgba(0, 0, 0, 0.5) inset;
-}
-
-.indicator.green {
-  background-color: #6EF4AD !important;
-  transition: 1s;
-}
-.indicator.red {
-  background-color: #F55962 !important;
-  transition: 1s;
-}
-.indicator.yellow {
-  background-color: #FDA361 !important;
-  transition: 1s;
-}

@@ -8,9 +8,10 @@ const db = new loki("../db/ponlde.db", {
 
 const gameAPI = require(`../api/game`);
 
-let days;
+let days, leaderboard;
 
 function databaseInitialize() {
+  leaderboard = db.addCollection("leaderboard");
   days = db.addCollection("days");
   _lastDay = db.addCollection("lastDay");
 
@@ -43,17 +44,46 @@ function databaseInitialize() {
       data: gameAPI.getGameData("normal"),
     });
 
+    leaderboard.insertOne({
+      date: baseData.date,
+      mode: "normal",
+      scores: []
+    })
+
     days.insertOne({
       ...baseData,
       mode: "easy",
       data: gameAPI.getGameData("easy"),
     });
 
+    leaderboard.insertOne({
+      date: baseData.date,
+      mode: "easy",
+      scores: []
+    })
+
     lastDay.day = today;
     _lastDay.update(lastDay);
   }, 1000);
+
+  const allDays = days.find({})
+  for (let i = 0; i < allDays.length; i++) {
+    const day = allDays[i];
+    
+    if(leaderboard.findOne({
+      date: day.date,
+      mode: day.mode
+    })) return;
+
+    leaderboard.insertOne({
+      date: day.date,
+      mode: day.mode,
+      scores: []
+    })
+  }
 }
 
 module.exports = {
   days: ()=>days,
+  leaderboard: ()=>leaderboard
 };

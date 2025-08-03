@@ -12,9 +12,21 @@
         <h1>Archive - <%=archiveDescription%></h1>
 
         <% data.forEach((d, i)=>{ %>
-          <p><a href="/archive/<%=d.date%>/<%=d.mode%>"><%=d.date%></a> <%=i == 0 ? "(today!)" : ""%></p><br>
+          <div class="songIndicators inline" data-localstore-id="<%=generateRunID(d)%>">
+            <div class="indicator"></div>
+            <div class="indicator"></div>
+            <div class="indicator"></div>
+            <div class="indicator"></div>
+            <div class="indicator"></div>
+            <p style="margin: 0;">
+              <b class="score">00/15</b>
+              <a href="/archive/<%=d.date%>/<%=d.mode%>"><%=d.date%></a>
+              <%=i == 0 ? "(today!)" : ""%></p>
+          </div>
         <% }) %>
       </div>
     </div>
+
+    <script src="/js/archive.js"></script>
   </body>
 </html>

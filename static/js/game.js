@@ -5,7 +5,10 @@ let gameState = {
   },
   trackAudio = [],
   currentlyPlaying = false,
-  audioStopShift = 0;
+  audioStopShift = 0,
+  guess1End,
+  guess2End,
+  guess3End;
 window.toLoad++;
 
 // playTrack(trackAudio[0], 0, 10)
@@ -14,6 +17,11 @@ window.toLoad++;
 // playTrack(trackAudio[0], 14, 14.5)
 
 const clicky = new Audio("/audio/click.ogg");
+
+function clickSound() {
+  clicky.volume = window.volume;
+  clicky.play();
+}
 
 function stopAudio() {
   audioStopShift++;
@@ -130,8 +138,7 @@ function setupGuesser(data) {
 
     element.querySelector(`.skipButton`).addEventListener(`click`, () => {
       if (done) return;
-      clicky.volume = window.volume;
-      clicky.play();
+      clickSound();
       element.querySelector(`.resultBox`).style.display = "none";
       element.querySelector(`input`).value = "Skipped";
       makeYellowRedGreen("red");
@@ -146,7 +153,7 @@ function setupGuesser(data) {
         makeYellowRedGreen("green");
         r({
           isCorrect: true,
-          input: title
+          input: title,
         });
         return;
       } else if (album == correctAlbum && !window.gameData.hidden) {
@@ -162,13 +169,17 @@ function setupGuesser(data) {
       // Already filled
       makeYellowRedGreen(data.color);
       element.querySelector(`input`).value = data.userGuess;
-      r({ isCorrect: data.color == "green", isYellow: data.color == "yellow", input: data.userGuess });
+      r({
+        isCorrect: data.color == "green",
+        isYellow: data.color == "yellow",
+        input: data.userGuess,
+      });
     } else if (data.hadCorrect) {
       // One above was correct, just return with grey
       makeYellowRedGreen("alreadyAbove");
       r({
         isCorrect: true,
-        input: ""
+        input: "",
       });
     }
   });
@@ -260,8 +271,7 @@ async function startNewRound() {
     document.querySelector(`.nextButton`).addEventListener(
       `click`,
       () => {
-        clicky.volume = window.volume;
-        clicky.play();
+        clickSound();
 
         stopAudio();
 
@@ -288,26 +298,30 @@ async function startNewRound() {
           : result.isYellow
             ? "yellow"
             : "red";
-    
+
     gameState.tracks[currentTrackNum].userGuess[num] = guess;
 
     if (result.isYellow && best == "red") best = "yellow";
-    if (result.isCorrect) best = "green";
+    if (result.isCorrect && best != "green") {
+      // tada!!
+      best = "green";
+      confettiCorrect();
+    }
 
-    pushGameState()
+    pushGameState();
   };
 
   result = await setupGuesser({
     // Sets it up and waits for the uh user to be done with it
     className: "s05",
     start: 14,
-    end: 14.45,
+    end: guess1End,
     audio: trackAudio[currentTrackNum],
     correctId: currentTrackData.id,
     correctAlbum: currentTrackData.album,
     hadCorrect: result?.isCorrect,
     color: gameState.tracks[currentTrackNum].guesses[0] || null,
-    userGuess: gameState.tracks[currentTrackNum].userGuess[0] || null
+    userGuess: gameState.tracks[currentTrackNum].userGuess[0] || null,
   });
 
   calcBest(0, result.input);
@@ -317,13 +331,13 @@ async function startNewRound() {
     // Sets it up and waits for the uh user to be done with it
     className: "s1",
     start: 13,
-    end: window.gameData.hardcore ? 13.4 : 13.9,
+    end: guess2End,
     audio: trackAudio[currentTrackNum],
     correctId: currentTrackData.id,
     correctAlbum: currentTrackData.album,
     hadCorrect: result.isCorrect,
     color: gameState.tracks[currentTrackNum].guesses[1] || null,
-    userGuess: gameState.tracks[currentTrackNum].userGuess[1] || null
+    userGuess: gameState.tracks[currentTrackNum].userGuess[1] || null,
   });
 
   calcBest(1, result.input);
@@ -332,14 +346,14 @@ async function startNewRound() {
   result = await setupGuesser({
     // Sets it up and waits for the uh user to be done with it
     className: "sstart",
-    start: 10,
-    end: window.gameData.hardcore ? 10.4 : 12.9,
+    start: window.gameData.lodestar ? 11.5 : 10,
+    end: guess3End,
     audio: trackAudio[currentTrackNum],
     correctId: currentTrackData.id,
     correctAlbum: currentTrackData.album,
     hadCorrect: result.isCorrect,
     color: gameState.tracks[currentTrackNum].guesses[2] || null,
-    userGuess: gameState.tracks[currentTrackNum].userGuess[2] || null
+    userGuess: gameState.tracks[currentTrackNum].userGuess[2] || null,
   });
 
   calcBest(2, result.input);
@@ -353,25 +367,27 @@ function createGuessWrappers() {
   list.offsetWidth;
   list.classList.add(`in`);
 
-  list.appendChild(createGuessWrapper(`0.5 seconds`, "s05"));
-  list.appendChild(
-    createGuessWrapper(
-      window.gameData.hardcore ? `0.5 seconds` : `1 second`,
-      "s1",
-      true
-    )
-  );
-  list.appendChild(
-    createGuessWrapper(
-      window.gameData.hardcore ? `0.5 seconds start` : `start of song`,
-      "sstart",
-      true
-    )
-  );
+  let text1 = `0.5 seconds`,
+    text2 = `1 second`,
+    text3 = `start of song`;
+
+  if (window.gameData.lodestar) {
+    text1 = `0.1 seconds`;
+    text2 = `0.1 seconds`;
+    text3 = `0.1 seconds`;
+  } else if (window.gameData.hardcore) {
+    text1 = `0.5 seconds`;
+    text2 = `0.5 seconds`;
+    text3 = `0.5s start`;
+  }
+
+  list.appendChild(createGuessWrapper(text1, "s05"));
+  list.appendChild(createGuessWrapper(text2, "s1", true));
+  list.appendChild(createGuessWrapper(text3, "sstart", true));
 }
 
 function pushGameState() {
-  localStorage.setItem(window.runID, JSON.stringify(gameState))
+  localStorage.setItem(window.runID, JSON.stringify(gameState));
 }
 
 document.addEventListener(`DOMContentLoaded`, async () => {
@@ -384,17 +400,33 @@ document.addEventListener(`DOMContentLoaded`, async () => {
     (window.gameData.tracks[1].id + "-") +
     (window.gameData.tracks[2].id + "-") +
     (window.gameData.tracks[3].id + "-") +
-    (window.gameData.tracks[4].id);
+    window.gameData.tracks[4].id;
 
-  if(localStorage.getItem(window.runID)) {
-    gameState = JSON.parse(localStorage.getItem(window.runID))
+  // Parse the saved state
+  if (localStorage.getItem(window.runID)) {
+    gameState = JSON.parse(localStorage.getItem(window.runID));
   }
   gameState.currentTrack = 0;
+
+  // Set the end times of the guesses
+  guess1End = 14.45;
+  guess2End = 13.9;
+  guess3End = 12.4;
+
+  if (window.gameData.lodestar) {
+    guess1End = 14.1;
+    guess2End = 13.1;
+    guess3End = 11.6; // lodestar skips 1.5s into the start
+  } else if (window.gameData.hardcore) {
+    guess2End = 13.4;
+    guess3End = 10.4;
+  }
 
   // Get autocomplete data
   const autocompleteData = await (
     await fetch("/api/songData/autocomplete")
-  ).json();
+  ) // TODO: prefetch
+    .json();
 
   window.autocompleteData = autocompleteData;
 

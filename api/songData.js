@@ -4,6 +4,7 @@ const router = express.Router();
 const tracks = require(`../util/tracks`)
 
 router.get("/autocomplete", (req, res)=>{
+  res.set('Cache-Control', 'public, max-age=360000');
   res.send(Object.values(tracks).map((track)=>{
     return {
       n: track.title,

@@ -7,6 +7,9 @@
 .fullEnd.in .score {
   animation: roundEndIn 2s;
 }
+.fullEnd.in .leaderboard {
+  animation: roundEndIn 3s;
+}
 
 .resultsList {
   display: flex;

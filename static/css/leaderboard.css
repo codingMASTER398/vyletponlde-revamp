@@ -1,0 +1,35 @@
+.center.lbLeft, .leaderboard.center.lbRight {
+  width: fit-content;
+}
+
+.lbContainer:has(.lbLeft) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.leaderboard {
+  margin-left: 1rem;
+  padding-left: 2rem;
+  box-sizing: border-box;
+  border-left: 1px dashed #999;
+  height: 547px;
+}
+
+.leaderboardContent {
+  height: 100%;
+  width: 200px;
+  background-color: #eee;
+  border-top: 1px solid #999;
+  border-bottom: 1px solid #999;
+  overflow-y: scroll;
+  text-align: center;
+  font-family: monospace, "MozillaText";
+}
+
+.leaderboard input[type=text] {
+  border: 1px solid #999;
+  padding-left: 6px;
+  padding-right: 6px;
+  text-align: center;
+}

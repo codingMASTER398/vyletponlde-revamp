@@ -129,7 +129,9 @@ function endGameUI() {
 
     element.querySelector(`img`).src =
       `/api/songData/thumbnail/${track.image}.jpg`;
-    element.querySelector(`p`).innerText = track.title;
+    element.querySelector(`a`).innerText = track.title;
+    element.querySelector(`a`).href =
+      "https://vyletpony.bandcamp.com/" + window.gameData.tracks[i].bandcamp;
 
     if (track.guesses.includes("green")) correct++;
 
@@ -138,6 +140,7 @@ function endGameUI() {
       const indicator = element.querySelector(`.indicators`).children[ii];
 
       indicator.classList.add(value);
+      indicator.setAttribute(`title`, track.userGuess[ii] || "N/A");
 
       if (value == "green" || value == "grey") score += 1;
       else if (value == "yellow") score += 0.5;
@@ -146,22 +149,25 @@ function endGameUI() {
 
   score = Number(score.toFixed(1)); // Fix any floating points
 
-  let grade = `F`
-  if(score >= 1) grade = "E-";
-  if(score >= 2) grade = "E";
-  if(score >= 3) grade = "E+";
-  if(score >= 4) grade = "D-";
-  if(score >= 5) grade = "D";
-  if(score >= 6) grade = "D+";
-  if(score >= 7) grade = "C-";
-  if(score >= 8) grade = "C";
-  if(score >= 9) grade = "C+";
-  if(score >= 10) grade = "B-";
-  if(score >= 11) grade = "B";
-  if(score >= 12) grade = "B+";
-  if(score >= 13) grade = "A-";
-  if(score >= 14) grade = "A";
-  if(score == 15) grade = "A+";
+  let grade = `F`;
+  if (score >= 1) grade = "E-";
+  if (score >= 2) grade = "E";
+  if (score >= 3) grade = "E+";
+  if (score >= 4) grade = "D-";
+  if (score >= 5) grade = "D";
+  if (score >= 6) grade = "D+";
+  if (score >= 7) grade = "C-";
+  if (score >= 8) grade = "C";
+  if (score >= 9) grade = "C+";
+  if (score >= 10) grade = "B-";
+  if (score >= 11) grade = "B";
+  if (score >= 12) grade = "B+";
+  if (score >= 13) grade = "A-";
+  if (score >= 14) grade = "A";
+  if (score == 15) grade = "A+";
+
+  if (score >= 15) confettiWinBig();
+  if (score >= 10) confettiWin();
 
   document.querySelector(`.gameArea`).style.display = "none";
   document.querySelector(`.fullEnd`).style.display = "";
@@ -171,6 +177,7 @@ function endGameUI() {
   document.querySelector(`.gradeValue`).innerText = grade;
 
   document.querySelector(`.homeButton`).addEventListener(`click`, () => {
+    clickSound();
     window.location.href = "/";
   });
 
@@ -197,7 +204,87 @@ function endGameUI() {
     text += `\nvylet ponlde revamp ${window.location.href}`;
 
     copyTextToClipboard(text);
+    clickSound();
 
     document.querySelector(`.copiedToClipboard`).classList.add(`exists`);
   });
+
+  const lbButton = document.querySelector(`.leaderboardButton`);
+
+  if (!lbButton) return;
+
+  lbButton.addEventListener(`click`, async () => {
+    lbButton.classList.add(`disabled`);
+
+    const name = document.querySelector(`.lbNick`).value;
+    if (name.length != 5) {
+      alert(`Nick must be 5 characters long!`);
+      lbButton.classList.remove(`disabled`);
+      return;
+    }
+
+    const response = await fetch(
+      lbButton
+        .getAttribute(`data-url`)
+        .replace(`%score`, score)
+        .replace(`%name`, name),
+      {
+        method: "POST",
+      }
+    );
+
+    if (response.status != 200) {
+      alert(await response.text());
+      lbButton.classList.remove(`disabled`);
+      return;
+    }
+
+    document.querySelector(`.leaderboardContent`).innerHTML =
+      await response.text();
+
+    const squee = new Audio(`/audio/squee.ogg`);
+    squee.volume = window.volume;
+    squee.play();
+
+    lbButton.innerText = `Added`
+  });
+}
+
+// confetti
+function confettiCorrect() {
+  confetti({
+    particleCount: 100,
+    spread: 100,
+    origin: { y: 0.5 },
+  });
+}
+
+function confettiWin() {
+  confetti({
+    particleCount: 200,
+    spread: 100,
+    origin: { y: 0.5 },
+    decay: 0.95,
+    ticks: 500,
+  });
+
+  const squee = new Audio(`/audio/squee.ogg`);
+  squee.volume = window.volume;
+  squee.play();
+}
+
+function confettiWinBig() {
+  confetti({
+    particleCount: 50,
+    spread: 100,
+    origin: { y: 0.5 },
+    decay: 0.95,
+    ticks: 900,
+    shapes: [confetti.shapeFromText({ text: "🦄", scalar: 2 })],
+    scalar: 5,
+  });
+
+  const yay = new Audio(`/audio/yay.ogg`);
+  yay.volume = window.volume;
+  yay.play();
 }
