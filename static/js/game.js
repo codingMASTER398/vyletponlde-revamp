@@ -9,12 +9,8 @@ let gameState = {
   guess1End,
   guess2End,
   guess3End;
-window.toLoad++;
 
-// playTrack(trackAudio[0], 0, 10)
-// playTrack(trackAudio[0], 10, 12.9)
-// playTrack(trackAudio[0], 13, 13.9)
-// playTrack(trackAudio[0], 14, 14.5)
+window.toLoad++;
 
 const clicky = new Audio("/audio/click.ogg");
 
@@ -27,7 +23,7 @@ function stopAudio() {
   audioStopShift++;
 }
 
-function playTrack(audio, from, to, element, disableOtherPlays = true) {
+async function playTrack(audio, from, to, element, disableOtherPlays = true) {
   // Play a part of a track chunk. Stops all other tracks from playing.
   if (disableOtherPlays) currentlyPlaying = true;
 
@@ -46,20 +42,22 @@ function playTrack(audio, from, to, element, disableOtherPlays = true) {
     progress.classList.add(`t`);
   }
 
-  audio.play();
+  await audio.play();
   audio.volume = window.volume;
   audio.currentTime = from;
 
-  let currentShift = Number(audioStopShift);
+  let currentShift = Number(audioStopShift), passed = 0, lastProcess = performance.now();
 
-  let checkInterval = setInterval(() => {
+  let checkInterval = () => {
+    passed += (performance.now() - lastProcess) * 0.001;
+    lastProcess = performance.now();
+
     if (
-      audio.currentTime >= to - 0.05 ||
+      passed >= to - from ||
       audioStopShift != currentShift ||
       audio.paused
     ) {
       audio.pause();
-      clearInterval(checkInterval);
 
       if (disableOtherPlays) currentlyPlaying = false;
       if (!element) return;
@@ -73,7 +71,10 @@ function playTrack(audio, from, to, element, disableOtherPlays = true) {
     }
 
     audio.volume = window.volume;
-  }, 1);
+    requestAnimationFrame(checkInterval);
+  };
+
+  requestAnimationFrame(checkInterval);
 }
 
 function setupAutoComplete(element) {
@@ -190,6 +191,42 @@ async function loadGameState() {
   startNewRound();
 }
 
+function loadTrackAudio(trackNum, data) {
+  let loader = false;
+  if (window.toLoad > 0) {
+    window.toLoad++;
+    loader = true;
+  }
+
+  trackAudio[trackNum] ??= {}
+
+  // Edge case for archives before 8/4/25
+  if(typeof data.slice1 === "undefined") data.slice1 = 5;
+  if(typeof data.slice2 === "undefined") data.slice2 = 3;
+  if(!data.audio.endsWith(`.ogg.ogg`)) data.audio += `.ogg`; // dual weild
+
+  trackAudio[trackNum].base = new Audio(`/api/audio/base/${data.audio}`);
+  trackAudio[trackNum].one = new Audio(
+    `/api/audio/tiny/${data.slice1}-${data.audio}`
+  );
+  trackAudio[trackNum].two = new Audio(
+    `/api/audio/tiny/${data.slice2}-${data.audio}`
+  );
+
+  trackAudio[trackNum].base.addEventListener(`canplaythrough`, () => {
+    if (loader) window.toLoad--;
+
+    setTimeout(() => {
+      // Preload next
+      if (
+        window.gameData.tracks[trackNum + 1] &&
+        !trackAudio[trackNum + 1]?.base
+      )
+        loadTrackAudio(trackNum + 1, window.gameData.tracks[trackNum + 1]);
+    }, 1000);
+  });
+}
+
 async function startNewRound() {
   // Clean up old data
   document.querySelector(`.roundEnd`).classList.remove(`in`);
@@ -199,26 +236,14 @@ async function startNewRound() {
   const currentTrackData = window.gameData.tracks[gameState.currentTrack],
     currentTrackNum = gameState.currentTrack;
 
-  if (!trackAudio[currentTrackNum]) {
-    // Load track audio
-    trackAudio[currentTrackNum] = new Audio(currentTrackData.audio);
+  // Load track audio
+  trackAudio[currentTrackNum] ??= {}
 
-    // Preload the next track
-    if (window.gameData.tracks[gameState.currentTrack + 1]) {
-      // lolololololololol
-      trackAudio[currentTrackNum + 1] = new Audio(
-        window.gameData.tracks[gameState.currentTrack + 1].audio
-      );
-    }
-
-    if (window.toLoad > 0) {
-      // Page is still loading
-      trackAudio[currentTrackNum].addEventListener(`canplaythrough`, () => {
-        window.toLoad--;
-      });
-    }
+  if (!trackAudio[currentTrackNum].base) {
+    loadTrackAudio(currentTrackNum, currentTrackData);
   }
 
+  // Set up the state if it doesn't exist already
   gameState.tracks[currentTrackNum] ??= {
     guesses: [],
     userGuess: [],
@@ -241,7 +266,7 @@ async function startNewRound() {
 
     setTimeout(() => {
       // Play a 10s preview of the track
-      playTrack(trackAudio[currentTrackNum], 0, 10, false, false);
+      playTrack(trackAudio[currentTrackNum].base, 0, 10, false, false);
     }, 100);
 
     // Show the end track info
@@ -314,9 +339,9 @@ async function startNewRound() {
   result = await setupGuesser({
     // Sets it up and waits for the uh user to be done with it
     className: "s05",
-    start: 14,
+    start: 0,
     end: guess1End,
-    audio: trackAudio[currentTrackNum],
+    audio: trackAudio[currentTrackNum].one,
     correctId: currentTrackData.id,
     correctAlbum: currentTrackData.album,
     hadCorrect: result?.isCorrect,
@@ -330,9 +355,9 @@ async function startNewRound() {
   result = await setupGuesser({
     // Sets it up and waits for the uh user to be done with it
     className: "s1",
-    start: 13,
+    start: 0,
     end: guess2End,
-    audio: trackAudio[currentTrackNum],
+    audio: trackAudio[currentTrackNum].two,
     correctId: currentTrackData.id,
     correctAlbum: currentTrackData.album,
     hadCorrect: result.isCorrect,
@@ -348,7 +373,7 @@ async function startNewRound() {
     className: "sstart",
     start: 10,
     end: guess3End,
-    audio: trackAudio[currentTrackNum],
+    audio: trackAudio[currentTrackNum].base,
     correctId: currentTrackData.id,
     correctAlbum: currentTrackData.album,
     hadCorrect: result.isCorrect,
@@ -405,13 +430,13 @@ document.addEventListener(`DOMContentLoaded`, async () => {
   gameState.currentTrack = 0;
 
   // Set the end times of the guesses
-  guess1End = 14.45;
-  guess2End = 13.9;
-  guess3End = 12.4;
+  guess1End = 0.5;
+  guess2End = 1;
+  guess3End = 12.5; // with the fade taken into account
 
   if (window.gameData.hardcore || window.gameData.lodestar) {
-    guess2End = 13.4;
-    guess3End = 10.4;
+    guess2End = 0.5;
+    guess3End = 10.5; // with the fade taken into account
   }
 
   // Get autocomplete data
@@ -440,4 +465,6 @@ document.addEventListener(`DOMContentLoaded`, async () => {
 
   // Load the game state
   loadGameState();
+
+  window.toLoad--;
 });

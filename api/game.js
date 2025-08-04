@@ -39,23 +39,49 @@ function getGameData(mode = "") {
     .sort((a, b) => a.sort - b.sort)
     .slice(0, 5)
     .map(({ value }) => {
+      const slice1 = Math.floor(Math.random() * 9) + 1;
+      let slice2 = -1;
+
+      while(slice2 == -1 || slice2 == slice1) {
+        slice2 = Math.floor(Math.random() * 9) + 1;
+      }
+
       return {
         title: value.title,
-        audio: `/api/audio/${value.nameId}.ogg`,
+        audio: value.nameId + ".ogg", // lol .ogg.ogg, dual weilding
         album: value.album,
         bandcamp: value.url,
         id: value.id,
         image: getImageId(value),
+        slice1, slice2
       };
     });
 
   return {
     tracks: tracksToSend,
-    mode
+    mode,
+    v: 1
   };
+}
+
+function fixGameData(data) {
+  if(!data.v && !data.tracks[0].v) {
+    // Old data without slices
+    for (let i = 0; i < data.tracks.length; i++) {
+      data.tracks[i].audio = data.tracks[i].audio.split(`/api/audio/`)[1];
+      data.tracks[i].slice1 = 5
+      data.tracks[i].slice2 = 3
+      data.tracks[i].v = 1;
+    }
+
+    data.v = 1;
+  }
+
+  return data;
 }
 
 module.exports = {
   router,
   getGameData,
+  fixGameData
 };

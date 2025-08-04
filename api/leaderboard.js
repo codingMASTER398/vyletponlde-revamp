@@ -18,7 +18,7 @@ function dailyData(req, date, mode) {
 
   return {
     users: dbData.scores.sort((a,b)=>b.score - a.score).map((d) => {
-      return `${d.name} ${String(d.score).padStart(2, "0")}/15`;
+      return `${d.name} ${Math.round(d.score * 2)}/30`;
     }),
     canSubmit: canSubmitToLB(req, dbData),
     submitURL: `/api/leaderboard/${date}/${mode}/%score/%name`,
@@ -78,7 +78,7 @@ router.post(`/:date/:mode/:score/:name`, (req, res) => {
   res.status(200).render(`blocks/leaderboardContent`, {
     lb: {
       users: dbData.scores.sort((a,b)=>b.score - a.score).map((d) => {
-        return `${d.name} ${String(d.score).padStart(2, "0")}/15`;
+        return `${d.name} ${Math.round(d.score * 2)}/30`;
       }),
     },
   });

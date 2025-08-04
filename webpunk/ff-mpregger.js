@@ -72,8 +72,6 @@ function concatClips(outputs, finalOutput) {
     ffmpeg()
       .input(outputs[0])
       .input(outputs[1])
-      .input(outputs[2])
-      .input(outputs[3])
       .on("end", () => resolve(finalOutput))
       .on("error", reject)
       .mergeToFile(finalOutput, tempFilePath);

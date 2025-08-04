@@ -16,6 +16,8 @@ document.addEventListener(`DOMContentLoaded`, ()=>{
     const parsed = JSON.parse(data);
 
     for (let ii = 0; ii < indicators.length; ii++) {
+      if(!parsed.tracks[ii]) continue;
+
       const indicator = indicators[ii],
         guesses = parsed.tracks[ii].guesses;
 
@@ -38,7 +40,7 @@ document.addEventListener(`DOMContentLoaded`, ()=>{
       else indicator.classList.add(`red`);
     }
 
-    element.querySelector(`.score`).innerText = `${String(score).padStart(2, "0")}/15`
+    element.querySelector(`.score`).innerText = `${Math.round(score * 2)}/30`
   }
 
   window.toLoad--;

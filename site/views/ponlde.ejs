@@ -13,8 +13,12 @@
       window.gameData = JSON.parse(<%- JSON.stringify(JSON.stringify(gameData)) %>);
     </script>
 
-    <!-- Preload some content -->
-    <link rel="preload" href="<%=gameData.tracks[0].audio%>" as="audio" />
+    <!-- Preload audio -->
+    <link rel="preload" href="/api/audio/base/<%=gameData.tracks[0].audio%>" as="audio" />
+    <link rel="preload" href="/api/audio/tiny/<%=gameData.tracks[0].slice1%>-<%=gameData.tracks[0].audio%>" as="audio" />
+    <link rel="preload" href="/api/audio/tiny/<%=gameData.tracks[0].slice2%>-<%=gameData.tracks[0].audio%>" as="audio" />
+
+    <!-- Preload other content -->
     <link rel="preload" href="/audio/click.ogg" as="audio" />
     <link rel="preload" href="/audio/squee.ogg" as="audio" />
     <link rel="preload" href="/audio/yay.ogg" as="audio" />

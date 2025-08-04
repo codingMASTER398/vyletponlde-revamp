@@ -120,6 +120,7 @@ function copyTextToClipboard(text) {
 // end stackoverflow :3
 
 function endGameUI() {
+  // Calculate score. Calculated from 0-15, but rendered 0-30
   let correct = 0,
     score = 0;
 
@@ -147,8 +148,7 @@ function endGameUI() {
     }
   }
 
-  score = Number(score.toFixed(1)); // Fix any floating points
-
+  // Calculate grade
   let grade = `F`;
   if (score >= 1) grade = "E-";
   if (score >= 2) grade = "E";
@@ -173,7 +173,7 @@ function endGameUI() {
   document.querySelector(`.fullEnd`).style.display = "";
   document.querySelector(`.fullEnd`).classList.add(`in`);
   document.querySelector(`.correctValue`).innerText = `${correct}/5`;
-  document.querySelector(`.scoreValue`).innerText = `${score}/15`;
+  document.querySelector(`.scoreValue`).innerText = `${Math.round(score * 2)}/30`;
   document.querySelector(`.gradeValue`).innerText = grade;
 
   document.querySelector(`.homeButton`).addEventListener(`click`, () => {
@@ -183,7 +183,7 @@ function endGameUI() {
 
   document.querySelector(`.shareButton`).addEventListener(`click`, () => {
     // Get the share copy description
-    let text = `${window.gameData.copyDescription}\ngrade: ${grade}`;
+    let text = `${window.gameData.copyDescription}\nscore: ${Math.round(score * 2)}/30, ${grade}`;
 
     for (let i = 0; i < gameState.tracks.length; i++) {
       const track = gameState.tracks[i];
@@ -201,7 +201,7 @@ function endGameUI() {
       }
     }
 
-    text += `\nvylet ponlde revamp ${window.location.href}`;
+    text += `\n${window.location.href} (revamp)`;
 
     copyTextToClipboard(text);
     clickSound();
@@ -255,7 +255,7 @@ function endGameUI() {
 // confetti
 function confettiCorrect() {
   confetti({
-    particleCount: 100,
+    particleCount: 50,
     spread: 100,
     origin: { y: 0.5 },
   });

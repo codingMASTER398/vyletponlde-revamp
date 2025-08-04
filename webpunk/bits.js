@@ -13,29 +13,29 @@ async function process(inputName, outFile) {
   fs.mkdirSync(dir)
 
   const inFile = `./data/downloadCache/${inputName}.mp3`,
-    processingFile1 = `${dir}/${inputName}-s.mp3`, // Silence trimmed
-    processingFile2 = `${dir}/${inputName}-1.mp3`, // Clip 1
-    processingFile3 = `${dir}/${inputName}-2.mp3`, // Clip 2
-    processingFile4 = `${dir}/${inputName}-3.mp3`, // Clip 3
-    processingFile5 = `${dir}/${inputName}-f.mp3`  // Fade clip
+    silenceTrimmedFile = `${dir}/${inputName}-s.mp3`, // Silence trimmed,
+    startClip = `${dir}/${inputName}-startclip.mp3`,
+    fadeClip = `${dir}/${inputName}-fadeclip.mp3`  // Fade clip
 
   console.log(`Removing silence`)
-  await mpreg.removeSilence(inFile, processingFile1)
-  const length = await mpreg.getDuration(processingFile1);
+  await mpreg.removeSilence(inFile, silenceTrimmedFile)
+  const length = await mpreg.getDuration(silenceTrimmedFile);
+
+  console.log(`Extracting 1s tiny clips`)
+  for (let i = 1; i < 10; i += 1) {
+    await mpreg.extractClip(silenceTrimmedFile, `./data/bits/tiny/${i}-${outFile}.ogg`, length * (i * 0.1), 1, false)
+  }
 
   console.log(`Extracting clips`)
-  await mpreg.extractClip(processingFile1, processingFile2, length / 2, 0.5, false)
-  await mpreg.extractClip(processingFile1, processingFile3, length / 3, 1, false)
-  await mpreg.extractClip(processingFile1, processingFile4, 0, 3, false)
-  await mpreg.extractClip(processingFile1, processingFile5, length / 2.5, 10, true)
+  await mpreg.extractClip(silenceTrimmedFile, startClip, 0, 3, false)
+  await mpreg.extractClip(silenceTrimmedFile, fadeClip, length / 2.5, 10, true)
+
+  console.log(startClip, fadeClip,  `./data/bits/base/${outFile}.ogg`)
 
   console.log("Concatonating")
   await mpreg.concatClips([
-    processingFile5,
-    processingFile4,
-    processingFile3,
-    processingFile2
-  ], outFile)
+    fadeClip, startClip
+  ], `./data/bits/base/${outFile}.ogg`)
 
   fs.rmdirSync(dir, {
     recursive: true
@@ -56,9 +56,9 @@ module.exports =  (async () => {
 
   for (let i = 0; i < downloads.length; i++) {
     //if(downloads[i] != "antonymph.mp3") continue;
-    const outFile = `./data/bits/${downloads[i].replace(`.mp3`, `.ogg`)}`
+    const outFile = downloads[i].replace(`.mp3`, `.ogg`)
 
-    if (fs.existsSync(outFile)) continue;
+    if (fs.existsSync(`./data/bits/base/${outFile}.ogg`)) continue;
 
     await process(downloads[i].replace(`.mp3`, ``), outFile)
 
