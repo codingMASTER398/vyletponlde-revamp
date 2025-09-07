@@ -50,6 +50,20 @@ body:not(.reduceAqua).dark {
   background-size: cover;
   background-position: center;
 }
+body.dolphins {
+  background:
+    linear-gradient(rgba(255,255,255, 0.5), rgba(255,255,255, 0.5)),
+    url(/img/dolphins.jpg);
+  background-size: cover;
+  background-position: center;
+}
+body.dark.dolphins {
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+    url(/img/dolphins.jpg);
+  background-size: cover;
+  background-position: center;
+}
 
 body:not(.reduceAqua):before {
   width: 100%;

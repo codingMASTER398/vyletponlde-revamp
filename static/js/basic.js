@@ -58,6 +58,9 @@ let settings = {
   reduceAqua: {
     enabled: false,
   },
+  dolphins: {
+    enabled: false,
+  },
 };
 
 function updateSettings() {
@@ -71,14 +74,14 @@ function updateSettings() {
   }
 }
 
-updateSettings()
+updateSettings();
 
 for (const setting in settings) {
   const input = document.querySelector(`input[for="${setting}"]`);
 
   input.checked = settings[setting].enabled;
-  input.addEventListener(`input`, ()=>{
-    localStorage.setItem(`ponldesetting.${setting}`, input.checked)
+  input.addEventListener(`input`, () => {
+    localStorage.setItem(`ponldesetting.${setting}`, input.checked);
     updateSettings();
-  })
+  });
 }
