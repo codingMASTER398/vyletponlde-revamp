@@ -10,5 +10,9 @@
 
   <% albumN++ %>
 
-  <p><%=albumN%>. <a href="https://vyletpony.bandcamp.com<%=track.url%>" target="_blank"><%=track.title%></a><br></p>
+  <% if(track.url.includes("vyletpony")) { %>
+  <p><%=albumN%>. <a href="<%=track.url%>" target="_blank"><%=track.title%></a><br></p>
+  <% } else { %>
+    <p><%=albumN%>. <a href="https://vyletpony.bandcamp.com<%=track.url%>" target="_blank"><%=track.title%></a><br></p>
+  <% } %>
 <% }) %>
