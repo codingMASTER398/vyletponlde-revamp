@@ -1,13 +1,13 @@
-.fullEnd.in {
+body:not(.reduceMotion) .fullEnd.in {
   animation: roundEndIn 0.5s;
 }
-.fullEnd.in .resultsList {
+body:not(.reduceMotion) .fullEnd.in .resultsList {
   animation: roundEndIn 1s;
 }
-.fullEnd.in .score {
+body:not(.reduceMotion) .fullEnd.in .score {
   animation: roundEndIn 2s;
 }
-.fullEnd.in .leaderboard {
+body:not(.reduceMotion) .fullEnd.in .leaderboard {
   animation: roundEndIn 3s;
 }
 
@@ -44,7 +44,11 @@
   width: 38px;
   aspect-ratio: 1/1;
   background-color: #eee;
-  box-shadow: 0 -3px 6px rgba(0,0,0,0.5) inset;
+  box-shadow:
+    0 6px 12px rgba(255, 255, 255, 0.5) inset,
+    0 -6px 12px rgba(0, 0, 0, 0.2) inset;
+  border-radius: 2.5px;
+  border: 1px solid rgba(150, 150, 150, 0.5);
 }
 
 .resultsList .result p {
@@ -74,5 +78,5 @@
 }
 
 .copiedToClipboard:not(.exists) {
-  display: none;
+  opacity: 0;
 }

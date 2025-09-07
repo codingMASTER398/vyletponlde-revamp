@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include("blocks/preloads") %> <%- include("blocks/basicHead") %>
+    <link rel="stylesheet" href="/css/menu.css" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css"
+    />
+  </head>
+  <body>
+    <%- include("blocks/titlebar") %>
+
+    <div class="center">
+      <div class="menuWrapper">
+        <div class="task">
+          <div class="light red"></div>
+          <div class="light yellow"></div>
+          <div class="light green"></div>
+          <p>ponlde.cuti.tv</p>
+        </div>
+        <div class="menu">
+          <div class="sidebar">
+            <p>VYLETPONLDE</p>
+            <div class="content">
+              <div data-menu-id="menuNormal">
+                <i class="ph ph-play"></i>
+                Normal
+              </div>
+              <div data-menu-id="menuEasy">
+                <i class="ph ph-smiley"></i>
+                Easy
+              </div>
+              <div data-menu-id="menuSpecial">
+                <i class="ph ph-star"></i>
+                Special
+              </div>
+              <div data-menu-id="menuAbout">
+                <i class="ph ph-question"></i>
+                About
+              </div>
+              <div data-menu-id="menuTracks">
+                <i class="ph ph-cassette-tape"></i>
+                Tracks
+              </div>
+              <div data-menu-id="menuCat">
+                <i class="ph ph-cat"></i>
+                Cat
+              </div>
+            </div>
+          </div>
+          <div class="menuContent">
+            <!-- Normal -->
+            <div class="menuNormal">
+              <h2>Normal</h2>
+              <p>Normal Vylet Ponlde. Includes all tracks.</p>
+              <button onclick="window.location.href='/daily'" class="shinyButton blueButton">Daily</button>
+              <button onclick="window.location.href='/infinite'" class="shinyButton">Infinite</button>
+              <br>
+              <p>.-* daily archive</p>
+              <% archiveNormal.forEach((d, i)=>{ %>
+                <div class="songIndicators inline" data-localstore-id="<%=generateRunID(d)%>">
+                  <div class="indicator"></div>
+                  <div class="indicator"></div>
+                  <div class="indicator"></div>
+                  <div class="indicator"></div>
+                  <div class="indicator"></div>
+                  <p style="margin: 0;">
+                    <b class="score">00/15</b>
+                    <a href="/archive/<%=d.date%>/<%=d.mode%>" target="_blank"><%=d.date%></a>
+                    <%=i == 0 ? "(today!)" : ""%></p>
+                </div>
+              <% }) %>
+            </div>
+            <!-- Easy -->
+            <div class="menuEasy" style="display: none;">
+              <h2>Easy</h2>
+              <p>Easy Vylet Ponlde with a unique daily. Mostly popular songs.</p>
+              <button onclick="window.location.href='/easy'" class="shinyButton blueButton">Daily</button>
+              <button onclick="window.location.href='/easy/infinite'" class="shinyButton">Infinite</button>
+              <br>
+              <p>.-* daily archive</p>
+              <% archiveEasy.forEach((d, i)=>{ %>
+                <div class="songIndicators inline" data-localstore-id="<%=generateRunID(d)%>">
+                  <div class="indicator"></div>
+                  <div class="indicator"></div>
+                  <div class="indicator"></div>
+                  <div class="indicator"></div>
+                  <div class="indicator"></div>
+                  <p style="margin: 0;">
+                    <b class="score">00/15</b>
+                    <a href="/archive/<%=d.date%>/<%=d.mode%>" target="_blank"><%=d.date%></a>
+                    <%=i == 0 ? "(today!)" : ""%></p>
+                </div>
+              <% }) %>
+            </div>
+            <!-- Special -->
+            <div class="menuSpecial" style="display: none;">
+              <h2>Special</h2>
+              <p>Sillier modes!</p>
+              <button onclick="window.location.href='/classic'" class="shinyButton">Classic</button> without album indicators</li><br><br>
+              <button onclick="window.location.href='/hardcore'" class="shinyButton">Hardcore</button> with only difficult songs</li><br><br>
+              <button onclick="window.location.href='/oneshot'" class="shinyButton">Oneshot</button> where you can't mess up</li><br><br>
+              <button onclick="window.location.href='/lodestar'" class="shinyButton">Lodestar</button> all of the above</li>
+            </div>
+            <!-- About -->
+            <div class="menuAbout" style="display: none;">
+              <%- include("about") %>
+            </div>
+            <!-- Tracks -->
+            <div class="menuTracks" style="display: none;">
+              <%- include("songs") %>
+            </div>
+            <!-- KITTY CAR -->
+            <div class="menuCat" style="display: none;">
+              <video src="/splish-cat.mp4" style="max-width: 100%;" autoplay muted loop></video>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="/js/archive.js"></script>
+    <script src="/js/menu.js"></script>
+  </body>
+</html>

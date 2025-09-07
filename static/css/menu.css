@@ -1,0 +1,124 @@
+.menuWrapper {
+  max-width: 800px;
+  width: 100%;
+  min-height: 400px;
+  margin-top: 4rem;
+
+  box-shadow: 0 12px 12px rgba(0, 0, 0, 0.2);
+}
+
+.menuWrapper .task {
+  width: 100%;
+  height: 26px;
+
+  background: linear-gradient(180deg, #e3e3e3 0%, #b7b7b7 100%);
+  box-shadow: 0 6px 6px rgba(0, 0, 0, 0.1) inset;
+  border-top-left-radius: 4.5px;
+  border-top-right-radius: 4.5px;
+  border: 1px solid grey;
+  
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  padding-left: 10px;
+  gap: 4px;
+
+  color: black;
+}
+
+.menuWrapper .task p {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%);
+}
+
+.menuWrapper .task .light {
+  height: 14px;
+  width: 14px;
+  border-radius: 100%;
+  background-color: lightgreen;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.3) inset, 0 -3px 3px rgba(255,255,255,0.5) inset;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.menuWrapper .task .light.yellow {
+  background-color: orange;
+}
+
+.menuWrapper .task .light.red {
+  background-color: red;
+}
+
+.menu {
+  border: 1px solid grey;
+  height: 600px;
+
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+
+  box-sizing: border-box;
+}
+
+.menu .sidebar {
+  width: 200px;
+  height: auto;
+  background: linear-gradient(180deg, #e7ecf0 0%, #ced8e0 100%);
+  box-shadow: 0 6px 6px rgba(0, 0, 0, 0.1) inset;
+  border-right: 1px solid grey;
+
+  padding: 1rem;
+  padding-top: 0.5rem;
+  box-sizing: border-box;
+}
+
+body.dark .menu .sidebar {
+  background: linear-gradient(180deg, #1f2020 0%, #171718 100%);
+}
+
+.menu .sidebar p {
+  margin-bottom: 0.7rem;
+  opacity: 0.6;
+}
+
+.menu .sidebar .content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding-left: 1rem;
+  box-sizing: border-box;
+}
+
+.menu .sidebar .content > div {
+  width: 100%;
+  font-size: medium;
+}
+
+.menu .sidebar .content > div:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.menu .sidebar .content > div i {
+  opacity: 0.8;
+}
+
+.menu .menuContent {
+  background-color: white;
+  flex-grow: 1;
+  width: 100%;
+  height: auto;
+
+  padding: 1.5rem;
+  padding-top: 0.5rem;
+  box-sizing: border-box;
+
+  overflow-y: scroll;
+
+  box-shadow: 0 -3px 3px rgba(0, 0, 0, 0.1) inset;
+}
+
+body.dark .menu .menuContent {
+  background-color: rgb(37, 37, 37);
+}

@@ -1,69 +1,50 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <%- include("blocks/preloads") %> <%- include("blocks/basicHead") %>
-  </head>
-  <body>
-    <%- include("blocks/loader/html") %> <%- include("blocks/loader/script") %>
-    <%- include("blocks/titlebar") %>
+<h2>About ponlde.cuti.tv</h2>
+<p>hii!! so great to see you.</p>
+<p>
+  This vyletponlde site is different from the original made by
+  VilleOlof. I just saw the opportunity to add new features, make it
+  load faster, and i was bored.
+</p>
 
-    <div class="center">
-      <div style="text-align: left; width: 400px; max-width: 100%">
-        <h1>About ponlde.cuti.tv</h1>
-        <p>hii!! so great to see you.</p>
-        <p>
-          This vyletponlde site is different from the original made by
-          VilleOlof. I just saw the opportunity to add new features, make it
-          load faster, and i was bored.
-        </p>
+<br />
+<p><b>.-* how to play</b></p>
+<p>
+  Head to the home page and select a mode. then, listen
+  to samples of a vylet pony song & try to figure out what it is. you
+  have 5 chances to guess different songs, and how well you do is
+  collated in a screen at the end to share with your friends.
+  <br /><br />
+  If you get a guess wrong, it'll light up <b>red</b> and give no
+  points. If you get the right album, it'll light up <b>yellow</b> and
+  you'll get half a point. Get it right, it'll be <b>green</b>, and
+  that's one point.
+</p>
+<br />
+<p><b>.-* modes</b></p>
+<p>
+  <b>daily</b> changes every day. you can check the archive to see old
+  dailys.
+</p>
+<p>
+  <b>easy</b> modes are the same as the normal ones, but only with the
+  most popular albums.
+</p>
+<p><b>classic</b> is where albums don't light up yellow, like the lifelike.dev version.</p>
+<p><b>oneshot</b> fails you if you get a single song wrong.</p>
+<p><b>hardcore</b> is only the niche and old songs. also, only 0.5s ones.</p>
+<p><b>lodestar</b> is oneshot, classic, and hardcore combined.</p>
 
-        <br />
-        <p><b>.-* how to play</b></p>
-        <p>
-          Head to the <a href="/">home page</a> and select a mode. then, listen
-          to samples of a vylet pony song & try to figure out what it is. you
-          have 5 chances to guess different songs, and how well you do is
-          collated in a screen at the end to share with your friends.
-          <br /><br />
-          If you get a guess wrong, it'll light up <b>red</b> and give no
-          points. If you get the right album, it'll light up <b>yellow</b> and
-          you'll get half a point. Get it right, it'll be <b>green</b>, and
-          that's one point.
-        </p>
-        <br />
-        <p><b>.-* modes</b></p>
-        <p>
-          <b>daily</b> changes every day. you can check the archive to see old
-          dailys.
-        </p>
-        <p>
-          <b>easy</b> modes are the same as the normal ones, but only with the
-          most popular albums.
-        </p>
-        <p><b>classic</b> is where albums don't light up yellow, like the lifelike.dev version.</p>
-        <p><b>oneshot</b> fails you if you get a single song wrong.</p>
-        <p><b>hardcore</b> is only the niche and old songs. also, only 0.5s ones.</p>
-        <p><b>lodestar</b> is oneshot, hidden, and hardcore combined.</p>
-
-        <br />
-        <p><b>.-* easy/hardcore albums</b></p>
-        <p>The <b>easy</b> mode only has these albums:</p>
-        <ul>
-          <% config.easyAlbums.forEach((al)=>{ %>
-          <li><%=al%></li>
-          <% }) %>
-        </ul>
-        <p>And <b>hardcore</b> mode has no easy albums or the below:</p>
-        <ul>
-          <% config.neutralAlbums.forEach((al)=>{ %>
-          <li><%=al%></li>
-          <% }) %>
-        </ul>
-
-        <br />
-        <p><b>.-* source</b></p>
-        <p><a href="https://github.com/codingMASTER398/vyletponlde-revamp" target="_blank">GitHub</a></p>
-      </div>
-    </div>
-  </body>
-</html>
+<br />
+<p><b>.-* easy/hardcore albums</b></p>
+<p>The <b>easy</b> mode only has these albums:</p>
+<ul>
+  <% config.easyAlbums.forEach((al)=>{ %>
+  <li><%=al%></li>
+  <% }) %>
+</ul>
+<p>And <b>hardcore</b> mode has no easy albums or the below:</p>
+<ul>
+  <% config.neutralAlbums.forEach((al)=>{ %>
+  <li><%=al%></li>
+  <% }) %>
+</ul>

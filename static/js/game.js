@@ -46,17 +46,15 @@ async function playTrack(audio, from, to, element, disableOtherPlays = true) {
   audio.volume = window.volume;
   audio.currentTime = from;
 
-  let currentShift = Number(audioStopShift), passed = 0, lastProcess = performance.now();
+  let currentShift = Number(audioStopShift),
+    passed = 0,
+    lastProcess = performance.now();
 
   let checkInterval = () => {
     passed += (performance.now() - lastProcess) * 0.001;
     lastProcess = performance.now();
 
-    if (
-      passed >= to - from ||
-      audioStopShift != currentShift ||
-      audio.paused
-    ) {
+    if (passed >= to - from || audioStopShift != currentShift || audio.paused) {
       audio.pause();
 
       if (disableOtherPlays) currentlyPlaying = false;
@@ -84,7 +82,13 @@ function setupAutoComplete(element) {
 
   let onEnter, disabled;
 
-  inputBox.addEventListener(`keyup`, (e) => {
+  resultBox.addEventListener(`click`, () => {
+    const result = miniSearch.search(inputBox.value, { fuzzy: 0.2 })[0];
+    if (result) inputBox.value = result.n;
+    inputBox.focus();
+  });
+
+  const autoComplete = (e) => {
     if (disabled) return;
 
     const result = miniSearch.search(inputBox.value, { fuzzy: 0.2 })[0];
@@ -102,7 +106,10 @@ function setupAutoComplete(element) {
 
     resultBox.querySelector(`p`).innerText = `> ` + result.n;
     resultBox.style.display = "block";
-  });
+  };
+
+  inputBox.addEventListener(`keydown`, autoComplete);
+  inputBox.addEventListener(`input`, autoComplete);
 
   return {
     onEnter: (f) => {
@@ -198,12 +205,12 @@ function loadTrackAudio(trackNum, data) {
     loader = true;
   }
 
-  trackAudio[trackNum] ??= {}
+  trackAudio[trackNum] ??= {};
 
   // Edge case for archives before 8/4/25
-  if(typeof data.slice1 === "undefined") data.slice1 = 5;
-  if(typeof data.slice2 === "undefined") data.slice2 = 3;
-  if(!data.audio.endsWith(`.ogg.ogg`)) data.audio += `.ogg`; // dual weild
+  if (typeof data.slice1 === "undefined") data.slice1 = 5;
+  if (typeof data.slice2 === "undefined") data.slice2 = 3;
+  if (!data.audio.endsWith(`.ogg.ogg`)) data.audio += `.ogg`; // dual weild
 
   trackAudio[trackNum].base = new Audio(`/api/audio/base/${data.audio}`);
   trackAudio[trackNum].one = new Audio(
@@ -237,7 +244,7 @@ async function startNewRound() {
     currentTrackNum = gameState.currentTrack;
 
   // Load track audio
-  trackAudio[currentTrackNum] ??= {}
+  trackAudio[currentTrackNum] ??= {};
 
   if (!trackAudio[currentTrackNum].base) {
     loadTrackAudio(currentTrackNum, currentTrackData);
@@ -428,6 +435,11 @@ document.addEventListener(`DOMContentLoaded`, async () => {
     gameState = JSON.parse(localStorage.getItem(window.runID));
   }
   gameState.currentTrack = 0;
+
+  if (gameState.tracks[4]) {
+    // They already completed it, don't increase win streak
+    window.noIncreaseWinStreak = true;
+  }
 
   // Set the end times of the guesses
   guess1End = 0.5;

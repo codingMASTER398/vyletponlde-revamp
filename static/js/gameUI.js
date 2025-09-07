@@ -169,13 +169,23 @@ function endGameUI() {
   if (score >= 15) confettiWinBig();
   if (score >= 10) confettiWin();
 
+  // Texts
   document.querySelector(`.gameArea`).style.display = "none";
   document.querySelector(`.fullEnd`).style.display = "";
   document.querySelector(`.fullEnd`).classList.add(`in`);
   document.querySelector(`.correctValue`).innerText = `${correct}/5`;
-  document.querySelector(`.scoreValue`).innerText = `${Math.round(score * 2)}/30`;
+  document.querySelector(`.scoreValue`).innerText =
+    `${Math.round(score * 2)}/30`;
   document.querySelector(`.gradeValue`).innerText = grade;
 
+  // Win streak
+  if(correct === 5) {
+    if(!window.noIncreaseWinStreak) localStorage.setItem(`winStreak`, Number(localStorage.getItem(`winStreak`) || 0) + 1)
+  } else localStorage.setItem(`winStreak`, `0`)
+
+  document.querySelector(`.winStreak`).innerText = `5/5 streak: ${localStorage.getItem(`winStreak`)}`
+
+  // Buttons
   document.querySelector(`.homeButton`).addEventListener(`click`, () => {
     clickSound();
     window.location.href = "/";
@@ -209,6 +219,7 @@ function endGameUI() {
     document.querySelector(`.copiedToClipboard`).classList.add(`exists`);
   });
 
+  // Leaderboard
   const lbButton = document.querySelector(`.leaderboardButton`);
 
   if (!lbButton) return;
@@ -248,12 +259,14 @@ function endGameUI() {
     squee.volume = window.volume;
     squee.play();
 
-    lbButton.innerText = `Added`
+    lbButton.innerText = `Added`;
   });
 }
 
 // confetti
 function confettiCorrect() {
+  if (settings.hideConfetti.enabled) return;
+
   confetti({
     particleCount: 50,
     spread: 100,
@@ -262,31 +275,39 @@ function confettiCorrect() {
 }
 
 function confettiWin() {
-  confetti({
-    particleCount: 200,
-    spread: 100,
-    origin: { y: 0.5 },
-    decay: 0.95,
-    ticks: 500,
-  });
+  if (!settings.hideConfetti.enabled) {
+    confetti({
+      particleCount: 200,
+      spread: 100,
+      origin: { y: 0.5 },
+      decay: 0.95,
+      ticks: 500,
+    });
+  }
 
-  const squee = new Audio(`/audio/squee.ogg`);
-  squee.volume = window.volume;
-  squee.play();
+  if (!settings.noLoudSounds.enabled) {
+    const squee = new Audio(`/audio/squee.ogg`);
+    squee.volume = window.volume;
+    squee.play();
+  }
 }
 
 function confettiWinBig() {
-  confetti({
-    particleCount: 50,
-    spread: 100,
-    origin: { y: 0.5 },
-    decay: 0.95,
-    ticks: 900,
-    shapes: [confetti.shapeFromText({ text: "🦄", scalar: 2 })],
-    scalar: 5,
-  });
+  if (!settings.hideConfetti.enabled) {
+    confetti({
+      particleCount: 50,
+      spread: 100,
+      origin: { y: 0.5 },
+      decay: 0.95,
+      ticks: 900,
+      shapes: [confetti.shapeFromText({ text: "🦄", scalar: 2 })],
+      scalar: 5,
+    });
+  }
 
-  const yay = new Audio(`/audio/yay.ogg`);
-  yay.volume = window.volume;
-  yay.play();
+  if (!settings.noLoudSounds.enabled) {
+    const yay = new Audio(`/audio/yay.ogg`);
+    yay.volume = window.volume;
+    yay.play();
+  }
 }

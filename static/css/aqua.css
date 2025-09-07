@@ -1,0 +1,271 @@
+/* adapted https://github.com/gregarkhipov/aqua-ui/blob/gh-pages/main.css */
+
+.shinyButton {
+  padding: 4.5px 18px;
+  min-width: 50px;
+  width: auto;
+  border-radius: 3.5px;
+  background-image: linear-gradient(
+    rgb(255, 255, 255) 22%,
+    rgb(251, 251, 251) 27.5%,
+    rgb(249, 249, 249) 33%,
+    rgb(245, 245, 245) 38.5%,
+    rgb(242, 242, 242) 44%,
+    rgb(240, 240, 240) 50%,
+    rgb(231, 231, 231) 55.5%,
+    rgb(231, 231, 231) 72%,
+    rgb(232, 232, 232) 77.5%,
+    rgb(232, 232, 232) 89%,
+    rgb(235, 235, 235) 95%,
+    rgb(239, 239, 239) 100%
+  );
+  box-shadow:
+    inset 3px 0px 3px -3px rgba(0, 0, 0, 0.2),
+    inset -3px 0px 3px -3px rgba(0, 0, 0, 0.2),
+    0 3px 3px rgba(0, 0, 0, 0.2);
+  border: 1px solid grey;
+  position: relative;
+
+  font-family: "MozillaText";
+}
+
+.shinyButton.blueButton {
+  background-image: -webkit-linear-gradient(
+    rgb(229, 247, 255) 0%,
+    rgb(210, 236, 253) 5.5%,
+    rgb(199, 228, 252) 11%,
+    rgb(196, 221, 252) 16.5%,
+    rgb(189, 222, 255) 22%,
+    rgb(180, 216, 252) 27.5%,
+    rgb(177, 216, 253) 33%,
+    rgb(168, 211, 252) 38.5%,
+    rgb(162, 210, 252) 44%,
+    rgb(155, 207, 254) 50%,
+    rgb(138, 191, 249) 55.5%,
+    rgb(140, 196, 252) 61%,
+    rgb(148, 202, 252) 66.5%,
+    rgb(161, 212, 255) 72%,
+    rgb(170, 217, 253) 77.5%,
+    rgb(179, 224, 253) 83%,
+    rgb(187, 232, 255) 89%,
+    rgb(203, 242, 255) 95%,
+    rgb(219, 244, 255) 100%
+  );
+  background-image: linear-gradient(
+    rgb(229, 247, 255) 0%,
+    rgb(210, 236, 253) 5.5%,
+    rgb(199, 228, 252) 11%,
+    rgb(196, 221, 252) 16.5%,
+    rgb(189, 222, 255) 22%,
+    rgb(180, 216, 252) 27.5%,
+    rgb(177, 216, 253) 33%,
+    rgb(168, 211, 252) 38.5%,
+    rgb(162, 210, 252) 44%,
+    rgb(155, 207, 254) 50%,
+    rgb(138, 191, 249) 55.5%,
+    rgb(140, 196, 252) 61%,
+    rgb(148, 202, 252) 66.5%,
+    rgb(161, 212, 255) 72%,
+    rgb(170, 217, 253) 77.5%,
+    rgb(179, 224, 253) 83%,
+    rgb(187, 232, 255) 89%,
+    rgb(203, 242, 255) 95%,
+    rgb(219, 244, 255) 100%
+  );
+}
+
+.shinyButton:hover {
+  filter: brightness(93%);
+  cursor: pointer;
+}
+
+.shinyButton:active {
+  background-image: -webkit-linear-gradient(
+    rgb(176, 205, 236) 0%,
+    rgb(148, 179, 237) 5.5%,
+    rgb(136, 169, 229) 11%,
+    rgb(128, 163, 229) 16.5%,
+    rgb(121, 161, 230) 22%,
+    rgb(114, 155, 230) 27.5%,
+    rgb(107, 154, 230) 33%,
+    rgb(99, 150, 230) 38.5%,
+    rgb(92, 147, 230) 44%,
+    rgb(87, 143, 230) 50%,
+    rgb(58, 128, 230) 55.5%,
+    rgb(64, 132, 231) 61%,
+    rgb(73, 140, 234) 66.5%,
+    rgb(85, 150, 236) 72%,
+    rgb(96, 158, 236) 77.5%,
+    rgb(109, 167, 237) 83%,
+    rgb(122, 178, 237) 89%,
+    rgb(135, 189, 236) 95%,
+    rgb(158, 203, 236) 100%
+  );
+  background-image: linear-gradient(
+    rgb(176, 205, 236) 0%,
+    rgb(148, 179, 237) 5.5%,
+    rgb(136, 169, 229) 11%,
+    rgb(128, 163, 229) 16.5%,
+    rgb(121, 161, 230) 22%,
+    rgb(114, 155, 230) 27.5%,
+    rgb(107, 154, 230) 33%,
+    rgb(99, 150, 230) 38.5%,
+    rgb(92, 147, 230) 44%,
+    rgb(87, 143, 230) 50%,
+    rgb(58, 128, 230) 55.5%,
+    rgb(64, 132, 231) 61%,
+    rgb(73, 140, 234) 66.5%,
+    rgb(85, 150, 236) 72%,
+    rgb(96, 158, 236) 77.5%,
+    rgb(109, 167, 237) 83%,
+    rgb(122, 178, 237) 89%,
+    rgb(135, 189, 236) 95%,
+    rgb(158, 203, 236) 100%
+  );
+}
+
+/* checkboxes */
+input[type="checkbox"] {
+  appearance: none;
+  border: 1px solid grey;
+  height: 14px;
+  aspect-ratio: 1/1;
+  display: inline-block;
+  margin-right: 4px;
+  border-radius: 2.5px;
+  position: relative;
+
+  box-shadow: 0 0 3px rgb(196, 221, 252) inset, 0 5px 5px rgb(231, 231, 231) inset;
+}
+
+input[type="checkbox"]:checked {
+  box-shadow: 0 0 3px rgb(196, 221, 252) inset, 0 3px 1px white inset, 0 5px 5px rgb(140, 196, 252) inset, 0 5px 3px rgb(96, 173, 255) inset;
+}
+
+input[type="checkbox"]:checked:after {
+  content: "✓";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-40%, -10px);
+  font-size: 18px;
+  opacity: 0.9;
+}
+
+input[type="range"] {
+  appearance: none;
+  height: 10px;
+  background: transparent;
+  border: 1px solid rgb(230,230,230);
+  border-radius: 4.5px;
+  box-shadow: 0 5px 5px rgb(180,180,180) inset;
+}
+input[type="range"]::-webkit-slider-thumb, input[type="range"]::-moz-range-thumb {
+  appearance: none;
+  height: 18px;
+  width: 18px;
+  background-color: rgb(140, 196, 252);
+  box-shadow: 0 -5px 5px rgb(96, 173, 255) inset, 0 3px 3px rgba(0, 0, 0, 0.3);
+  border-radius: 4.5px;
+  cursor: pointer;
+}
+
+/* https://gist.github.com/benchristel/7feca2ef6943ea8f353f96d5f3a1a538 */
+
+::-webkit-scrollbar {
+  background: linear-gradient(to right, #ccc, #fff 20%, #ddd);
+  cursor: default;
+}
+
+::-webkit-scrollbar {
+  background: linear-gradient(to bottom, #ccc, #fff 20%, #ddd);
+  cursor: default;
+}
+
+::-webkit-scrollbar-track:vertical {
+  background: linear-gradient(to right, #eee, #fff);
+  border-left: 1px solid #ccc;
+  border-top: 1px solid #bbb;
+  border-bottom: 1px solid #ddd;
+  width: 16px;
+  border-radius: 100px;
+  box-shadow:
+    inset 2px 0 3px #0002,
+    inset 0 -2px 3px #0003,
+    inset 0 2px 3px #0003;
+}
+
+::-webkit-scrollbar-track:vertical:window-inactive {
+  box-shadow:
+    inset 2px 0 3px #0041,
+    inset 0 -2px 3px #0041,
+    inset 0 2px 3px #0041;
+}
+
+::-webkit-scrollbar-track:horizontal {
+  background: linear-gradient(to bottom, #eee, #fff);
+  border-top: 1px solid #ccc;
+  border-left: 1px solid #bbb;
+  border-right: 1px solid #ddd;
+  width: 16px;
+  border-radius: 100px;
+  box-shadow:
+    inset 0 2px 3px #0002,
+    inset -2px 0 3px #0003,
+    inset 2px 0 3px #0003;
+}
+
+::-webkit-scrollbar-track:horizontal:window-inactive {
+  box-shadow:
+    inset 0 2px 3px #0041,
+    inset -2px 0 3px #0041,
+    inset 2px 0 3px #0041;
+}
+
+::-webkit-scrollbar-thumb:vertical {
+  background:
+    linear-gradient(to right, #6af 10%, #fff4 20%, #6af 30%, #9ef),
+    linear-gradient(to bottom, #6af 5px, #6af0 10px),
+    linear-gradient(to top, #6af 5px, #6af0 10px);
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  box-shadow: inset 0 0 4px #004;
+  min-height: 30px;
+  -webkit-border-radius: 100px;
+}
+
+::-webkit-scrollbar-thumb:vertical:window-inactive {
+  background:
+    linear-gradient(to bottom, #eee 5px, #eee0 10px),
+    linear-gradient(to top, #eee 5px, #eee0 10px),
+    linear-gradient(to right, #ddd 10%, #fff 20%, #eee 30%, #fff);
+  box-shadow: inset 0 0 4px #0044;
+}
+
+::-webkit-scrollbar-thumb:horizontal {
+  background:
+    linear-gradient(to bottom, #6af 10%, #fff4 20%, #6af 30%, #9ef),
+    linear-gradient(to right, #6af 5px, #6af0 10px),
+    linear-gradient(to left, #6af 5px, #6af0 10px);
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  box-shadow: inset 0 0 4px #004;
+  min-width: 30px;
+  -webkit-border-radius: 100px;
+}
+
+::-webkit-scrollbar-thumb:horizontal:window-inactive {
+  background:
+    linear-gradient(to right, #eee 5px, #eee0 10px),
+    linear-gradient(to left, #eee 5px, #eee0 10px),
+    linear-gradient(to bottom, #ddd 10%, #fff 20%, #eee 30%, #fff);
+  box-shadow: inset 0 0 4px #0044;
+}
+
+::-webkit-scrollbar-thumb:active {
+  box-shadow: inset 0 0 7px #004;
+}
+
+::-webkit-scrollbar-corner {
+  background: linear-gradient(to right, #ccc, #fff 20%, #ddd);
+}

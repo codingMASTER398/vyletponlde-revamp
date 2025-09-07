@@ -27,11 +27,25 @@ function download(url, location) {
 // Process the bits
 
 module.exports = (async () => {
+  let left = 0;
+
   for (let i = 0; i < songs.length; i++) {
     const song = require(`./data/songs/${songs[i]}`);
 
     if (fs.existsSync(`./data/bits/${song.nameId}`) || fs.existsSync(`./data/downloadCache/${song.nameId}.mp3`)) continue;
 
-    download(song.download, `./data/downloadCache/${song.nameId}.mp3`);
+    left++;
+    download(song.download, `./data/downloadCache/${song.nameId}.mp3`).then(()=>{
+      left--;
+    });
   }
+
+  return new Promise((r)=>{
+    const i = setInterval(()=>{
+      if(left === 0) {
+        clearInterval(i);
+        r();
+      }
+    }, 100)
+  })
 });

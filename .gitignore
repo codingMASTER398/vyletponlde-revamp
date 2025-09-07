@@ -3,3 +3,5 @@ webpunk/data/downloadCache/*
 db/ponlde.db
 package-lock.json
 site/.env
+webpunk/data/m3u
+webpunk/m3u.js

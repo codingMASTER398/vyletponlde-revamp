@@ -23,11 +23,36 @@
   position: relative;
 
   transition: 0.1s;
-  box-shadow: 0 8px 3px rgba(0, 0, 0, 0.3);
+  box-shadow:
+    0 8px 8px rgba(0, 0, 0, 0.1),
+    0 16px 16px 8px rgba(0, 0, 0, 0.1);
   color: black;
+  border-radius: 4.5px;
 }
 body.dark .guessWrapper {
   box-shadow: 0 8px 3px rgba(255, 255, 255, 0.3);
+}
+
+body:not(.reduceAqua) .guessWrapper:before {
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    var(--s-2),
+    var(--s-2) 3px,
+    var(--s-0),
+    var(--s-0) 6px
+  );
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  mask-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+body:not(.reduceAqua).dark .guessWrapper:before {
+  opacity: 0.5;
 }
 
 .guessWrapper[disabled] {
@@ -39,13 +64,13 @@ body.dark .guessWrapper {
 }
 
 .guessWrapper.yellow .progress {
-  background-color: #FDA361;
+  background-color: #fda361;
 }
 .guessWrapper.red .progress {
-  background-color: #F55962;
+  background-color: #f55962;
 }
 .guessWrapper.green .progress {
-  background-color: #6EF4AD;
+  background-color: #6ef4ad;
 }
 
 .guessWrapper .progress,
@@ -57,8 +82,13 @@ body.dark .guessWrapper {
   left: 0;
   z-index: -1;
 
-  background-color: #d1d1d1;
-  box-shadow: 0 -6px 12px rgba(0, 0, 0, 0.1) inset;
+  background-color: #e9e9e9;
+  box-shadow:
+    0 6px 12px rgba(0, 0, 0, 0.1) inset,
+    0 3px 3px rgba(255, 255, 255, 0.4) inset,
+    0 -12px 12px rgba(255, 255, 255, 0.2) inset,
+    0 3px 3px rgba(0, 0, 0, 0.3);
+  border-radius: 4.5px;
 }
 
 .progress .full {
@@ -103,17 +133,14 @@ body.dark .guessWrapper {
 .guessContent .buttons button img:hover {
   filter: none;
 }
-.guessContent .buttons button:active img {
+body:not(.reduceMotion) .guessContent .buttons button:active img {
   transform: scale(0.5);
   transition: 0.1s;
-  filter:
-    drop-shadow(6px 6px 12px white)
-    drop-shadow(-6px 6px 12px white)
-    drop-shadow(-6px -6px 12px white)
-    drop-shadow(6px -6px 12px white);
+  filter: drop-shadow(6px 6px 12px white) drop-shadow(-6px 6px 12px white)
+    drop-shadow(-6px -6px 12px white) drop-shadow(6px -6px 12px white);
 }
 
-.guessWrapper:has(button:active) {
+body:not(.reduceMotion) .guessWrapper:has(button:active) {
   transform: translateY(6px);
   transition: 0.1s;
   box-shadow: none;
@@ -136,6 +163,10 @@ body.dark .guessWrapper {
   background-color: #ececec;
   width: 316px;
   transform: translateY(6px);
+  cursor: pointer;
+  box-shadow:
+    0 0 3px rgba(0, 0, 0, 0.2),
+    0 2px 2px white inset;
 }
 
 .guessRight .resultBox p {
@@ -157,9 +188,10 @@ body.dark .guessWrapper {
   padding-left: 1rem;
   box-sizing: border-box;
 
-  box-shadow: 0 -2px 6px #00000022 inset;
+  box-shadow:
+    0 2px 6px #00000022 inset,
+    0 3px 3px rgba(0, 0, 0, 0.1);
 }
-
 
 /* The uh finished song thing at the bottom */
 .finishedSong {
@@ -167,10 +199,18 @@ body.dark .guessWrapper {
   min-height: 150px;
   background: linear-gradient(45deg, #eee 0%, #d8d8d8 100%);
 
-  box-shadow: 0 -3px 12px rgba(0, 0, 0, 0.3) inset, 0 18px 24px var(--bxs-02);
+  box-shadow:
+    0 -3px 1px white inset,
+    0 -12px 12px rgba(0, 0, 0, 0.3) inset,
+    0 -3px 6px white inset,
+    0 0px 24px var(--bxs-02),
+    0 0px 3px var(--bxs-02);
+
+  border-radius: 4.5px;
 
   padding-left: 1rem;
   padding-right: 1rem;
+  padding-bottom: 0.3rem;
 
   display: flex;
   align-items: center;
@@ -178,11 +218,28 @@ body.dark .guessWrapper {
 }
 
 body.dark .finishedSong {
-  background: linear-gradient(45deg, #04013A 0%, #000010 100%);
+  background: linear-gradient(45deg, #04013a 0%, #000010 100%);
+
+  box-shadow:
+    0 -3px 1px rgba(255, 255, 255, 0.3) inset,
+    0 -12px 12px rgba(0, 0, 0, 0.3) inset,
+    0 -3px 6px rgba(255, 255, 255, 0.3) inset,
+    0 0px 24px var(--bxs-02),
+    0 0px 3px var(--bxs-02);
 }
 
 .finishedSong img {
-  height: 100px;
+  height: 120px;
+  border-radius: 3.5px;
+  box-shadow:
+    0 0 6px rgba(0, 0, 0, 0.2),
+    0 0 6px 6px rgba(255, 255, 255, 0.5);
+}
+
+body.dark .finishedSong img {
+    box-shadow:
+    0 0 6px rgba(0, 0, 0, 0.2),
+    0 0 6px 6px rgba(255, 255, 255, 0.2);
 }
 
 .finishedSong .data {
@@ -203,11 +260,11 @@ body.dark .finishedSong {
   display: none;
 }
 
-.roundEnd.in {
+body:not(.reduceMotion) .roundEnd.in {
   animation: roundEndIn 0.5s;
 }
 
-.roundEnd.in button {
+body:not(.reduceMotion) .roundEnd.in button {
   animation: roundEndIn 1s;
 }
 
