@@ -11,7 +11,7 @@ const { spawn } = require("child_process");
   await require(`./bits`)();
   console.log(`Bits done, all done.`);
 
-  return;
+  //return;
 
   // ts pmo ima kms rq 🥀
   const child = spawn("npx", ["pm2", "restart", "vyletponlde"], {
