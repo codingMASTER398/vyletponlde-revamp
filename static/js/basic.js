@@ -26,6 +26,8 @@ function themeSwitch(dark, initial = false) {
     document.querySelector(`.volIcon`).src = `/img/volumeLight.png`;
     document.querySelector(`.logo`).src = `/logo.webp`;
   }
+
+  if(!initial) updateBackground();
 }
 
 function toggleTheme() {
@@ -58,9 +60,9 @@ let settings = {
   reduceAqua: {
     enabled: false,
   },
-  dolphins: {
+  /*dolphins: {
     enabled: false,
-  },
+  },*/
 };
 
 function updateSettings() {
@@ -85,3 +87,46 @@ for (const setting in settings) {
     updateSettings();
   });
 }
+
+/* background */
+const bgElem = document.querySelector(`#background`);
+
+const artists = {
+  "maxresdefault.jpg": "PlushieCore",
+  "djgoober.jpg": "AstroEden",
+  "dolphins.jpg": "Christian Riese Lassen",
+  "queenIsBack.png": "larvaecandy",
+  "gwaw.png": "Elena Fortune",
+  "paradiseValley.png": "larvaecandy",
+  "carousel.png": "StereoFlier",
+  "webpunk.png": "Plushiecore",
+  "lps.png": "Vemrill",
+  "dragonfly.png": "DishieRX",
+  "antonymph.png": "nerkmidz",
+}
+
+function updateBackground() {
+  localStorage.setItem(`ponldesetting.background`, bgElem.value);
+
+  if(bgElem.value == "none") {
+    document.querySelector(`#backgroundThemeStyle`).innerHTML = ``;
+    document.querySelector(`#backgroundArtist`).innerText = ``;
+    return;
+  }
+
+  document.querySelector(`#backgroundThemeStyle`).innerHTML = `
+  body, body.dark {
+    background:
+      ${localStorage.getItem(`theme`) == "dark" ? "linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6))" : "linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6))"},
+      url(/img/${bgElem.value});
+    background-size: cover;
+    background-position: center;
+  }`;
+  document.querySelector(`#backgroundArtist`).innerText = `background art by ` + artists[bgElem.value]
+}
+
+bgElem.value =
+  localStorage.getItem(`ponldesetting.background`) || "maxresdefault.jpg";
+bgElem.addEventListener(`input`, updateBackground);
+
+updateBackground();
