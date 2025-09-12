@@ -164,12 +164,16 @@
     }, i * 60);
   }
 
+  let loadTimeout = 0;
+
   function waitForZeroLoad() {
     return new Promise((r) => {
       let i = setInterval(() => {
-        if (window.toLoad <= 0) {
+        if (window.toLoad <= 0 || (performance.now() - loadTimeout > 6_000)) {
           clearInterval(i);
           r();
+        } else if(performance.now() - loadTimeout > 3_000) {
+          loadingText.innerText = `taking longer than expected. continuing anyway in ${4 - Math.ceil((performance.now() - loadTimeout - 3000) / 1000)}s`
         }
       }, 100);
     });
@@ -186,6 +190,8 @@
 
   document.addEventListener(`DOMContentLoaded`, async () => {
     loadingText.innerText = `loading content...`;
+
+    loadTimeout = performance.now()
 
     if(window.toLoad >= 1) await waitForZeroLoad();
 
