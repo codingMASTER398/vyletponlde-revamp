@@ -125,6 +125,11 @@ body:not(.reduceAqua).dark .guessWrapper:before {
   cursor: pointer;
 }
 
+.guessContent .buttons button.removed {
+  opacity: 0.5 !important;
+  pointer-events: none !important;
+}
+
 .guessContent .buttons button img {
   height: 30px;
   filter: grayscale(1) brightness(0);

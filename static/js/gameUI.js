@@ -219,6 +219,14 @@ function endGameUI() {
     document.querySelector(`.copiedToClipboard`).classList.add(`exists`);
   });
 
+  // Uh
+  if(!window.gameData.vylet && window.gameData.lodestar && score == 15) {
+    document.querySelector(`.vyletMode`).style.display = ""
+    document.querySelector(`.vyletMode`).addEventListener(`click`, ()=>{
+      window.location.href = '/creekflowCaptcha'
+    })
+  }
+
   // Leaderboard
   const lbButton = document.querySelector(`.leaderboardButton`);
 

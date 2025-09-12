@@ -50,6 +50,7 @@ app.get("/about", (_, res) => res.redirect("/"));
 app.get("/songs", (_, res) => res.redirect("/"));
 app.get("/archive", (_, res) => res.redirect("/"));
 app.get("/archive/easy", (_, res) => res.redirect("/"));
+app.get("/creekflowCaptcha", (_, res) => res.render(`creekflowcaptcha`));
 
 app.use(
   `/`,

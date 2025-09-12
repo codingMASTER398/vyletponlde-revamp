@@ -141,7 +141,12 @@ function setupGuesser(data) {
     };
 
     element.querySelector(`.playButton`).addEventListener(`click`, () => {
-      if (!currentlyPlaying) playTrack(audio, start, end, element);
+      if (!currentlyPlaying) {
+        playTrack(audio, start, end, element);
+        if(window.gameData.vylet) {
+          element.querySelector(`.playButton`).classList.add(`removed`);
+        }
+      }
     });
 
     element.querySelector(`.skipButton`).addEventListener(`click`, () => {
@@ -378,7 +383,7 @@ async function startNewRound() {
   result = await setupGuesser({
     // Sets it up and waits for the uh user to be done with it
     className: "sstart",
-    start: 10,
+    start: window.gameData.vylet ? 11 : 10,
     end: guess3End,
     audio: trackAudio[currentTrackNum].base,
     correctId: currentTrackData.id,
@@ -407,6 +412,12 @@ function createGuessWrappers() {
     text1 = `0.5 seconds`;
     text2 = `0.5 seconds`;
     text3 = `0.5s start`;
+  }
+
+  if (window.gameData.vylet) {
+    text1 = `0.2 seconds`;
+    text2 = `0.2 seconds`;
+    text3 = `0.2s start`;
   }
 
   list.appendChild(createGuessWrapper(text1, "s05"));
@@ -449,6 +460,12 @@ document.addEventListener(`DOMContentLoaded`, async () => {
   if (window.gameData.hardcore || window.gameData.lodestar) {
     guess2End = 0.5;
     guess3End = 10.5; // with the fade taken into account
+  }
+
+  if (window.gameData.vylet) {
+    guess1End = 0.2;
+    guess2End = 0.2;
+    guess3End = 11.2;
   }
 
   // Get autocomplete data

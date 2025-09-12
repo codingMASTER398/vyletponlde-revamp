@@ -80,6 +80,22 @@ router.get(`/lodestar`, (req, res) => {
   });
 });
 
+router.get(`/super-duper-secret-vylet-mode`, (req, res) => {
+  const gameData = {
+    ...gameAPI.getGameData("hard"),
+    copyDescription: "SUPER SECRET VYLET MODE",
+    hidden: true,
+    oneshot: true,
+    hardcore: true,
+    lodestar: true,
+    vylet: true
+  };
+
+  res.render(`ponlde.ejs`, {
+    gameData: gameAPI.fixGameData(gameData),
+  });
+});
+
 // Dailies
 router.get(`/daily`, (req, res) => {
   const mostRecent = db
