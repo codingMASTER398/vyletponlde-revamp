@@ -1,4 +1,5 @@
 const greekUtils = require("greek-utils");
+const config = require(`../config/scraper.json`);
 
 function makeAcronym(text) {
   return text
@@ -6,7 +7,7 @@ function makeAcronym(text) {
     .reduce((accumulator, word) => accumulator + word.charAt(0), "");
 }
 
-function convertToAcronyms(text) {
+function convertToAcronyms(text, id) {
   // Remove (feat.) and [feat.]
   text = text
     .toLowerCase()
@@ -36,6 +37,8 @@ function convertToAcronyms(text) {
   if (acronymSimplified.length > 1 && acronymSimplified != text)
     out.push(acronymSimplified);
 
+  if (config.ACRONYMS[id]) out = [...out, ...config.ACRONYMS[id]];
+
   return out;
 }
 
@@ -48,10 +51,8 @@ module.exports = () => {
     const file = `../webpunk/data/songs/` + trackFiles[i];
     const data = require(file);
 
-    if (typeof data.acronyms === "undefined") {
-      data.acronyms = convertToAcronyms(data.title);
+    data.acronyms = convertToAcronyms(data.title, data.nameId);
 
-      fs.writeFileSync(file, JSON.stringify(data));
-    }
+    fs.writeFileSync(file, JSON.stringify(data));
   }
 };

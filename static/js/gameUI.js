@@ -50,12 +50,12 @@ function createGuessWrapper(footerText, className, disabled) {
   resultBox.appendChild(resultBoxP);
   guessRight.appendChild(guessInput);
   guessRight.appendChild(resultBox);
-  guessRight.appendChild(footerP);
+  if(!window.gameData.lyricMode) guessRight.appendChild(footerP);
 
   playButton.appendChild(playButtonIcon);
   skipButton.appendChild(skipButtonIcon);
 
-  buttonsWrapper.appendChild(playButton);
+  if(!window.gameData.lyricMode) buttonsWrapper.appendChild(playButton);
   buttonsWrapper.appendChild(skipButton);
 
   guessContent.appendChild(buttonsWrapper);

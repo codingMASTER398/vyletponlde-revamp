@@ -2,8 +2,8 @@ const { spawn } = require("child_process");
 
 (async () => {
   // *taps the glass*
-  await require(`./infoUpdater`)();
-  console.log("Info updater done");
+  //await require(`./infoUpdater`)();
+  //console.log("Info updater done");
   await require(`./acronyms`)();
   console.log(`Acronyms done`);
   await require(`./downloader`)();

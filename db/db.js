@@ -28,7 +28,7 @@ function databaseInitialize() {
     const lastDay = _lastDay.findOne({});
     const today = Math.floor(Date.now() / (1000 * 60 * 60 * 24));
 
-    if (lastDay.day == today) return;
+    if (lastDay.day === today) return;
 
     // it's a brand new day again, still feels like yesterday.
     console.log(`New day!`);
@@ -47,8 +47,8 @@ function databaseInitialize() {
     leaderboard.insertOne({
       date: baseData.date,
       mode: "normal",
-      scores: []
-    })
+      scores: [],
+    });
 
     days.insertOne({
       ...baseData,
@@ -59,31 +59,46 @@ function databaseInitialize() {
     leaderboard.insertOne({
       date: baseData.date,
       mode: "easy",
-      scores: []
-    })
+      scores: [],
+    });
+
+    days.insertOne({
+      ...baseData,
+      mode: "lyric",
+      data: gameAPI.getGameData("lyric"),
+    });
+
+    leaderboard.insertOne({
+      date: baseData.date,
+      mode: "lyric",
+      scores: [],
+    });
 
     lastDay.day = today;
     _lastDay.update(lastDay);
   }, 1000);
 
-  const allDays = days.find({})
+  const allDays = days.find({});
   for (let i = 0; i < allDays.length; i++) {
     let day = allDays[i];
-    
-    if(leaderboard.findOne({
-      date: day.date,
-      mode: day.mode
-    })) continue;
+
+    if (
+      leaderboard.findOne({
+        date: day.date,
+        mode: day.mode,
+      })
+    )
+      continue;
 
     leaderboard.insertOne({
       date: day.date,
       mode: day.mode,
-      scores: []
-    })
+      scores: [],
+    });
   }
 }
 
 module.exports = {
-  days: ()=>days,
-  leaderboard: ()=>leaderboard
+  days: () => days,
+  leaderboard: () => leaderboard,
 };

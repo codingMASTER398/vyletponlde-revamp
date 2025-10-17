@@ -29,6 +29,30 @@ router.get(`/easy/infinite`, (req, res) => {
   });
 });
 
+router.get(`/lyric/infinite`, (req, res) => {
+  const gameData = {
+    ...gameAPI.getGameData("lyric"),
+    copyDescription: "lyric infinite",
+    lyricMode: true
+  };
+
+  res.render(`ponlde.ejs`, {
+    gameData: gameAPI.fixGameData(gameData),
+  });
+});
+
+router.get(`/winter`, (req, res) => {
+  const gameData = {
+    ...gameAPI.getGameData("hard"),
+    copyDescription: "winter/gladey/mat mode",
+    winterMode: true
+  };
+
+  res.render(`ponlde.ejs`, {
+    gameData: gameAPI.fixGameData(gameData),
+  });
+});
+
 router.get(`/classic`, (req, res) => {
   const gameData = {
     ...gameAPI.getGameData(""),
@@ -96,6 +120,7 @@ router.get(`/super-duper-secret-vylet-mode`, (req, res) => {
   });
 });
 
+
 // Dailies
 router.get(`/daily`, (req, res) => {
   const mostRecent = db
@@ -143,11 +168,36 @@ router.get(`/easy`, (req, res) => {
   });
 });
 
+
+router.get(`/lyric`, (req, res) => {
+  const mostRecent = db
+    .days()
+    .chain()
+    .find({ mode: "lyric" })
+    .sort((a, b) => b.day - a.day)
+    .limit(1)
+    .data()[0];
+
+  const gameData = {
+    ...mostRecent.data,
+    copyDescription: `daily lyric ${mostRecent.date}`,
+    daily: true,
+    lyricMode: true
+  };
+
+  const lb = leaderboard.dailyData(req, mostRecent.date, mostRecent.mode);
+
+  res.render(`ponlde.ejs`, {
+    gameData: gameAPI.fixGameData(gameData),
+    lb,
+  });
+});
+
 // Archives
 router.get(`/archive/:date/:mode`, (req, res) => {
   const found = db
     .days()
-    .findOne({ mode: "normal", date: req.params.date, mode: req.params.mode });
+    .findOne({ date: req.params.date, mode: req.params.mode });
 
   if (!found) {
     res.status(404).render(`404`);
@@ -161,6 +211,7 @@ router.get(`/archive/:date/:mode`, (req, res) => {
     ...found.data,
     copyDescription,
     daily: true,
+    lyricMode: req.params.mode === "lyric"
   };
 
   const lb = leaderboard.dailyData(req, found.date, found.mode);

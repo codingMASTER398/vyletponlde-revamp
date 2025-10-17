@@ -15,7 +15,6 @@ const api = require("../api/index");
 const ponlde = require("./ponlde");
 //const archives = require("./archives");
 const tracks = require(`../util/tracks`);
-const webpunker = require(`../webpunk/webpunkTask`);
 
 //
 app.set(`view engine`, `ejs`);
@@ -40,9 +39,15 @@ app.get("/", (_, res) =>
         mode: "easy",
       })
       .reverse(),
+    archiveLyric: db
+      .days()
+      .find({
+        mode: "lyric",
+      })
+      .reverse(),
     generateRunID,
     config,
-    tracks
+    tracks,
   })
 );
 app.get("/homeold", (_, res) => res.render("home"));
@@ -51,6 +56,10 @@ app.get("/songs", (_, res) => res.redirect("/"));
 app.get("/archive", (_, res) => res.redirect("/"));
 app.get("/archive/easy", (_, res) => res.redirect("/"));
 app.get("/creekflowCaptcha", (_, res) => res.render(`creekflowcaptcha`));
+
+app.get("/circles-of-hell/:num/intro", (_, res) =>
+  res.render(`circleIntro`, { circle: _.params.num })
+);
 
 app.use(
   `/`,

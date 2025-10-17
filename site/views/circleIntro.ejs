@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>*suspenseful music i think*</title>
+    <link rel="stylesheet" href="/css/circleIntro.css">
+    <script src="https://q5js.org/q5.js"></script>r
+  </head>
+  <body>
+    <div class="click">
+      <h1>click when ready</h1>
+    </div>
+
+    <script>
+      const clickElem = document.querySelector(`.click`);
+
+      window.addEventListener(`click`, ()=>{
+        clickElem.classList.add(`out`)
+      }, {
+        once: true
+      });
+
+      
+    </script>
+  </body>
+</html>

@@ -1,0 +1,44 @@
+/* Fonts */
+@font-face {
+  font-family: "MozillaText";
+  src: url("/font/LucidaGrande.ttf");
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  background: black;
+
+  font-family: "MozillaText";
+}
+
+/* Click animations */
+
+.click {
+  animation: 3s clickIn forwards;
+}
+
+@keyframes clickIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+
+.click.out {
+  animation: 0.5s clickOut forwards cubic-bezier(0.36, 0, 0.66, -0.56);
+}
+
+@keyframes clickOut {
+  100% {
+    transform: translateY(300px) rotate(600deg) scale(0);
+    opacity: 0;
+  }
+}

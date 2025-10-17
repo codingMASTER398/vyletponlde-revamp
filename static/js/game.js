@@ -23,6 +23,14 @@ function stopAudio() {
   audioStopShift++;
 }
 
+function lyricCensor(lyric, factor) {
+  const splitAt = Math.round(lyric.length * factor);
+  const shown = lyric.substr(0, splitAt);
+  const hidden = lyric.substr(splitAt, lyric.length);
+
+  return `${shown}<span class="hidden">${hidden}</span>`;
+}
+
 async function playTrack(audio, from, to, element, disableOtherPlays = true) {
   // Play a part of a track chunk. Stops all other tracks from playing.
   if (disableOtherPlays) currentlyPlaying = true;
@@ -140,18 +148,32 @@ function setupGuesser(data) {
       done = true;
     };
 
-    element.querySelector(`.playButton`).addEventListener(`click`, () => {
-      if (!currentlyPlaying) {
-        playTrack(audio, start, end, element);
-        if(window.gameData.vylet) {
-          element.querySelector(`.playButton`).classList.add(`removed`);
+    if (!window.gameData.lyricMode)
+      element.querySelector(`.playButton`).addEventListener(`click`, () => {
+        if (!currentlyPlaying) {
+          playTrack(audio, start, end, element);
+          if (window.gameData.vylet) {
+            element.querySelector(`.playButton`).classList.add(`removed`);
+          }
         }
-      }
-    });
+      });
 
     element.querySelector(`.skipButton`).addEventListener(`click`, () => {
       if (done) return;
       clickSound();
+
+      // Winter function
+      if (window.gameData.winterMode) {
+        makeYellowRedGreen("green");
+        r({
+          isCorrect: true,
+          input: ``,
+        });
+        element.querySelector(`input`).value = `(the correct song because im so cool)`
+        return;
+      }
+
+      // Skip function
       element.querySelector(`.resultBox`).style.display = "none";
       element.querySelector(`input`).value = "Skipped";
       makeYellowRedGreen("red");
@@ -162,7 +184,8 @@ function setupGuesser(data) {
       element.querySelector(`.resultBox`).style.display = "none";
       element.querySelector(`input`).value = title;
 
-      if (correctId == id) {
+      if (correctId == id || window.gameData.winterMode) {
+        if(window.gameData.winterMode) element.querySelector(`input`).value = `(the correct song because im so cool)`;
         makeYellowRedGreen("green");
         r({
           isCorrect: true,
@@ -201,6 +224,8 @@ function setupGuesser(data) {
 async function loadGameState() {
   // uhh how tf am i gonna do this
   startNewRound();
+
+  // this function is useless but ill keep it for laughs
 }
 
 function loadTrackAudio(trackNum, data) {
@@ -218,12 +243,16 @@ function loadTrackAudio(trackNum, data) {
   if (!data.audio.endsWith(`.ogg.ogg`)) data.audio += `.ogg`; // dual weild
 
   trackAudio[trackNum].base = new Audio(`/api/audio/base/${data.audio}`);
-  trackAudio[trackNum].one = new Audio(
-    `/api/audio/tiny/${data.slice1}-${data.audio}`
-  );
-  trackAudio[trackNum].two = new Audio(
-    `/api/audio/tiny/${data.slice2}-${data.audio}`
-  );
+
+  // Only load these two if it's not the lyric mode
+  if (!window.gameData.lyricMode) {
+    trackAudio[trackNum].one = new Audio(
+      `/api/audio/tiny/${data.slice1}-${data.audio}`
+    );
+    trackAudio[trackNum].two = new Audio(
+      `/api/audio/tiny/${data.slice2}-${data.audio}`
+    );
+  }
 
   trackAudio[trackNum].base.addEventListener(`canplaythrough`, () => {
     if (loader) window.toLoad--;
@@ -265,6 +294,15 @@ async function startNewRound() {
 
   createGuessWrappers();
 
+  // Set up lyric mode if needed
+  const lyricElem = document.querySelector(`.lyric`);
+
+  if (window.gameData.lyricMode) {
+    lyricElem.style.display = "block";
+    lyricElem.innerHTML = lyricCensor(currentTrackData.lyric, 0.33);
+  }
+
+  /// uhhh game i think
   let result,
     ended = false,
     best = "red";
@@ -364,6 +402,11 @@ async function startNewRound() {
   calcBest(0, result.input);
   if (result.isCorrect) end();
 
+  // Show more in lyric mode
+  if (window.gameData.lyricMode) {
+    lyricElem.innerHTML = lyricCensor(currentTrackData.lyric, 0.66);
+  }
+
   result = await setupGuesser({
     // Sets it up and waits for the uh user to be done with it
     className: "s1",
@@ -379,6 +422,11 @@ async function startNewRound() {
 
   calcBest(1, result.input);
   if (result.isCorrect) end();
+
+  // Show more in lyric mode
+  if (window.gameData.lyricMode) {
+    lyricElem.innerHTML = currentTrackData.lyric;
+  }
 
   result = await setupGuesser({
     // Sets it up and waits for the uh user to be done with it
@@ -447,8 +495,8 @@ document.addEventListener(`DOMContentLoaded`, async () => {
   }
   gameState.currentTrack = 0;
 
-  if (gameState.tracks[4]) {
-    // They already completed it, don't increase win streak
+  if (gameState.tracks[4] || window.gameData.winterMode) {
+    // They already completed it (or they're in winter mode), don't increase win streak
     window.noIncreaseWinStreak = true;
   }
 

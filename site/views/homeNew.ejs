@@ -32,6 +32,10 @@
                 <i class="ph ph-smiley"></i>
                 Easy
               </div>
+              <div data-menu-id="menuLyrics">
+                <i class="ph ph-microphone"></i>
+                Lyrics
+              </div>
               <div data-menu-id="menuSpecial">
                 <i class="ph ph-star"></i>
                 Special
@@ -82,6 +86,28 @@
               <br>
               <p>.-* daily archive</p>
               <% archiveEasy.forEach((d, i)=>{ %>
+                <div class="songIndicators inline" data-localstore-id="<%=generateRunID(d)%>">
+                  <div class="indicator"></div>
+                  <div class="indicator"></div>
+                  <div class="indicator"></div>
+                  <div class="indicator"></div>
+                  <div class="indicator"></div>
+                  <p style="margin: 0;">
+                    <b class="score">00/15</b>
+                    <a href="/archive/<%=d.date%>/<%=d.mode%>" target="_blank"><%=d.date%></a>
+                    <%=i == 0 ? "(today!)" : ""%></p>
+                </div>
+              <% }) %>
+            </div>
+            <!-- Lyrics -->
+            <div class="menuLyrics" style="display: none;">
+              <h2>Lyrics</h2>
+              <p>The lyric Ponlde with a unique daily.</p>
+              <button onclick="window.location.href='/lyric'" class="shinyButton blueButton">Daily</button>
+              <button onclick="window.location.href='/lyric/infinite'" class="shinyButton">Infinite</button>
+              <br>
+              <p>.-* daily archive</p>
+              <% archiveLyric.forEach((d, i)=>{ %>
                 <div class="songIndicators inline" data-localstore-id="<%=generateRunID(d)%>">
                   <div class="indicator"></div>
                   <div class="indicator"></div>

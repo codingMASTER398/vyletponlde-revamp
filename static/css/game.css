@@ -279,3 +279,16 @@ body:not(.reduceMotion) .roundEnd.in button {
     transform: translateY(12px);
   }
 }
+
+.lyric {
+  margin: 0;
+  width: 500px;
+  text-align: center;
+}
+
+.lyric .hidden {
+  user-select: none;
+  color: transparent;
+  background: linear-gradient(0deg, grey, black);
+  pointer-events: none;
+}

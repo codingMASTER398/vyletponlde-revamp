@@ -67,7 +67,7 @@ function getTitleID(trackURL) {
         : title_id;
 }
 
-function processSong(downloadURL, trackURL, albumInfo, id, title) {
+function processSong(downloadURL, trackURL, albumInfo, id, title, lyrics) {
   const title_id = getTitleID(trackURL);
 
   if (
@@ -82,6 +82,11 @@ function processSong(downloadURL, trackURL, albumInfo, id, title) {
     return; // Probably an instrumental or already added, skip!
   }
 
+  lyrics =
+    lyrics?.split?.("\n")?.filter?.((line) => {
+      return line.length > 10 && !line.includes("(") && !line.includes("[");
+    }) || [];
+
   duplicateBuster.push(title_id);
 
   fs.writeFileSync(
@@ -94,6 +99,7 @@ function processSong(downloadURL, trackURL, albumInfo, id, title) {
       download: downloadURL,
       album: albumInfo?.raw?.current?.title || "Singles",
       albumURL: albumInfo?.url || null,
+      lyrics: lyrics.length > 10 ? lyrics : null,
     })
   );
 }
@@ -101,7 +107,13 @@ function processSong(downloadURL, trackURL, albumInfo, id, title) {
 async function updateAlbums() {
   for (let i = 0; i < albumsList.length; i++) {
     const albumURL = albumsList[i];
+    if (albumURL.includes("track")) continue;
+
     const id = albumURL.split("/album/")[1].replaceAll(`.`, `-`); // No directory traversal for you!
+    if (config.ALBUM_EXCLUDES.includes(id)) {
+      console.log(`Skipping album ${id}, in exclude list`);
+      continue;
+    }
 
     const albumInfo = await bandcampP.getAlbumInfoPromise(albumURL);
 
@@ -114,6 +126,8 @@ async function updateAlbums() {
       continue;
     }
 
+    let newFound = false;
+
     for (let ii = 0; ii < albumInfo.raw.trackinfo.length; ii++) {
       const track = albumInfo.raw.trackinfo[ii];
 
@@ -122,15 +136,38 @@ async function updateAlbums() {
         continue;
       }
 
-      processSong(
-        track?.file?.["mp3-128"],
-        track.title_link,
-        albumInfo,
-        track.id,
-        track.title
-      );
+      const title_id = getTitleID(track.title_link);
+      if (
+        config.EXCLUDE.find((e) => title_id.includes(e)) ||
+        config.EXCLUDE_EXACT.includes(title_id) ||
+        fs.existsSync(`./data/songs/${title_id}.json`)
+      ) {
+        console.log(`Already gotten ${title_id}`)
+        continue; // Exlcuded
+      }
+
+      newFound = true;
+
+      bandcampP
+        .getTrackInfoPromise(config.ARTIST_URL + track.title_link)
+        .then((trackData) => {
+          processSong(
+            track?.file?.["mp3-128"],
+            track.title_link,
+            albumInfo,
+            track.id,
+            track.title,
+            trackData?.raw?.current?.lyrics || []
+          );
+        });
     }
+
+    if(newFound) await sleep(15_000); // so as not to awaken the ratelimit demons
   }
+}
+
+function sleep(ms) {
+  return new Promise((r) => setTimeout(r, ms));
 }
 
 async function getSingleDownloadURL(freeDownloadPage) {
@@ -161,71 +198,106 @@ async function getImageURL(freeDownloadPage) {
   return html.split(`class="download-thumbnail" src="`)?.[1]?.split?.('"')?.[0];
 }
 
-async function updateSingle(singleURL) {
-  const parsedURL = getTitleID(singleURL);
+function updateSingle(singleURL) {
+  return new Promise(async (continueSearch) => {
+    const parsedURL = getTitleID(singleURL);
 
-  if(config.EXCLUDE.find((e) => parsedURL.includes(e)) ||
-    config.EXCLUDE_EXACT.includes(parsedURL)) {
+    // Make sure it isn't excluded or we've already done it
+
+    if (
+      config.EXCLUDE.find((e) => parsedURL.includes(e)) ||
+      config.EXCLUDE_EXACT.includes(parsedURL)
+    ) {
+      continueSearch();
       return;
-    };
+    }
 
-  if (fs.existsSync(`./data/songs/${parsedURL}.json`)) {
-    console.log("Already got");
-    if(require(`./data/songs/${parsedURL}.json`).id) return; // monkey patch for redoing ones without ids for some reason
-  }
+    if (
+      fs.existsSync(`./data/songs/${parsedURL}.json`) &&
+      require(`./data/songs/${parsedURL}.json`).id
+    ) {
+      console.log("Already got");
+      if (require(`./data/songs/${parsedURL}.json`).id) {
+        continueSearch();
+        return;
+      }
+    }
 
-  console.log(singleURL)
+    // Get the data from bandcamp
+    let data;
 
-  let data;
+    try {
+      console.log(singleURL);
+      data = await bandcampP.getTrackInfoPromise(singleURL);
+    } catch (e) {
+      console.error(e);
+      continueSearch();
+      return;
+    }
 
-  try {
-    data = await bandcampP.getTrackInfoPromise(singleURL);
-  } catch (e) {
-    console.log(e, singleURL);
-    return;
-  }
+    //continueSearch();
 
-  if (!data?.raw?.freeDownloadPage && !data?.raw?.trackinfo?.[0]?.file?.["mp3-128"]) {
-    console.warn(`${singleURL} doesn't have a free download`);
-    return;
-  }
+    // Get the audio file URL
+    if (
+      !data?.raw?.freeDownloadPage &&
+      !data?.raw?.trackinfo?.[0]?.file?.["mp3-128"]
+    ) {
+      console.warn(`${singleURL} doesn't have a free download`);
+      continueSearch();
+      return;
+    }
 
-  const downloadURL = data?.raw?.trackinfo?.[0]?.file?.["mp3-128"] || await getSingleDownloadURL(data.raw.freeDownloadPage);
-  if (!downloadURL) {
-    console.warn(`${singleURL} can't parse download URL`);
-    return;
-  }
+    const downloadURL =
+      data?.raw?.trackinfo?.[0]?.file?.["mp3-128"] ||
+      (await getSingleDownloadURL(data.raw.freeDownloadPage));
+    if (!downloadURL) {
+      console.warn(`${singleURL} can't parse download URL`);
+      continueSearch();
+      return;
+    }
 
-  // Download the image
-  if (!fs.existsSync(`./data/albumImages/${data.id}.jpg`) && data?.raw?.freeDownloadPage) {
-    const imageURL = await getImageURL(data?.raw?.freeDownloadPage);
-    download(imageURL, `./data/albumImages/${parsedURL}.jpg`);
-  }
+    // Download the cover image
+    if (
+      !fs.existsSync(`./data/albumImages/${data.id}.jpg`) &&
+      data?.raw?.freeDownloadPage
+    ) {
+      const imageURL = await getImageURL(data?.raw?.freeDownloadPage);
+      download(imageURL, `./data/albumImages/${parsedURL}.jpg`);
+    }
 
-  processSong(downloadURL, data.url, null, data?.trackId || data.id, data.title);
-}
+    // Process it
+    processSong(
+      downloadURL,
+      data.url,
+      null,
+      data?.trackId || data.id,
+      data.title,
+      data?.raw?.current?.lyrics || []
+    );
 
-function sleep(ms) {
-  return new Promise((r) => setTimeout(r, ms));
+    continueSearch();
+  });
 }
 
 async function updateSingles() {
   for (let i = 0; i < singles.length; i++) {
     try {
-      updateSingle(singles[i]);
+      // Compute 3 at once before awaiting, i don't got all day
+      if (i % 3 === 0) await updateSingle(singles[i]);
+      else updateSingle(singles[i]);
     } catch (e) {
       console.log(e);
     }
   }
 }
 
-module.exports = (async () => {
+module.exports = async () => {
   console.log(`Updating albums list...`);
-  await updateAlbumsList();
+  //await updateAlbumsList();
 
   console.log(`Updating albums...`);
-  await updateAlbums();
+  //await updateAlbums();
 
   console.log(`Updating singles...`);
   await updateSingles();
-});
+};

@@ -31,6 +31,36 @@
     "no-matter-what012-2",
     "no-matter-what017-2",
     "no-matter-what019-2",
-    "no-matter-what020-faithful-mix-2"
-  ]
+    "no-matter-what020-faithful-mix-2",
+    "w",
+    "owo"
+  ],
+  "ALBUM_EXCLUDES": [
+    "tempest-live-version",
+    "little-dreams-live-2019"
+  ],
+  "ACRONYMS": {
+    "-": ["cross"],
+    "376486-n-1224296-w-ft-sylver-stripe": ["coordinates", "co-ordinates"],
+
+    "no-matter-what-2013": ["nmw 2013", "2013"],
+    "no-matter-what-2014": ["nmw 2014", "2014"],
+    "no-matter-what-2015": ["nmw 2015", "2015"],
+    "no-matter-what-2016": ["nmw 2016", "2016"],
+    "no-matter-what-2017": ["nmw 2017", "2017"],
+    "no-matter-what-2018": ["nmw 2018", "2018"],
+    "no-matter-what-2019": ["nmw 2019", "2019"],
+    "no-matter-what-2020": ["nmw 2020", "2020"],
+    "no-matter-what-2021": ["nmw 2021", "2021"],
+    "no-matter-what-2022": ["nmw 2022", "2022"],
+    "no-matter-what-2023": ["nmw 2023", "2023"],
+    "no-matter-what-2024": ["nmw 2024", "2024"],
+    "no-matter-what-2025": ["nmw 2025", "2025"],
+    "no-matter-what-2026": ["nmw 2026", "2026"],
+    "no-matter-what-2027": ["nmw 2027", "2027"],
+
+    "no-matter-what-2020-full-version": ["nmw 2020", "2020"],
+    "no-matter-what-2024-ft-nekosnicker-sylver-stripe-namii-galaxysquid": ["nmw 2024", "2024"],
+    "--12": ["morse", "morse code", "mc", "mystic"]
+  }
 }
