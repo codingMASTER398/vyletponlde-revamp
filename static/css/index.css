@@ -234,16 +234,16 @@ a:has(.logo) {
   border: 1px solid rgba(150, 150, 150, 0.5);
 }
 
-.indicator.green {
-  background-color: #6ef4ad !important;
-  transition: 1s;
-}
 .indicator.red {
   background-color: #f55962 !important;
   transition: 1s;
 }
 .indicator.yellow {
   background-color: #fda361 !important;
+  transition: 1s;
+}
+.indicator.green {
+  background-color: #6ef4ad !important;
   transition: 1s;
 }
 

@@ -12,6 +12,11 @@ let gameState = {
 
 window.toLoad++;
 
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+const panner = audioCtx.createStereoPanner();
+panner.connect(audioCtx.destination);
+
 const clicky = new Audio("/audio/click.ogg");
 
 function clickSound() {
@@ -48,6 +53,13 @@ async function playTrack(audio, from, to, element, disableOtherPlays = true) {
     progress.style.width = "0%";
     progress.offsetWidth;
     progress.classList.add(`t`);
+  }
+
+  if (window.gameData.circle === 9) {
+    // Evil audio panning
+    const source = audioCtx.createMediaElementSource(audio);
+    source.connect(panner);
+    panner.pan.value = Math.random() > 0.5 ? -1 : 1;
   }
 
   await audio.play();
@@ -90,6 +102,8 @@ function setupAutoComplete(element) {
 
   let onEnter, disabled;
 
+  inputBox.classList.add(`current`)
+
   resultBox.addEventListener(`click`, () => {
     const result = miniSearch.search(inputBox.value, { fuzzy: 0.2 })[0];
     if (result) inputBox.value = result.n;
@@ -118,6 +132,15 @@ function setupAutoComplete(element) {
 
   inputBox.addEventListener(`keydown`, autoComplete);
   inputBox.addEventListener(`input`, autoComplete);
+  inputBox.addEventListener(`internalSend`,()=>{
+    autoComplete({
+      key: "Enter"
+    })
+  });
+
+  if(window.gameData.circle === 9) {
+    inputBox.setAttribute("disabled", true)
+  }
 
   return {
     onEnter: (f) => {
@@ -126,6 +149,7 @@ function setupAutoComplete(element) {
     disable: () => {
       disabled = true;
       inputBox.blur();
+      inputBox.classList.remove(`current`)
     },
   };
 }
@@ -133,7 +157,15 @@ function setupAutoComplete(element) {
 function setupGuesser(data) {
   // Sets up the guessing logic for a guessWrapper object
   return new Promise((r) => {
-    const { className, start, end, audio, correctId, correctAlbum } = data;
+    const {
+      className,
+      start,
+      end,
+      audio,
+      correctId,
+      correctAlbum,
+      additionalMatches,
+    } = data;
     const element = document.querySelector(`.${className}`);
     const input = setupAutoComplete(element.querySelector(`.guessRight`));
 
@@ -148,11 +180,15 @@ function setupGuesser(data) {
       done = true;
     };
 
-    if (!window.gameData.lyricMode)
+    if (
+      !window.gameData.lyricMode &&
+      !window.gameData.artMode &&
+      !window.gameData.waveformMode
+    )
       element.querySelector(`.playButton`).addEventListener(`click`, () => {
         if (!currentlyPlaying) {
           playTrack(audio, start, end, element);
-          if (window.gameData.vylet) {
+          if (window.gameData.vylet || window.gameData.onlyOnce) {
             element.querySelector(`.playButton`).classList.add(`removed`);
           }
         }
@@ -169,7 +205,8 @@ function setupGuesser(data) {
           isCorrect: true,
           input: ``,
         });
-        element.querySelector(`input`).value = `(the correct song because im so cool)`
+        element.querySelector(`input`).value =
+          `(the correct song because im so cool)`;
         return;
       }
 
@@ -184,8 +221,14 @@ function setupGuesser(data) {
       element.querySelector(`.resultBox`).style.display = "none";
       element.querySelector(`input`).value = title;
 
-      if (correctId == id || window.gameData.winterMode) {
-        if(window.gameData.winterMode) element.querySelector(`input`).value = `(the correct song because im so cool)`;
+      if (
+        correctId == id ||
+        window.gameData.winterMode ||
+        additionalMatches?.includes?.(id)
+      ) {
+        if (window.gameData.winterMode)
+          element.querySelector(`input`).value =
+            `(the correct song because im so cool)`;
         makeYellowRedGreen("green");
         r({
           isCorrect: true,
@@ -245,7 +288,11 @@ function loadTrackAudio(trackNum, data) {
   trackAudio[trackNum].base = new Audio(`/api/audio/base/${data.audio}`);
 
   // Only load these two if it's not the lyric mode
-  if (!window.gameData.lyricMode) {
+  if (
+    !window.gameData.lyricMode &&
+    !window.gameData.artMode &&
+    !window.gameData.waveformMode
+  ) {
     trackAudio[trackNum].one = new Audio(
       `/api/audio/tiny/${data.slice1}-${data.audio}`
     );
@@ -302,6 +349,34 @@ async function startNewRound() {
     lyricElem.innerHTML = lyricCensor(currentTrackData.lyric, 0.33);
   }
 
+  // Set up art mode if needed
+  const artElem = document.querySelector(`.art`);
+
+  if (window.gameData.artMode) {
+    artElem.style.display = "block";
+    artElem.querySelector(`img`).src =
+      `/api/songData/trackart/${currentTrackData.coverArt}.webp`;
+    artElem.querySelector(`img`).style.filter = "blur(35px)";
+    artElem.classList.remove(`transition`);
+
+    if (window.gameData.hardcoreArt) {
+      artElem.classList.add(`hardcore`);
+      artElem.classList.remove(`transitionOutHardcore`);
+      artElem.querySelector(`img`).style.top = `-${Math.random() * 900}px`;
+      artElem.querySelector(`img`).style.left = `-${Math.random() * 900}px`;
+      artElem.querySelector(`img`).style.filter = "blur(20px)";
+    }
+  }
+
+  // Set up waveform mode if needded
+  const waveformElem = document.querySelector(`.waveform`);
+
+  if (window.gameData.waveformMode) {
+    waveformElem.style.display = "block";
+    waveformElem.querySelector(`img`).src =
+      `/api/songData/waveform/${currentTrackData.nameId}.png`;
+  }
+
   /// uhhh game i think
   let result,
     ended = false,
@@ -322,9 +397,11 @@ async function startNewRound() {
     // Show the end track info
     showRoundEndInfo(
       currentTrackData.title,
-      currentTrackData.album,
+      window.gameData.artMode
+        ? `Art by ${currentTrackData.coverArtAttribution}`
+        : currentTrackData.album,
       currentTrackData.image,
-      "https://vyletpony.bandcamp.com/" + currentTrackData.bandcamp
+      currentTrackData.bandcamp
     );
 
     // Change the color of the indicators
@@ -332,14 +409,21 @@ async function startNewRound() {
       .querySelector(`.songIndicators`)
       .children[currentTrackNum + 1].classList.add(best);
 
+    // If it's hardcore art, show the whole thing
+    if (window.gameData.hardcoreArt) {
+      artElem.classList.add(`transition`);
+      artElem.classList.add(`transitionOutHardcore`);
+      artElem.classList.remove(`hardcore`);
+    }
+
     // If it's oneshot, then one shot the the one shot.
 
     if (window.gameData.oneshot && best != "green") {
-      gameState.currentTrack = 4;
+      gameState.currentTrack = window.gameData.amountOverride - 1 || 4;
     }
 
     // Yeah.
-    if (gameState.currentTrack == 4) {
+    if (gameState.currentTrack === (window.gameData.amountOverride - 1 || 4)) {
       document.querySelector(`.nextButton`).innerText = "show results";
     }
 
@@ -350,7 +434,9 @@ async function startNewRound() {
 
         stopAudio();
 
-        if (gameState.currentTrack == 4) {
+        if (
+          gameState.currentTrack == (window.gameData.amountOverride - 1 || 4)
+        ) {
           endGameUI();
           return;
         }
@@ -393,6 +479,7 @@ async function startNewRound() {
     end: guess1End,
     audio: trackAudio[currentTrackNum].one,
     correctId: currentTrackData.id,
+    additionalMatches: currentTrackData.additionalMatches,
     correctAlbum: currentTrackData.album,
     hadCorrect: result?.isCorrect,
     color: gameState.tracks[currentTrackNum].guesses[0] || null,
@@ -407,6 +494,11 @@ async function startNewRound() {
     lyricElem.innerHTML = lyricCensor(currentTrackData.lyric, 0.66);
   }
 
+  // Show more in art mode
+  if (window.gameData.artMode) {
+    artElem.querySelector(`img`).style.filter = "blur(10px)";
+  }
+
   result = await setupGuesser({
     // Sets it up and waits for the uh user to be done with it
     className: "s1",
@@ -414,6 +506,7 @@ async function startNewRound() {
     end: guess2End,
     audio: trackAudio[currentTrackNum].two,
     correctId: currentTrackData.id,
+    additionalMatches: currentTrackData.additionalMatches,
     correctAlbum: currentTrackData.album,
     hadCorrect: result.isCorrect,
     color: gameState.tracks[currentTrackNum].guesses[1] || null,
@@ -428,6 +521,11 @@ async function startNewRound() {
     lyricElem.innerHTML = currentTrackData.lyric;
   }
 
+  // Show more in art mode
+  if (window.gameData.artMode) {
+    artElem.querySelector(`img`).style.filter = "";
+  }
+
   result = await setupGuesser({
     // Sets it up and waits for the uh user to be done with it
     className: "sstart",
@@ -435,6 +533,7 @@ async function startNewRound() {
     end: guess3End,
     audio: trackAudio[currentTrackNum].base,
     correctId: currentTrackData.id,
+    additionalMatches: currentTrackData.additionalMatches,
     correctAlbum: currentTrackData.album,
     hadCorrect: result.isCorrect,
     color: gameState.tracks[currentTrackNum].guesses[2] || null,
@@ -480,6 +579,9 @@ function pushGameState() {
 document.addEventListener(`DOMContentLoaded`, async () => {
   // get a unique ID for this run
   window.runID =
+    (window.gameData.artMode ? "art-" : "") +
+    (window.gameData.hardcoreArt ? "arthc-" : "") +
+    (window.gameData.lyricMode ? "lyric-" : "") +
     (window.gameData.hardcore ? "hardcore-" : "") +
     (window.gameData.hidden ? "hidden-" : "") +
     (window.gameData.oneshot ? "oneshot-" : "") +
@@ -544,4 +646,30 @@ document.addEventListener(`DOMContentLoaded`, async () => {
   loadGameState();
 
   window.toLoad--;
+
+  // Circle 9 discord
+  let lastId = "", initial = true;
+
+  if(window.gameData.circle === 9) {
+    setInterval(async ()=>{
+      const message = await(await fetch(`/vyletDiscord/last`)).json();
+      if(message[1] !== lastId) {
+        lastId = message[1]
+
+        if(initial) {
+          initial = false;
+          return;
+        }
+
+        const inputBox = document.querySelector(`.guessInput.current`);
+
+        if(!inputBox) return;
+
+        inputBox.value = message[0];
+        inputBox.dispatchEvent(new Event("input"))
+        inputBox.dispatchEvent(new Event("internalSend"))
+      }
+
+    }, 500)
+  }
 });

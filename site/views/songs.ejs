@@ -1,6 +1,6 @@
 <h2>Tracks (<%=Object.keys(tracks).length%>)</h2>
 
-<% tracks = Object.values(tracks).sort((a,b)=>a.album.localeCompare(b.album)) %>
+<% tracks = tracks.sort((a,b)=>a.album.localeCompare(b.album)) %>
 <% let currentAlbum = ``, albumN = 0 %>
 <% tracks.forEach((track)=>{ %>
   <% if(currentAlbum != track.album) { %>

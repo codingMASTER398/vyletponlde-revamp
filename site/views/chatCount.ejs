@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include("blocks/preloads") %> <%- include("blocks/basicHead") %>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css"
+    />
+  </head>
+  <body>
+    <%- include("blocks/titlebar") %>
+
+    <div class="center">
+      <h1>vylet's youtube chat has to count to 30</h1>
+      <div class="numbers">
+        <h2 class="lastMessage">connecting??</h2>
+      </div>
+      <i class="from">@nobody</i>
+    </div>
+
+    <style>
+      .numbers {
+        position: relative;
+        display: block;
+        margin-top: 100px;
+      }
+      .numbers:after {
+        position: absolute;
+        width: 960px;
+        height: 540px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: url(/img/numberCam.png);
+        content: "";
+        z-index: -99;
+      }
+
+      .numbers h2 {
+        -webkit-text-stroke: 1px black;
+        font-size: 60px;
+      }
+
+      .numbers h2.green {
+        color: rgb(0, 255, 0);
+      }
+      .numbers h2.red {
+        color: red;
+      }
+    </style>
+
+    <script src="/js/chatCount.js"></script>
+  </body>
+</html>

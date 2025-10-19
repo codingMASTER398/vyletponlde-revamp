@@ -21,22 +21,26 @@ function getImageId(track) {
   else return `notfound`;
 }
 
-function getGameDataLyric(mode) {
+function getGameDataLyric(mode, amount = 5) {
   const tracksToSend = uniqueLyrics
     .map((value) => ({ value, sort: randomer() }))
     .sort((a, b) => a.sort - b.sort)
-    .slice(0, 5)
+    .slice(0, amount)
     .map(({ value }) => {
-      const related = Object.values(tracks).find((t)=>value.from.includes(t.nameId));
+      const matches = Object.values(tracks).filter((t) =>
+        value.from.includes(t.nameId)
+      );
+      const firstRelated = matches[0];
 
       return {
-        title: related.title,
-        album: related.album,
-        bandcamp: related.url,
-        audio: related.nameId + ".ogg",
-        id: related.id,
-        image: getImageId(related),
-        lyric: value.lyric
+        title: firstRelated.title,
+        album: firstRelated.album,
+        bandcamp: firstRelated.albumURL || firstRelated.url,
+        audio: firstRelated.nameId + ".ogg",
+        id: firstRelated.id,
+        image: getImageId(firstRelated),
+        lyric: value.lyric,
+        additionalMatches: matches.map((m) => m.id),
       };
     });
 
@@ -47,11 +51,41 @@ function getGameDataLyric(mode) {
   };
 }
 
-function getGameData(mode = "") {
+function getGameDataArt(mode, amount = 5) {
+  const tracksToSend = Object.values(tracks)
+    .filter((track) => track.coverArtAttribution && !track.isFeatherSong)
+    .map((value) => ({ value, sort: randomer() }))
+    .sort((a, b) => a.sort - b.sort)
+    .slice(0, amount)
+    .map(({ value }) => {
+      return {
+        title: value.title,
+        album: value.album,
+        bandcamp: value.albumURL || value.url,
+        audio: value.nameId + ".ogg",
+        id: value.id,
+        image: getImageId(value),
+        coverArtAttribution: value.coverArtAttribution,
+        coverArt: value.nameId,
+      };
+    });
+
+  return {
+    tracks: tracksToSend,
+    mode,
+    v: 1,
+  };
+}
+
+function getGameData(mode = "", amount = 5, isFeather) {
   let possibleTracks = Object.values(tracks);
 
   if (mode.includes("lyric")) {
-    return getGameDataLyric(mode);
+    return getGameDataLyric(mode, amount);
+  }
+
+  if (mode.includes("art")) {
+    return getGameDataArt(mode, amount);
   }
 
   if (mode.includes("easy")) {
@@ -69,9 +103,10 @@ function getGameData(mode = "") {
   }
 
   const tracksToSend = possibleTracks
+    .filter((t) => (isFeather ? t.isFeatherSong : !t.isFeatherSong))
     .map((value) => ({ value, sort: randomer() }))
     .sort((a, b) => a.sort - b.sort)
-    .slice(0, 5)
+    .slice(0, amount)
     .map(({ value }) => {
       const slice1 = Math.floor(Math.random() * 9) + 1;
       let slice2 = -1;
@@ -84,8 +119,9 @@ function getGameData(mode = "") {
         title: value.title,
         audio: value.nameId + ".ogg", // lol .ogg.ogg, dual weilding
         album: value.album,
-        bandcamp: value.url,
+        bandcamp: value.albumURL || value.url,
         id: value.id,
+        nameId: value.nameId,
         image: getImageId(value),
         slice1,
         slice2,

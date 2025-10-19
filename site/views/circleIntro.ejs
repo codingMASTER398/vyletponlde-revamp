@@ -1,25 +1,97 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <data-circle style="display: none"><%=circle%></data-circle>
     <title>*suspenseful music i think*</title>
-    <link rel="stylesheet" href="/css/circleIntro.css">
-    <script src="https://q5js.org/q5.js"></script>r
+    <link rel="stylesheet" href="/css/circleIntro.css" />
+    <script src="https://q5js.org/q5.js"></script>
+    <script src="/js/reusedParticleRenderer.js"></script>
+    <script src="/js/circleIntroParticles.js"></script>
+    <script src="/js/circleIntro.js" defer></script>
   </head>
   <body>
     <div class="click">
       <h1>click when ready</h1>
     </div>
+    <div class="circleText" style="display: none">
+      <h1>CIRCLE 1</h1>
+    </div>
 
-    <script>
-      const clickElem = document.querySelector(`.click`);
+    <!-- CIRCLE 1: Hardcore ponlde -->
+    <div class="task task-1" style="display: none">
+      <p>The (very easy) hardcore ponlde.</p>
+      <p>Complete it, completely green, to move to circle 2.</p>
+      <p>Any yellows/reds aren't acceptable.</p>
+      <button class="start">start</button>
+    </div>
 
-      window.addEventListener(`click`, ()=>{
-        clickElem.classList.add(`out`)
-      }, {
-        once: true
-      });
+    <!-- CIRCLE 2: Lyric guesser -->
+    <div class="task task-2" style="display: none">
+      <p>Lyrics x10.</p>
+      <p>Complete it, completely green, to move to circle 3.</p>
+      <p>Yellows/reds are ok, as long as it's correct at the end.</p>
+      <button class="start">start</button>
+    </div>
 
-      
-    </script>
+    <!-- CIRCLE 3: Art ponlde -->
+    <div class="task task-3" style="display: none">
+      <img src="/img/Screenshot_20251019_113234.png">
+      <br>
+      <button class="start">start</button>
+    </div>
+
+    <!-- CIRCLE 4: Speedrun ponlde -->
+    <div class="task task-4" style="display: none">
+      <p>Speedrun x12.</p>
+      <p>Complete it within 60 seconds to move to circle 5.</p>
+      <button class="start">start</button>
+    </div>
+
+    <!-- CIRCLE 5: Feather ponlde -->
+    <div class="task task-5" style="display: none">
+      <p>Feather ponlde.</p>
+      <p>Ponlde, but Feather's songs. Yeah.</p>
+      <p>Complete it, completely green, to move to circle 6.</p>
+      <p>Yellows and reds are acceptable. Just for fun :3</p>
+      <button class="start">start</button>
+    </div>
+
+    <!-- CIRCLE 6: Chat counting -->
+    <div class="task task-6" style="display: none">
+      <p>Chat has to count to 30, lmao.</p>
+      <p>Incorrect numbers reset the counter.</p>
+      <p>I have no idea how long this is going to take.</p>
+      <button class="start">start</button>
+    </div>
+
+    <!-- CIRCLE 7: Endurance -->
+    <div class="task task-7" style="display: none">
+      <p>Comical amount of ponlde.</p>
+      <p>Each sample can only be played once.</p>
+      <p>Complete it, completely green, yellow/red is fine, to move to circle 8.</p>
+      <button class="start">start</button>
+    </div>
+
+    <!-- CIRCLE 8: Waveform -->
+    <div class="task task-8" style="display: none">
+      <p>Waveform ponlde</p>
+      <p>You said you could <i>probably</i> do this one, didn't you?</p>
+      <p>Complete it, completely green, to move to circle 9.</p>
+      <p>Yellows and reds are acceptable because it'd be insane if you were actually good at this.</p>
+      <button class="start">start</button>
+    </div>
+
+    <!-- CIRCLE 9: Waveform -->
+    <div class="task task-9" style="display: none">
+      <p>The final circle.</p>
+      <br>
+      <p>Your super secret vylet mode.</p>
+      <p>But you need 10 perfects instead of 5.</p>
+      <p>And the samples come out of a random ear, not both.</p>
+      <p>And all your answers must be sent in Super Pony World <b>#chat</b> so people think you're going crazy.</p>
+      <br>
+      <p>Get a perfect score and you're finally done.</p>
+      <button class="start">start</button>
+    </div>
   </body>
 </html>

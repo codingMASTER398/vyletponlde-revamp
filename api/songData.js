@@ -20,4 +20,19 @@ router.use(`/thumbnail`, express.static(`../webpunk/data/albumImages`, {
   immutable: true,
 }))
 
+router.use(`/thumbnail`, express.static(`../webpunk-feather/data/albumImages`, {
+  maxAge: 360000,
+  immutable: true,
+}))
+
+router.use(`/trackart`, express.static(`../webpunk/art/processed`, {
+  maxAge: 360000,
+  immutable: true,
+}))
+
+router.use(`/waveform`, express.static(`../webpunk/data/waveforms`, {
+  maxAge: 360000,
+  immutable: true,
+}))
+
 module.exports = router;

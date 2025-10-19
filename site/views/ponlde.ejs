@@ -15,8 +15,6 @@
 
     <!-- Preload audio -->
     <link rel="preload" href="/api/audio/base/<%=gameData.tracks[0].audio%>" as="audio" />
-    <link rel="preload" href="/api/audio/tiny/<%=gameData.tracks[0].slice1%>-<%=gameData.tracks[0].audio%>" as="audio" />
-    <link rel="preload" href="/api/audio/tiny/<%=gameData.tracks[0].slice2%>-<%=gameData.tracks[0].audio%>" as="audio" />
 
     <!-- Preload other content -->
     <link rel="preload" href="/audio/click.ogg" as="audio" />
@@ -35,12 +33,19 @@
     <div class="center gameArea" style="">
       <div class="songIndicators">
         <p style="margin: 0;margin-right: 1rem;"><%=gameData.copyDescription%></p>
-        <% for(i = 0; i < 5; i++) { %>
+        <% for(i = 0; i < (gameData.amountOverride || 5); i++) { %>
         <div class="grey indicator"></div>
         <% } %>
       </div>
 
       <h3 class="lyric" style="display: none;">Lyric</h3>
+      <div class="art" style="display: none;">
+        <img>
+      </div>
+
+      <div class="waveform" style="display: none;">
+        <img>
+      </div>
 
       <%- include("blocks/game/songGuessWrapper") %>
 
@@ -112,6 +117,22 @@
         <%- include("blocks/leaderboard") %>
       <% } %>
     </div>
+
+    <!-- Circles things -->
+
+    <div class="center circleFail" style="display: none;">
+      <h1>You failed.</h1>
+      <p class="toPass">To pass text here.</p>
+      <button class="shinyButton blueButton">Retry</button>
+    </div>
+    
+    <div class="center circlePass" style="display: none;">
+      <h1>Congratulations!.</h1>
+      <p>you did it. hip hip hooray!!!</p>
+      <button class="shinyButton blueButton">Next circle</button>
+    </div>
+
+    <!-- Scripts -->
 
     <script src="/js/minisearch.js"></script>
     <script src="/js/game.js"></script>

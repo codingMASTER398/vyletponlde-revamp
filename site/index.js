@@ -13,6 +13,9 @@ app.use(require("compression")());
 const db = require(`../db/db`);
 const api = require("../api/index");
 const ponlde = require("./ponlde");
+const circlesOfHell = require("./circlesOfHell");
+const ytChat = require("./youtubeChat");
+const discord = require("./discord");
 //const archives = require("./archives");
 const tracks = require(`../util/tracks`);
 
@@ -21,9 +24,12 @@ app.set(`view engine`, `ejs`);
 app.use(requestIp.mw());
 
 app.use("/api", api);
+app.use("/yt", ytChat);
+app.use("/vyletDiscord", discord);
 
 //app.use("/archive", archives);
 app.use("/", ponlde);
+app.use("/circles-of-hell", circlesOfHell);
 
 app.get("/", (_, res) =>
   res.render("homeNew", {
@@ -45,9 +51,15 @@ app.get("/", (_, res) =>
         mode: "lyric",
       })
       .reverse(),
+    archiveArt: db
+      .days()
+      .find({
+        mode: "art",
+      })
+      .reverse(),
     generateRunID,
     config,
-    tracks,
+    tracks: Object.values(tracks).filter((s)=>!s.isFeatherSong),
   })
 );
 app.get("/homeold", (_, res) => res.render("home"));
@@ -56,10 +68,6 @@ app.get("/songs", (_, res) => res.redirect("/"));
 app.get("/archive", (_, res) => res.redirect("/"));
 app.get("/archive/easy", (_, res) => res.redirect("/"));
 app.get("/creekflowCaptcha", (_, res) => res.render(`creekflowcaptcha`));
-
-app.get("/circles-of-hell/:num/intro", (_, res) =>
-  res.render(`circleIntro`, { circle: _.params.num })
-);
 
 app.use(
   `/`,

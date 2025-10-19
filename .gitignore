@@ -1,7 +1,14 @@
 node_modules
-webpunk/data/downloadCache/*
 db/ponlde.db
 package-lock.json
 site/.env
 webpunk/data/m3u
 webpunk/m3u.js
+webpunk/art/unprocessed/*
+webpunk/data/downloadCache/*
+
+webpunk-feather/data/m3u
+webpunk-feather/m3u.js
+webpunk-feather/art/unprocessed/*
+webpunk-feather/data/downloadCache/*
+site/.env

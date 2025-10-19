@@ -74,6 +74,18 @@ function databaseInitialize() {
       scores: [],
     });
 
+    days.insertOne({
+      ...baseData,
+      mode: "art",
+      data: gameAPI.getGameData("art"),
+    });
+
+    leaderboard.insertOne({
+      date: baseData.date,
+      mode: "art",
+      scores: [],
+    });
+
     lastDay.day = today;
     _lastDay.update(lastDay);
   }, 1000);

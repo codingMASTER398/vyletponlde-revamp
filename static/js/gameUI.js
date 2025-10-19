@@ -50,12 +50,22 @@ function createGuessWrapper(footerText, className, disabled) {
   resultBox.appendChild(resultBoxP);
   guessRight.appendChild(guessInput);
   guessRight.appendChild(resultBox);
-  if(!window.gameData.lyricMode) guessRight.appendChild(footerP);
+  if (
+    !window.gameData.lyricMode &&
+    !window.gameData.artMode &&
+    !window.gameData.waveformMode
+  )
+    guessRight.appendChild(footerP);
 
   playButton.appendChild(playButtonIcon);
   skipButton.appendChild(skipButtonIcon);
 
-  if(!window.gameData.lyricMode) buttonsWrapper.appendChild(playButton);
+  if (
+    !window.gameData.lyricMode &&
+    !window.gameData.artMode &&
+    !window.gameData.waveformMode
+  )
+    buttonsWrapper.appendChild(playButton);
   buttonsWrapper.appendChild(skipButton);
 
   guessContent.appendChild(buttonsWrapper);
@@ -119,6 +129,106 @@ function copyTextToClipboard(text) {
 }
 // end stackoverflow :3
 
+function circleEnd(score, correct) {
+  const passElement = document.querySelector(`.circlePass`);
+  const failElement = document.querySelector(`.circleFail`);
+  const toPass = document.querySelector(`.toPass`);
+
+  const doPassElement = (URL) => {
+    passElement.style.display = "";
+    passElement.querySelector(`.shinyButton`).addEventListener(`click`, () => {
+      window.location.href = URL;
+    });
+    passElement.classList.add(`in`);
+  };
+  const doFailElement = (toPassText) => {
+    failElement.style.display = "";
+    failElement.querySelector(`.shinyButton`).addEventListener(`click`, () => {
+      window.location.reload();
+    });
+    failElement.classList.add(`in`);
+
+    toPass.innerText = toPassText;
+  };
+
+  switch (window.gameData.circle) {
+    case 1:
+      // Hardcore
+      if (score >= 15) {
+        doPassElement("/circles-of-hell/2/intro");
+      } else {
+        // Fail, reload on click.
+        doFailElement(`To pass, get them all correct, no yellows or reds.`);
+      }
+      break;
+    case 2:
+      // Lyrics x10
+      if (correct === 10) {
+        doPassElement("/circles-of-hell/3/intro");
+      } else {
+        // Fail, reload on click.
+        doFailElement(`To pass, get them all correct.`);
+      }
+      break;
+    case 3:
+      // Art x10
+      if (correct === 10 && score >= 30) {
+        doPassElement("/circles-of-hell/4/intro");
+      } else {
+        // Fail, reload on click.
+        doFailElement(
+          `To pass, get them all correct, no yellows or reds!!!1\ndo not let the unicorn confetti deceive you.`
+        );
+      }
+      break;
+    case 4:
+      // Speedrun x12
+      if (correct === 12) {
+        doPassElement("/circles-of-hell/5/intro");
+      } else {
+        // Fail, reload on click.
+        doFailElement(`To pass, get them all correct within 1 minute!`);
+      }
+      break;
+    case 5:
+      // Feather ponlde
+      if (correct === 5) {
+        doPassElement("/circles-of-hell/6/intro");
+      } else {
+        // Fail, reload on click.
+        doFailElement(`To pass, get them all correct! Yellow/red is fine.`);
+      }
+      break;
+    case 7:
+      // Endurance
+      if (correct === 100) {
+        doPassElement("/circles-of-hell/8/intro");
+      } else {
+        // Fail, reload on click.
+        doFailElement(`To pass, get them all correct! Yellow/red is fine.`);
+      }
+      break;
+    case 8:
+      // Waveform
+      if (correct === 5) {
+        doPassElement("/circles-of-hell/9/intro");
+      } else {
+        // Fail, reload on click.
+        doFailElement(`To pass, get them all correct! Yellow/red is fine.`);
+      }
+      break;
+    case 9:
+      // Waveform
+      if (correct === 10 && score >= 30) {
+        window.location.href = "https://www.youtube.com/watch?v=Xqxzv5GthHg";
+      } else {
+        // Fail, reload on click.
+        doFailElement(`To pass, get them all correct! Yellow/red is fine.`);
+      }
+      break;
+  }
+}
+
 function endGameUI() {
   // Calculate score. Calculated from 0-15, but rendered 0-30
   let correct = 0,
@@ -126,15 +236,28 @@ function endGameUI() {
 
   for (let i = 0; i < gameState.tracks.length; i++) {
     const track = gameState.tracks[i];
+
+    if (track.guesses.includes("green")) correct++;
+
+    if (window.gameData.circle) {
+      // Calculate scores early if it's the circle mode
+      for (let ii = 0; ii < track.guesses.length; ii++) {
+        const value = track.guesses[ii] || "grey";
+
+        if (value == "green" || value == "grey") score += 1;
+        else if (value == "yellow") score += 0.5;
+      }
+      continue;
+    }
+
+    // Element manipulation
     const element = document.querySelector(`.resultsList`).children[i];
+    const bandcampURL = window.gameData.tracks[i].bandcamp;
 
     element.querySelector(`img`).src =
       `/api/songData/thumbnail/${track.image}.jpg`;
     element.querySelector(`a`).innerText = track.title;
-    element.querySelector(`a`).href =
-      "https://vyletpony.bandcamp.com/" + window.gameData.tracks[i].bandcamp;
-
-    if (track.guesses.includes("green")) correct++;
+    element.querySelector(`a`).href = bandcampURL;
 
     for (let ii = 0; ii < track.guesses.length; ii++) {
       const value = track.guesses[ii] || "grey";
@@ -171,6 +294,12 @@ function endGameUI() {
 
   // Texts
   document.querySelector(`.gameArea`).style.display = "none";
+
+  if (window.gameData.circle) {
+    circleEnd(score, correct);
+    return;
+  }
+
   document.querySelector(`.fullEnd`).style.display = "";
   document.querySelector(`.fullEnd`).classList.add(`in`);
   document.querySelector(`.correctValue`).innerText = `${correct}/5`;
@@ -179,11 +308,16 @@ function endGameUI() {
   document.querySelector(`.gradeValue`).innerText = grade;
 
   // Win streak
-  if(correct === 5) {
-    if(!window.noIncreaseWinStreak) localStorage.setItem(`winStreak`, Number(localStorage.getItem(`winStreak`) || 0) + 1)
-  } else localStorage.setItem(`winStreak`, `0`)
+  if (correct === 5) {
+    if (!window.noIncreaseWinStreak)
+      localStorage.setItem(
+        `winStreak`,
+        Number(localStorage.getItem(`winStreak`) || 0) + 1
+      );
+  } else localStorage.setItem(`winStreak`, `0`);
 
-  document.querySelector(`.winStreak`).innerText = `5/5 streak: ${localStorage.getItem(`winStreak`)}`
+  document.querySelector(`.winStreak`).innerText =
+    `5/5 streak: ${localStorage.getItem(`winStreak`)}`;
 
   // Buttons
   document.querySelector(`.homeButton`).addEventListener(`click`, () => {
@@ -220,11 +354,11 @@ function endGameUI() {
   });
 
   // Uh
-  if(!window.gameData.vylet && window.gameData.lodestar && score == 15) {
-    document.querySelector(`.vyletMode`).style.display = ""
-    document.querySelector(`.vyletMode`).addEventListener(`click`, ()=>{
-      window.location.href = '/creekflowCaptcha'
-    })
+  if (!window.gameData.vylet && window.gameData.lodestar && score == 15) {
+    document.querySelector(`.vyletMode`).style.display = "";
+    document.querySelector(`.vyletMode`).addEventListener(`click`, () => {
+      window.location.href = "/creekflowCaptcha";
+    });
   }
 
   // Leaderboard

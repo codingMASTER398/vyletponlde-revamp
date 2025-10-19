@@ -1,0 +1,21 @@
+{
+  "PORT": 3000,
+  "DEVELOPMENT": true,
+  "easyAlbums": [
+    "can opener's notebook: fish whisperer",
+    "Carousel (An Examination of the Shadow, Creekflow, and its Life as an Afterthought)",
+    "CUTIEMARKS (And the Things That Bind Us)",
+    "Daybreaker / Nightmare Night",
+    "Girls Who Are Wizards",
+    "I Was The Loner of Paradise Valley",
+    "I'm Creekflow",
+    "Love & Ponystep",
+    "Monarch of Monsters"
+  ],
+  "neutralAlbums": [
+    "Queen of Misfits",
+    "Super Pony World: Fairytails",
+    "Super Pony World: Zräos Simulation",
+    "Tales From Equestria"
+  ]
+}

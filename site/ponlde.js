@@ -41,6 +41,30 @@ router.get(`/lyric/infinite`, (req, res) => {
   });
 });
 
+router.get(`/art/infinite`, (req, res) => {
+  const gameData = {
+    ...gameAPI.getGameData("art"),
+    copyDescription: "art infinite",
+    artMode: true
+  };
+
+  res.render(`ponlde.ejs`, {
+    gameData: gameAPI.fixGameData(gameData),
+  });
+});
+
+router.get(`/feather`, (req, res) => {
+  const gameData = {
+    ...gameAPI.getGameData("normal", 5, true),
+    copyDescription: "feather ponlde",
+    featherMode: true
+  };
+
+  res.render(`ponlde.ejs`, {
+    gameData: gameAPI.fixGameData(gameData),
+  });
+});
+
 router.get(`/winter`, (req, res) => {
   const gameData = {
     ...gameAPI.getGameData("hard"),
@@ -168,7 +192,6 @@ router.get(`/easy`, (req, res) => {
   });
 });
 
-
 router.get(`/lyric`, (req, res) => {
   const mostRecent = db
     .days()
@@ -183,6 +206,35 @@ router.get(`/lyric`, (req, res) => {
     copyDescription: `daily lyric ${mostRecent.date}`,
     daily: true,
     lyricMode: true
+  };
+
+  const lb = leaderboard.dailyData(req, mostRecent.date, mostRecent.mode);
+
+  res.render(`ponlde.ejs`, {
+    gameData: gameAPI.fixGameData(gameData),
+    lb,
+  });
+});
+
+router.get(`/art`, (req, res) => {
+  const mostRecent = db
+    .days()
+    .chain()
+    .find({ mode: "art" })
+    .sort((a, b) => b.day - a.day)
+    .limit(1)
+    .data()[0];
+
+  if(!mostRecent) {
+    res.sendFile(__dirname.replace("/site", "/static") + "/fuck.mp4")
+    return;
+  }
+
+  const gameData = {
+    ...mostRecent.data,
+    copyDescription: `daily art ${mostRecent.date}`,
+    daily: true,
+    artMode: true
   };
 
   const lb = leaderboard.dailyData(req, mostRecent.date, mostRecent.mode);

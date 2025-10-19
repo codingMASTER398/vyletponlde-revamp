@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include("blocks/preloads") %> <%- include("blocks/basicHead") %>
+
+    <link rel="stylesheet" href="/css/game.css" />
+    <link rel="stylesheet" href="/css/gameResults.css" />
+    <link rel="stylesheet" href="/css/leaderboard.css" />
+
+    <script>
+      // Ignore the EJS error. We do this instead of calling the API
+      // to save like 200ms. it's SO worth it.
+      window.gameData = JSON.parse(<%- JSON.stringify(JSON.stringify(gameData)) %>);
+    </script>
+
+    <!-- Preload other content -->
+    <link rel="preload" href="/audio/click.ogg" as="audio" />
+    <link rel="preload" href="/audio/squee.ogg" as="audio" />
+    <link rel="preload" href="/audio/yay.ogg" as="audio" />
+    <link rel="preload" href="/api/songData/autocomplete" as="fetch" />
+  </head>
+  <body>
+    <%- include("blocks/loader/html") %> <%- include("blocks/loader/script") %>
+    <%- include("blocks/titlebar") %>
+
+    <div class="center gameArea" style="">
+      <div class="songIndicators">
+        <p style="margin: 0;margin-right: 1rem;"><%=gameData.copyDescription%></p>
+        <% for(i = 0; i < (gameData.amountOverride || 5); i++) { %>
+        <div class="grey indicator"></div>
+        <% } %>
+      </div>
+
+      <h3 class="lyric" style="display: none;">Lyric</h3>
+      <div class="art" style="display: none;">
+        <img>
+      </div>
+
+      <div class="songGuessList speedrun">
+        <div class="guessRight">
+          <input class="guessInput" type="text" placeholder="Guess here..." autocomplete="off"/>
+          <div class="resultBox">
+            <p>> Click the guessing box to start :3</p>
+          </div>
+        </div>
+      </div>
+
+      <br>
+
+      <p class="timer">⏰ 60s</p>
+    </div>
+
+    <!-- Circles things -->
+
+    <div class="center circleFail" style="display: none;">
+      <h1>You failed.</h1>
+      <p class="toPass">To pass text here.</p>
+      <button class="shinyButton blueButton">Retry</button>
+    </div>
+    
+    <div class="center circlePass" style="display: none;">
+      <h1>Congratulations!.</h1>
+      <p>you did it. hip hip hooray!!!</p>
+      <button class="shinyButton blueButton">Next circle</button>
+    </div>
+
+    <!-- Scripts -->
+
+    <script src="/js/minisearch.js"></script>
+    <script src="/js/gameSpeedrun.js"></script>
+    <script src="/js/gameUI.js"></script>
+    <script src="/js/confetti.js"></script>
+  </body>
+</html>

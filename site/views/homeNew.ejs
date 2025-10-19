@@ -36,6 +36,10 @@
                 <i class="ph ph-microphone"></i>
                 Lyrics
               </div>
+              <div data-menu-id="menuArt">
+                <i class="ph ph-image"></i>
+                Art
+              </div>
               <div data-menu-id="menuSpecial">
                 <i class="ph ph-star"></i>
                 Special
@@ -108,6 +112,28 @@
               <br>
               <p>.-* daily archive</p>
               <% archiveLyric.forEach((d, i)=>{ %>
+                <div class="songIndicators inline" data-localstore-id="<%=generateRunID(d)%>">
+                  <div class="indicator"></div>
+                  <div class="indicator"></div>
+                  <div class="indicator"></div>
+                  <div class="indicator"></div>
+                  <div class="indicator"></div>
+                  <p style="margin: 0;">
+                    <b class="score">00/15</b>
+                    <a href="/archive/<%=d.date%>/<%=d.mode%>" target="_blank"><%=d.date%></a>
+                    <%=i == 0 ? "(today!)" : ""%></p>
+                </div>
+              <% }) %>
+            </div>
+            <!-- Lyrics -->
+            <div class="menuArt" style="display: none;">
+              <h2>Art</h2>
+              <p>The art Ponlde with a unique daily. Currently consists of about 99 cover art images.</p>
+              <button onclick="window.location.href='/art'" class="shinyButton blueButton">Daily</button>
+              <button onclick="window.location.href='/art/infinite'" class="shinyButton">Infinite</button>
+              <br>
+              <p>.-* daily archive</p>
+              <% archiveArt.forEach((d, i)=>{ %>
                 <div class="songIndicators inline" data-localstore-id="<%=generateRunID(d)%>">
                   <div class="indicator"></div>
                   <div class="indicator"></div>

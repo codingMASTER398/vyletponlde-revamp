@@ -13,10 +13,34 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+
   color: white;
-  background: black;
+  background: #00000b;
 
   font-family: "MozillaText";
+}
+
+.click,
+.circleText,
+.task {
+  position: absolute;
+}
+
+.click,
+.circleText {
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Canvas */
+canvas {
+  z-index: -100;
+  position: fixed;
+  top: 0;
+  left: 0;
+  contain: strict;
+
+  filter: drop-shadow(0 0 100px red);
 }
 
 /* Click animations */
@@ -41,4 +65,232 @@ body {
     transform: translateY(300px) rotate(600deg) scale(0);
     opacity: 0;
   }
+}
+
+/* Circle text */
+.circleText {
+  font-size: 2rem;
+  font-weight: 900;
+  font-style: italic;
+}
+
+/* Circle text anim for 1-4 */
+.circleText.animate {
+  animation: circleText 6s forwards;
+}
+
+@keyframes circleText {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+
+  50%,
+  70% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Circle text anim for 3-5 */
+.circleText.animate3 {
+  animation: circleText3 6s forwards;
+}
+
+@keyframes circleText3 {
+  0% {
+    opacity: 0;
+    transform: scale(0) translateY(-200px);
+  }
+
+  50%,
+  70% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
+/* Circle text anim for 6-(8-1) */
+.circleText.animate6 {
+  animation: circleText6 6s forwards;
+  color: transparent;
+  -webkit-text-stroke: 2px white;
+  filter: drop-shadow(0 0 3px black);
+  mix-blend-mode: color-dodge;
+}
+
+@keyframes circleText6 {
+  0% {
+    opacity: 0;
+    transform: scale(4) rotate(-200deg);
+  }
+
+  20% {
+    opacity: 1;
+    transform: scale(2);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(20px) scale(1);
+  }
+}
+
+/* Circle text anim for 8 */
+.circleText.animate8 {
+  animation: circleText8 6s forwards;
+  color: red;
+  -webkit-text-stroke: 2px white;
+  text-shadow: 0 0 12px white;
+  mix-blend-mode: color-dodge;
+}
+
+@keyframes circleText8 {
+  0% {
+    opacity: 0;
+    transform: scale(4) rotate(-600deg) translateY(100px);
+    animation-timing-function: linear;
+  }
+
+  10% {
+    opacity: 0.5;
+    transform: scale(3) rotate(-300deg) translateY(-100px);
+    animation-timing-function: linear;
+  }
+
+  20% {
+    opacity: 1;
+    transform: scale(2);
+    text-shadow: 0 0 12px white;
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1);
+    text-shadow:
+      0 0 12px white,
+      0 120px 0 rgba(255, 255, 255, 0.7),
+      0 -120px 0 rgba(255, 255, 255, 0.7);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(3);
+  }
+}
+
+/* Circle text anim for 9 */
+.circleText.animate9 {
+  animation: circleText9 6s forwards;
+  color: red;
+  -webkit-text-stroke: 2px white;
+  text-shadow: 0 0 12px white;
+  mix-blend-mode: color-dodge;
+}
+
+@keyframes circleText9 {
+  0% {
+    opacity: 0;
+    transform: scale(4) rotate(-600deg) translateY(100px);
+    animation-timing-function: linear;
+  }
+
+  4% {
+    opacity: 0.5;
+    transform: scale(3) rotate(-300deg) translateY(-100px);
+    animation-timing-function: linear;
+  }
+
+  15%,
+  23% {
+    opacity: 1;
+    transform: scale(2);
+    text-shadow: 0 0 12px white;
+  }
+  19% {
+    transform: scale(4);
+    text-shadow:
+      0 0 12px white,
+      0 120px 0 rgba(255, 255, 255, 0.7),
+      0 -120px 0 rgba(255, 255, 255, 0.7);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1);
+    text-shadow:
+      0 0 12px #fff,
+      0 120px 0 #fff,
+      0 -120px 0 #fff,
+      0 240px 0 #fff,
+      0 -240px 0 #fff,
+      360px 0px 0 #fff,
+      360px 120px 0 #fff,
+      360px -120px 0 #fff,
+      360px 240px 0 #fff,
+      360px -240px 0 #fff,
+      -360px 120px 0 #fff,
+      -360px -120px 0 #fff,
+      -360px 240px 0 #fff,
+      -360px -240px 0 #fff,
+      -360px 0 0 #fff;
+  }
+
+  95% {
+    opacity: 0.5;
+    transform: scale(3);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
+.task {
+  z-index: 999999999;
+  text-shadow: 0 0 6px black;
+  background-color: #000a;
+  backdrop-filter: blur(5px);
+  padding: 12px;
+}
+
+.task.in {
+  animation: taskIn 3s forwards;
+}
+
+@keyframes taskIn {
+  0% {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+}
+
+/* start button */
+.start {
+  background: transparent;
+  color: white;
+  font-family: "MozillaText";
+  border: 2px inset white;
+  padding: 6px;
+  padding-left: 36px;
+  padding-right: 36px;
+}
+
+.start:hover {
+  box-shadow: 6px 6px 0px #fff3;
+}
+
+.start:active {
+  transform: translate(6px, 6px);
 }

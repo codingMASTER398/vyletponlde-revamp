@@ -1,0 +1,17 @@
+{
+  "ARTIST_URL": "https://feather-vocals.bandcamp.com",
+  "EXCLUDE": [
+  ],
+  "EXCLUDE_EXACT": [
+    "jealousy-original",
+    "look-to-the-clouds-original",
+    "mad-mares-mad-world-parody-by-ember-cover-by-feather",
+    "wave-hello-original",
+    "cupcakes-original-halloween-special13"
+  ],
+  "ALBUM_EXCLUDES": [
+  ],
+  "ACRONYMS": {
+    "example": ["here"]
+  }
+}
