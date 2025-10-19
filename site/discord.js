@@ -12,8 +12,8 @@ const HASHTAGCHAT = "1127198607263666206";
 const VYLETID = "149735968142917632"
 
 // Testing
-//const VYLETID = "977115628504748082"
-//const HASHTAGCHAT = "1386611739516207107";
+//const VYLETID = ""
+//const HASHTAGCHAT = "";
 
 let lastMessage = ["", "0"]
 
