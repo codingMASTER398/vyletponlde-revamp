@@ -10,8 +10,9 @@ let last5 = [];
 
 async function doLiveChat() {
   const liveChat = new LiveChat({
-    channelId: "UCDnYX2jqzQXMST8Yo4NzQZQ",
+    //channelId: "UCDnYX2jqzQXMST8Yo4NzQZQ",
     //liveId: "qyo3lDLOhrA",
+    liveId: "WUc9DW_5llo"
   });
 
   last5 = [];
