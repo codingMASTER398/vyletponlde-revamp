@@ -80,6 +80,7 @@ body.dark a:visited {
   left: 2.5%;
   box-sizing: border-box;
   overflow-x: hidden;
+  pointer-events: none;
 }
 
 .top .right {
@@ -87,6 +88,11 @@ body.dark a:visited {
   flex-direction: column;
   align-items: end;
   justify-content: center;
+  pointer-events: all;
+}
+
+.top .left {
+  pointer-events: all;
 }
 
 .top .right div {

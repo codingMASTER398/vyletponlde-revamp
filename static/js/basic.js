@@ -27,6 +27,10 @@ function themeSwitch(dark, initial = false) {
     document.querySelector(`.logo`).src = `/logo.webp`;
   }
 
+  if(window.location.href.includes("circles-of-hell")) {
+    document.querySelector(`.logo`).src = `/logo-hell.webp`;
+  }
+
   if(!initial) updateBackground();
 }
 
