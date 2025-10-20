@@ -45,6 +45,7 @@ async function doLiveChat() {
     console.log("Stream on!");
   } catch (e) {
     console.log(`Stream not on yet...`);
+    console.log(e)
 
     setTimeout(() => {
       doLiveChat();
