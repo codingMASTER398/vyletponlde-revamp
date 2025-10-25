@@ -36,7 +36,7 @@ router.post(`/:date/:mode/:score/:name`, (req, res) => {
     score < 0 ||
     score > 15 ||
     name.length != 5 ||
-    !["normal", "easy", "lyric", "art"].includes(mode)
+    !["normal", "easy", "lyric", "art", "waveform"].includes(mode)
   ) {
     res.status(400).send(`Invalid data`);
     return;

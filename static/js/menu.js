@@ -13,6 +13,21 @@ function openMenu(id) {
   });
 });
 
-if(["#menuNormal", "#menuEasy", "#menuSpecial", "#menuAbout", "#menuTracks", "#menuCat"].includes(window.location.hash)) {
-  openMenu(window.location.hash.replace("#", ""))
-}
+document.addEventListener(`DOMContentLoaded`, () => {
+  if (
+    [
+      "#menuNormal",
+      "#menuEasy",
+      "#menuSpecial",
+      "#menuAbout",
+      "#menuTracks",
+      "#menuCat",
+      "#menuArt",
+      "#menuLyrics",
+      "#menuSpeedrun",
+      "#menuWaveform",
+    ].includes(window.location.hash)
+  ) {
+    openMenu(window.location.hash.replace("#", ""));
+  }
+});

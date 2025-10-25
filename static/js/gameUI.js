@@ -129,28 +129,29 @@ function copyTextToClipboard(text) {
 }
 // end stackoverflow :3
 
+const passElement = document.querySelector(`.circlePass`);
+const failElement = document.querySelector(`.circleFail`);
+const toPass = document.querySelector(`.toPass`);
+
+const doPassElement = (URL, againButton) => {
+  passElement.style.display = "";
+  passElement.querySelector(`.shinyButton`).addEventListener(`click`, () => {
+    window.location.href = URL;
+  });
+  passElement.classList.add(`in`);
+  if(againButton) passElement.querySelector(`.shinyButton`).innerText = `again again!!!`
+};
+const doFailElement = (toPassText) => {
+  failElement.style.display = "";
+  failElement.querySelector(`.shinyButton`).addEventListener(`click`, () => {
+    window.location.reload();
+  });
+  failElement.classList.add(`in`);
+
+  toPass.innerText = toPassText;
+};
+
 function circleEnd(score, correct) {
-  const passElement = document.querySelector(`.circlePass`);
-  const failElement = document.querySelector(`.circleFail`);
-  const toPass = document.querySelector(`.toPass`);
-
-  const doPassElement = (URL) => {
-    passElement.style.display = "";
-    passElement.querySelector(`.shinyButton`).addEventListener(`click`, () => {
-      window.location.href = URL;
-    });
-    passElement.classList.add(`in`);
-  };
-  const doFailElement = (toPassText) => {
-    failElement.style.display = "";
-    failElement.querySelector(`.shinyButton`).addEventListener(`click`, () => {
-      window.location.reload();
-    });
-    failElement.classList.add(`in`);
-
-    toPass.innerText = toPassText;
-  };
-
   switch (window.gameData.circle) {
     case 1:
       // Hardcore
@@ -239,7 +240,7 @@ function endGameUI() {
 
     if (track.guesses.includes("green")) correct++;
 
-    if (window.gameData.circle) {
+    if (window.gameData.circle || window.gameData.speedrun) {
       // Calculate scores early if it's the circle mode
       for (let ii = 0; ii < track.guesses.length; ii++) {
         const value = track.guesses[ii] || "grey";
@@ -271,6 +272,10 @@ function endGameUI() {
     }
   }
 
+  if(window.gameData.amountOverride < 5) {
+    score *= 5 / window.gameData.amountOverride
+  }
+
   // Calculate grade
   let grade = `F`;
   if (score >= 1) grade = "E-";
@@ -298,6 +303,13 @@ function endGameUI() {
   if (window.gameData.circle) {
     circleEnd(score, correct);
     return;
+  } else if (window.gameData.speedrun && !window.gameData.circle) {
+    if (correct === window.gameData.amountOverride) {
+      doPassElement(window.location.href, true);
+    } else {
+      // Fail, reload on click.
+      doFailElement(`To pass, get them all correct within 1 minute!`);
+    }
   }
 
   document.querySelector(`.fullEnd`).style.display = "";

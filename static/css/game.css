@@ -323,11 +323,17 @@ body:not(.reduceMotion) .roundEnd.in button {
 
 /* Waveform */
 .waveform {
-  width: 800px;
+  width: 100%;
   height: 300px;
   border: 2px solid black;
   overflow: hidden;
-  overflow-x: scroll;
+  pointer-events: none;
+}
+
+.waveform img {
+  width: 100%;
+  height: 300px;
+  pointer-events: none;
 }
 
 /* Art */
@@ -356,10 +362,15 @@ body:not(.reduceMotion) .roundEnd.in button {
 
 .art.hardcore img {
   object-fit: cover;
+  width: 600px;
+  height: 600px;
+  max-width: 600px;
+  position: relative;
+}
+.art.actuallyHardcore img {
   width: 1200px;
   height: 1200px;
   max-width: 1200px;
-  position: relative;
 }
 
 .art.transition img {

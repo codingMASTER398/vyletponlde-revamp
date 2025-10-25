@@ -86,6 +86,18 @@ function databaseInitialize() {
       scores: [],
     });
 
+    days.insertOne({
+      ...baseData,
+      mode: "waveform",
+      data: gameAPI.getGameData("waveform", 1),
+    });
+
+    leaderboard.insertOne({
+      date: baseData.date,
+      mode: "waveform",
+      scores: [],
+    });
+
     lastDay.day = today;
     _lastDay.update(lastDay);
   }, 1000);

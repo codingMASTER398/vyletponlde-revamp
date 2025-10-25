@@ -144,11 +144,15 @@ async function startNewRound() {
     () => {
       startNextTrack();
       timerInterval = setInterval(() => {
-        timer--;
-        timerElem.innerText = `⏰ ${timer}s`;
-        timerElem.classList.remove(`bounce`);
-        timerElem.offsetWidth;
-        timerElem.classList.add(`bounce`);
+        timer -= 0.1;
+        timer = Number(timer.toFixed(1));
+        timerElem.innerText = `⏰ ${timer.toFixed(1)}s`;
+
+        if ((timer + 0.1) % 1 === 0) {
+          timerElem.classList.remove(`bounce`);
+          timerElem.offsetWidth;
+          timerElem.classList.add(`bounce`);
+        }
 
         if (timer === 0) {
           autoComplete.disable();
@@ -157,14 +161,14 @@ async function startNewRound() {
           return;
         }
 
-        if (timer % 5 === 0) {
-          const toYellow = 12 - timer / 5;
+        const toYellow =
+          window.gameData.amountOverride -
+          timer / (60 / window.gameData.amountOverride);
 
-          document
-            .querySelector(`.songIndicators`)
-            .children[toYellow].classList.add(`yellow`);
-        }
-      }, 1_000);
+        document
+          .querySelector(`.songIndicators`)
+          .children[toYellow].classList.add(`yellow`);
+      }, 1_00);
     },
     { once: true }
   );

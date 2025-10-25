@@ -53,6 +53,19 @@ router.get(`/art/infinite`, (req, res) => {
   });
 });
 
+router.get(`/waveform/infinite`, (req, res) => {
+  const gameData = {
+    ...gameAPI.getGameData("waveform", 1),
+    copyDescription: "waveform infinite",
+    waveformMode: true,
+    amountOverride: 1
+  };
+
+  res.render(`ponlde.ejs`, {
+    gameData: gameAPI.fixGameData(gameData),
+  });
+});
+
 router.get(`/feather`, (req, res) => {
   const gameData = {
     ...gameAPI.getGameData("normal", 5, true),
@@ -61,6 +74,21 @@ router.get(`/feather`, (req, res) => {
   };
 
   res.render(`ponlde.ejs`, {
+    gameData: gameAPI.fixGameData(gameData),
+  });
+});
+
+router.get("/speedrun/:amount", (_, res) => {
+  const amount = Math.min(100, Math.max(1, Math.round(Number(_.params.amount))));
+  const gameData = {
+    ...gameAPI.getGameData("normal", amount),
+    copyDescription: `speedrun x${amount}`,
+    hardcore: true,
+    speedrun: true,
+    amountOverride: amount,
+  };
+
+  res.render(`ponldeSpeedrun.ejs`, {
     gameData: gameAPI.fixGameData(gameData),
   });
 });
@@ -245,6 +273,36 @@ router.get(`/art`, (req, res) => {
   });
 });
 
+router.get(`/waveform`, (req, res) => {
+  const mostRecent = db
+    .days()
+    .chain()
+    .find({ mode: "waveform" })
+    .sort((a, b) => b.day - a.day)
+    .limit(1)
+    .data()[0];
+
+  if(!mostRecent) {
+    res.sendFile(__dirname.replace("/site", "/static") + "/fuck.mp4")
+    return;
+  }
+
+  const gameData = {
+    ...mostRecent.data,
+    copyDescription: `daily waveform ${mostRecent.date}`,
+    daily: true,
+    waveformMode: true,
+    amountOverride: 1
+  };
+
+  const lb = leaderboard.dailyData(req, mostRecent.date, mostRecent.mode);
+
+  res.render(`ponlde.ejs`, {
+    gameData: gameAPI.fixGameData(gameData),
+    lb,
+  });
+});
+
 // Archives
 router.get(`/archive/:date/:mode`, (req, res) => {
   const found = db
@@ -263,7 +321,9 @@ router.get(`/archive/:date/:mode`, (req, res) => {
     ...found.data,
     copyDescription,
     daily: true,
-    lyricMode: req.params.mode === "lyric"
+    lyricMode: req.params.mode === "lyric",
+    artMode: req.params.mode === "art",
+    waveformMode: req.params.mode === "waveform"
   };
 
   const lb = leaderboard.dailyData(req, found.date, found.mode);

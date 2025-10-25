@@ -102,7 +102,7 @@ function setupAutoComplete(element) {
 
   let onEnter, disabled;
 
-  inputBox.classList.add(`current`)
+  inputBox.classList.add(`current`);
 
   resultBox.addEventListener(`click`, () => {
     const result = miniSearch.search(inputBox.value, { fuzzy: 0.2 })[0];
@@ -132,14 +132,14 @@ function setupAutoComplete(element) {
 
   inputBox.addEventListener(`keydown`, autoComplete);
   inputBox.addEventListener(`input`, autoComplete);
-  inputBox.addEventListener(`internalSend`,()=>{
+  inputBox.addEventListener(`internalSend`, () => {
     autoComplete({
-      key: "Enter"
-    })
+      key: "Enter",
+    });
   });
 
-  if(window.gameData.circle === 9) {
-    inputBox.setAttribute("disabled", true)
+  if (window.gameData.circle === 9) {
+    inputBox.setAttribute("disabled", true);
   }
 
   return {
@@ -149,7 +149,7 @@ function setupAutoComplete(element) {
     disable: () => {
       disabled = true;
       inputBox.blur();
-      inputBox.classList.remove(`current`)
+      inputBox.classList.remove(`current`);
     },
   };
 }
@@ -359,13 +359,18 @@ async function startNewRound() {
     artElem.querySelector(`img`).style.filter = "blur(35px)";
     artElem.classList.remove(`transition`);
 
-    if (window.gameData.hardcoreArt) {
-      artElem.classList.add(`hardcore`);
-      artElem.classList.remove(`transitionOutHardcore`);
-      artElem.querySelector(`img`).style.top = `-${Math.random() * 900}px`;
-      artElem.querySelector(`img`).style.left = `-${Math.random() * 900}px`;
-      artElem.querySelector(`img`).style.filter = "blur(20px)";
-    }
+    // i have decided hardcore art is now normal art
+    // but hardcore hardcore art is like more zoomed in
+    // do you understand
+    // get vexi
+    if (window.gameData.hardcoreArt) artElem.classList.add(`actuallyHardcore`);
+    artElem.classList.add(`hardcore`);
+    artElem.classList.remove(`transitionOutHardcore`);
+    artElem.querySelector(`img`).style.top =
+      `-${Math.random() * (window.gameData.hardcoreArt ? 900 : 300)}px`;
+    artElem.querySelector(`img`).style.left =
+      `-${Math.random() * (window.gameData.hardcoreArt ? 900 : 300)}px`;
+    artElem.querySelector(`img`).style.filter = "blur(20px)";
   }
 
   // Set up waveform mode if needded
@@ -409,21 +414,19 @@ async function startNewRound() {
       .querySelector(`.songIndicators`)
       .children[currentTrackNum + 1].classList.add(best);
 
-    // If it's hardcore art, show the whole thing
-    if (window.gameData.hardcoreArt) {
-      artElem.classList.add(`transition`);
-      artElem.classList.add(`transitionOutHardcore`);
-      artElem.classList.remove(`hardcore`);
-    }
+    // If it's art, show the whole thing
+    artElem.classList.add(`transition`);
+    artElem.classList.add(`transitionOutHardcore`);
+    artElem.classList.remove(`hardcore`);
 
     // If it's oneshot, then one shot the the one shot.
 
     if (window.gameData.oneshot && best != "green") {
-      gameState.currentTrack = window.gameData.amountOverride - 1 || 4;
+      gameState.currentTrack = window.gameData.tracks.length - 1;
     }
 
     // Yeah.
-    if (gameState.currentTrack === (window.gameData.amountOverride - 1 || 4)) {
+    if (gameState.currentTrack === (window.gameData.tracks.length - 1)) {
       document.querySelector(`.nextButton`).innerText = "show results";
     }
 
@@ -435,7 +438,7 @@ async function startNewRound() {
         stopAudio();
 
         if (
-          gameState.currentTrack == (window.gameData.amountOverride - 1 || 4)
+          gameState.currentTrack == (window.gameData.tracks.length - 1)
         ) {
           endGameUI();
           return;
@@ -579,17 +582,14 @@ function pushGameState() {
 document.addEventListener(`DOMContentLoaded`, async () => {
   // get a unique ID for this run
   window.runID =
+    (window.gameData.waveformMode ? "waveform-" : "") +
     (window.gameData.artMode ? "art-" : "") +
     (window.gameData.hardcoreArt ? "arthc-" : "") +
     (window.gameData.lyricMode ? "lyric-" : "") +
     (window.gameData.hardcore ? "hardcore-" : "") +
     (window.gameData.hidden ? "hidden-" : "") +
     (window.gameData.oneshot ? "oneshot-" : "") +
-    (window.gameData.tracks[0].id + "-") +
-    (window.gameData.tracks[1].id + "-") +
-    (window.gameData.tracks[2].id + "-") +
-    (window.gameData.tracks[3].id + "-") +
-    window.gameData.tracks[4].id;
+    (window.gameData.tracks.map((track)=>track.id).join("-"));
 
   // Parse the saved state
   if (localStorage.getItem(window.runID)) {
@@ -620,7 +620,7 @@ document.addEventListener(`DOMContentLoaded`, async () => {
 
   // Get autocomplete data
   const autocompleteData = await (
-    await fetch("/api/songData/autocomplete")
+    await fetch(window.gameData.featherMode ? "/api/songData/autocomplete-feather" : "/api/songData/autocomplete")
   ).json();
 
   window.autocompleteData = autocompleteData;
@@ -648,28 +648,28 @@ document.addEventListener(`DOMContentLoaded`, async () => {
   window.toLoad--;
 
   // Circle 9 discord
-  let lastId = "", initial = true;
+  let lastId = "",
+    initial = true;
 
-  if(window.gameData.circle === 9) {
-    setInterval(async ()=>{
-      const message = await(await fetch(`/vyletDiscord/last`)).json();
-      if(message[1] !== lastId) {
-        lastId = message[1]
+  if (window.gameData.circle === 9) {
+    setInterval(async () => {
+      const message = await (await fetch(`/vyletDiscord/last`)).json();
+      if (message[1] !== lastId) {
+        lastId = message[1];
 
-        if(initial) {
+        if (initial) {
           initial = false;
           return;
         }
 
         const inputBox = document.querySelector(`.guessInput.current`);
 
-        if(!inputBox) return;
+        if (!inputBox) return;
 
         inputBox.value = message[0];
-        inputBox.dispatchEvent(new Event("input"))
-        inputBox.dispatchEvent(new Event("internalSend"))
+        inputBox.dispatchEvent(new Event("input"));
+        inputBox.dispatchEvent(new Event("internalSend"));
       }
-
-    }, 500)
+    }, 500);
   }
 });

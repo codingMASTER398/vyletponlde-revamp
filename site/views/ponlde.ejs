@@ -72,7 +72,7 @@
         <p style="margin: 0;"><%=gameData.copyDescription%></p>
         <p style="margin: 0;" class="winStreak">5/5 streak: 0</p>
         <div class="resultsList">
-          <% for(let i = 0; i < 5; i++) { %>
+          <% for(let i = 0; i < (gameData.amountOverride || 5); i++) { %>
           <div class="result">
             <img>
             <p><a target="_blank">N/A</a></p>

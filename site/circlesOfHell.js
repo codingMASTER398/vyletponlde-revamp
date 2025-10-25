@@ -88,7 +88,8 @@ router.get("/5/task", (_, res) => {
 });
 
 router.get("/6/task", (_, res) => {
-  res.render(`chatCount.ejs`);
+  res.redirect(`/circles-of-hell/7/intro`)
+  //res.render(`chatCount.ejs`);
 });
 
 router.get("/7/task", (_, res) => {
@@ -109,12 +110,13 @@ router.get("/7/task", (_, res) => {
 
 router.get("/8/task", (_, res) => {
   const gameData = {
-    ...gameAPI.getGameData("waveform", 5),
+    ...gameAPI.getGameData("waveform", 1),
     copyDescription: "circle 8",
     waveformMode: true,
     oneshot: true,
     hardcore: true,
     circle: 8,
+    amountOverride: 1
   };
 
   res.render(`ponlde.ejs`, {
