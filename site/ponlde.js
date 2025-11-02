@@ -58,6 +58,7 @@ router.get(`/waveform/infinite`, (req, res) => {
     ...gameAPI.getGameData("waveform", 1),
     copyDescription: "waveform infinite",
     waveformMode: true,
+    waveformInfinite: true,
     amountOverride: 1
   };
 

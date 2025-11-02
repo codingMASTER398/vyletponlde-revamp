@@ -592,7 +592,7 @@ document.addEventListener(`DOMContentLoaded`, async () => {
     (window.gameData.tracks.map((track)=>track.id).join("-"));
 
   // Parse the saved state
-  if (localStorage.getItem(window.runID)) {
+  if (localStorage.getItem(window.runID) && !window.gameData.waveformInfinite) {
     gameState = JSON.parse(localStorage.getItem(window.runID));
   }
   gameState.currentTrack = 0;
