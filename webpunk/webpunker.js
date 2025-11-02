@@ -3,7 +3,7 @@ const { spawn } = require("child_process");
 (async () => {
   // *taps the glass*
 
-  /*
+  
   await require(`./infoUpdater`)();
   console.log("Info updater done");
 
@@ -14,11 +14,11 @@ const { spawn } = require("child_process");
   console.log(`Downloader done`);
 
   await require(`./arter`)();
-  console.log(`Arter done`)*/ 
+  console.log(`Arter done`)
   
   await require(`./waveformer`)();
   console.log(`Waveformer done`);
 
-  /*await require(`./bits`)();
-  console.log(`Bits done, all done.`);*/
+  await require(`./bits`)();
+  console.log(`Bits done, all done.`);
 })();
