@@ -157,11 +157,13 @@ function setupAutoComplete(element) {
 function getRandomHint(data, index) {
   if (index === 2) {
     const minutes = Math.round(data.length / 60);
+    if(!minutes) return `title starts with "${data.title.trim().slice(0, 1).toUpperCase()}"`;
+
     return `around ${minutes} minute${minutes == 1 ? "" : "s"} long`;
   }
 
   if (index === 3) {
-    if (Math.random() > 0.5) {
+    if (Math.random() > 0.5 || !data.length) {
       return data.album;
     } else {
       return `title starts with "${data.title.trim().slice(0, 1).toUpperCase()}"`;
