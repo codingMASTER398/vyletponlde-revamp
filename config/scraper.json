@@ -36,15 +36,17 @@
     "owo",
     "the-yak-song-demo1-22-august-2021",
     "atychiphobia-vylet-remix",
-    "madeleines-2"
+    "madeleines-2",
+    "get-sexy"
   ],
-  "ALBUM_EXCLUDES": [
-    "tempest-live-version",
-    "little-dreams-live-2019"
-  ],
+  "ALBUM_EXCLUDES": ["tempest-live-version", "little-dreams-live-2019"],
   "ACRONYMS": {
     "-": ["cross"],
-    "376486-n-1224296-w-ft-sylver-stripe": ["coordinates", "co-ordinates"],
+    "376486-n-1224296-w-ft-sylver-stripe": [
+      "coordinates",
+      "co-ordinates",
+      "coords"
+    ],
 
     "no-matter-what-2013": ["nmw 2013", "2013"],
     "no-matter-what-2014": ["nmw 2014", "2014"],
@@ -61,9 +63,18 @@
     "no-matter-what-2025": ["nmw 2025", "2025"],
     "no-matter-what-2026": ["nmw 2026", "2026"],
     "no-matter-what-2027": ["nmw 2027", "2027"],
+    "no-matter-what-2028": ["nmw 2028", "2028"],
+    "no-matter-what-2029": ["nmw 2029", "2029"],
+    "no-matter-what-2030": ["no fucking way"],
 
     "no-matter-what-2020-full-version": ["nmw 2020", "2020"],
-    "no-matter-what-2024-ft-nekosnicker-sylver-stripe-namii-galaxysquid": ["nmw 2024", "2024"],
-    "--12": ["morse", "morse code", "mc", "mystic"]
+    "no-matter-what-2024-ft-nekosnicker-sylver-stripe-namii-galaxysquid": [
+      "nmw 2024",
+      "2024"
+    ],
+    "--12": ["morse", "morse code", "mc", "mystic"],
+    "12-days-of-1337mas-as-performed-by-the-pilford-squadron-seasonal-choral-group": [
+      "leetmas", "1337mas"
+    ]
   }
 }

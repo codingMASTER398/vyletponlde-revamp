@@ -120,6 +120,7 @@ function getGameData(mode = "", amount = 5, isFeather) {
         audio: value.nameId + ".ogg", // lol .ogg.ogg, dual weilding
         album: value.album,
         bandcamp: value.albumURL || value.url,
+        length: value.length,
         id: value.id,
         nameId: value.nameId,
         image: getImageId(value),

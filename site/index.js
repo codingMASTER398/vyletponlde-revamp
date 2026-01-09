@@ -31,7 +31,8 @@ app.use("/vyletDiscord", discord);
 app.use("/", ponlde);
 app.use("/circles-of-hell", circlesOfHell);
 
-app.get("/", (_, res) =>
+app.get("/", (_, res) => {
+  res.set('Cache-Control', 'public, max-age=1800');
   res.render("homeNew", {
     archiveNormal: db
       .days()
@@ -66,9 +67,9 @@ app.get("/", (_, res) =>
     generateRunID,
     config,
     tracks: Object.values(tracks).filter((s) => !s.isFeatherSong),
-  })
-);
-app.get("/homeold", (_, res) => res.render("home"));
+  });
+});
+//app.get("/homeold", (_, res) => res.render("home"));
 app.get("/about", (_, res) => res.redirect("/"));
 app.get("/songs", (_, res) => res.redirect("/"));
 app.get("/archive", (_, res) => res.redirect("/"));
@@ -91,5 +92,5 @@ app.listen(config.PORT);
 
 // one silly archive function
 function generateRunID(data) {
-  return data.data.tracks.map((track)=>track.id).join("-")
+  return data.data.tracks.map((track) => track.id).join("-");
 }

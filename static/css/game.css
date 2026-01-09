@@ -323,17 +323,31 @@ body:not(.reduceMotion) .roundEnd.in button {
 
 /* Waveform */
 .waveform {
+  align-items: center;
+  justify-content: center;
+  flex-direction: column; /* my fav 4 lines of CSS */
+  gap: 24px;
+}
+.widthHeightContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.waveformContainer {
   width: 100%;
   height: 300px;
   border: 2px solid black;
   overflow: hidden;
-  pointer-events: none;
+  overflow-x: scroll;
 }
 
 .waveform img {
   width: 100%;
-  height: 300px;
+  height: 100%;
   pointer-events: none;
+  image-rendering: pixelated;
 }
 
 /* Art */

@@ -1,4 +1,4 @@
-function createGuessWrapper(footerText, className, disabled) {
+function createGuessWrapper(index, footerText, className, disabled) {
   const guessWrapper = document.createElement(`div`);
   guessWrapper.classList.add(`guessWrapper`);
   guessWrapper.classList.add(className);
@@ -29,6 +29,12 @@ function createGuessWrapper(footerText, className, disabled) {
   const skipButtonIcon = document.createElement(`img`);
   skipButtonIcon.src = "/img/skipIcon.png";
 
+  const hintButton = document.createElement(`button`);
+  hintButton.classList.add(`hintButton`);
+
+  const hintButtonIcon = document.createElement(`img`);
+  hintButtonIcon.src = "/img/hintIcon.png";
+
   const guessRight = document.createElement(`div`);
   guessRight.classList.add(`guessRight`);
 
@@ -45,7 +51,8 @@ function createGuessWrapper(footerText, className, disabled) {
   const resultBoxP = document.createElement(`p`);
 
   const footerP = document.createElement(`p`);
-  footerP.innerText = footerText;
+  footerP.innerText = window.gameData.waveformMode ? "‍" : footerText;
+  footerP.classList.add(`footer`)
 
   resultBox.appendChild(resultBoxP);
   guessRight.appendChild(guessInput);
@@ -53,12 +60,13 @@ function createGuessWrapper(footerText, className, disabled) {
   if (
     !window.gameData.lyricMode &&
     !window.gameData.artMode &&
-    !window.gameData.waveformMode
+    (window.gameData.waveformMode ? index != 1 : true)
   )
     guessRight.appendChild(footerP);
 
   playButton.appendChild(playButtonIcon);
   skipButton.appendChild(skipButtonIcon);
+  hintButton.appendChild(hintButtonIcon);
 
   if (
     !window.gameData.lyricMode &&
@@ -67,6 +75,8 @@ function createGuessWrapper(footerText, className, disabled) {
   )
     buttonsWrapper.appendChild(playButton);
   buttonsWrapper.appendChild(skipButton);
+  if (window.gameData.waveformMode && index != 1)
+    buttonsWrapper.appendChild(hintButton);
 
   guessContent.appendChild(buttonsWrapper);
   guessContent.appendChild(guessRight);
@@ -139,7 +149,8 @@ const doPassElement = (URL, againButton) => {
     window.location.href = URL;
   });
   passElement.classList.add(`in`);
-  if(againButton) passElement.querySelector(`.shinyButton`).innerText = `again again!!!`
+  if (againButton)
+    passElement.querySelector(`.shinyButton`).innerText = `again again!!!`;
 };
 const doFailElement = (toPassText) => {
   failElement.style.display = "";
@@ -272,8 +283,8 @@ function endGameUI() {
     }
   }
 
-  if(window.gameData.amountOverride < 5) {
-    score *= 5 / window.gameData.amountOverride
+  if (window.gameData.amountOverride < 5) {
+    score *= 5 / window.gameData.amountOverride;
   }
 
   // Calculate grade

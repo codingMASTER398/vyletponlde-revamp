@@ -27,9 +27,9 @@ function generateWaveform(inputPath, outputPath) {
 
 //generateWaveform(`../webpunk/data/downloadCache/antonymph.mp3`, "./test.png")
 
-/*
-module.exports = async () => {*/
-;(async()=>{
+
+module.exports = async () => {
+//;(async()=>{
   for (let i = 0; i < trackFiles.length; i++) {
     const file = `../webpunk/data/songs/` + trackFiles[i];
     const data = require(file);
@@ -39,6 +39,6 @@ module.exports = async () => {*/
       await generateWaveform(`../webpunk/data/downloadCache/${data.nameId}.mp3`, location)
     }
   }
-})();
-/*};
-*/
+//})();
+};
+//

@@ -154,6 +154,21 @@ function setupAutoComplete(element) {
   };
 }
 
+function getRandomHint(data, index) {
+  if (index === 2) {
+    const minutes = Math.round(data.length / 60);
+    return `around ${minutes} minute${minutes == 1 ? "" : "s"} long`;
+  }
+
+  if (index === 3) {
+    if (Math.random() > 0.5) {
+      return data.album;
+    } else {
+      return `title starts with "${data.title.trim().slice(0, 1).toUpperCase()}"`;
+    }
+  }
+}
+
 function setupGuesser(data) {
   // Sets up the guessing logic for a guessWrapper object
   return new Promise((r) => {
@@ -193,6 +208,23 @@ function setupGuesser(data) {
           }
         }
       });
+
+    let hintRevealed = false;
+    if (window.gameData.waveformMode && data.index != 1) {
+      element.querySelector(`.hintButton`).addEventListener(`click`, () => {
+        if (hintRevealed) return;
+        hintRevealed = true;
+
+        element.querySelector(`.hintButton`).setAttribute(`disabled`, true);
+
+        clickSound();
+
+        element.querySelector(`.footer`).innerText = getRandomHint(
+          data.allSongData,
+          data.index
+        );
+      });
+    }
 
     element.querySelector(`.skipButton`).addEventListener(`click`, () => {
       if (done) return;
@@ -377,7 +409,7 @@ async function startNewRound() {
   const waveformElem = document.querySelector(`.waveform`);
 
   if (window.gameData.waveformMode) {
-    waveformElem.style.display = "block";
+    waveformElem.style.display = "flex";
     waveformElem.querySelector(`img`).src =
       `/api/songData/waveform/${currentTrackData.nameId}.png`;
   }
@@ -426,7 +458,7 @@ async function startNewRound() {
     }
 
     // Yeah.
-    if (gameState.currentTrack === (window.gameData.tracks.length - 1)) {
+    if (gameState.currentTrack === window.gameData.tracks.length - 1) {
       document.querySelector(`.nextButton`).innerText = "show results";
     }
 
@@ -437,9 +469,7 @@ async function startNewRound() {
 
         stopAudio();
 
-        if (
-          gameState.currentTrack == (window.gameData.tracks.length - 1)
-        ) {
+        if (gameState.currentTrack == window.gameData.tracks.length - 1) {
           endGameUI();
           return;
         }
@@ -478,6 +508,7 @@ async function startNewRound() {
   result = await setupGuesser({
     // Sets it up and waits for the uh user to be done with it
     className: "s05",
+    index: 1,
     start: 0,
     end: guess1End,
     audio: trackAudio[currentTrackNum].one,
@@ -487,6 +518,7 @@ async function startNewRound() {
     hadCorrect: result?.isCorrect,
     color: gameState.tracks[currentTrackNum].guesses[0] || null,
     userGuess: gameState.tracks[currentTrackNum].userGuess[0] || null,
+    allSongData: currentTrackData,
   });
 
   calcBest(0, result.input);
@@ -505,6 +537,7 @@ async function startNewRound() {
   result = await setupGuesser({
     // Sets it up and waits for the uh user to be done with it
     className: "s1",
+    index: 2,
     start: 0,
     end: guess2End,
     audio: trackAudio[currentTrackNum].two,
@@ -514,6 +547,7 @@ async function startNewRound() {
     hadCorrect: result.isCorrect,
     color: gameState.tracks[currentTrackNum].guesses[1] || null,
     userGuess: gameState.tracks[currentTrackNum].userGuess[1] || null,
+    allSongData: currentTrackData,
   });
 
   calcBest(1, result.input);
@@ -532,6 +566,7 @@ async function startNewRound() {
   result = await setupGuesser({
     // Sets it up and waits for the uh user to be done with it
     className: "sstart",
+    index: 3,
     start: window.gameData.vylet ? 11 : 10,
     end: guess3End,
     audio: trackAudio[currentTrackNum].base,
@@ -541,6 +576,7 @@ async function startNewRound() {
     hadCorrect: result.isCorrect,
     color: gameState.tracks[currentTrackNum].guesses[2] || null,
     userGuess: gameState.tracks[currentTrackNum].userGuess[2] || null,
+    allSongData: currentTrackData,
   });
 
   calcBest(2, result.input);
@@ -570,9 +606,9 @@ function createGuessWrappers() {
     text3 = `0.2s start`;
   }
 
-  list.appendChild(createGuessWrapper(text1, "s05"));
-  list.appendChild(createGuessWrapper(text2, "s1", true));
-  list.appendChild(createGuessWrapper(text3, "sstart", true));
+  list.appendChild(createGuessWrapper(1, text1, "s05"));
+  list.appendChild(createGuessWrapper(2, text2, "s1", true));
+  list.appendChild(createGuessWrapper(3, text3, "sstart", true));
 }
 
 function pushGameState() {
@@ -589,7 +625,7 @@ document.addEventListener(`DOMContentLoaded`, async () => {
     (window.gameData.hardcore ? "hardcore-" : "") +
     (window.gameData.hidden ? "hidden-" : "") +
     (window.gameData.oneshot ? "oneshot-" : "") +
-    (window.gameData.tracks.map((track)=>track.id).join("-"));
+    window.gameData.tracks.map((track) => track.id).join("-");
 
   // Parse the saved state
   if (localStorage.getItem(window.runID) && !window.gameData.waveformInfinite) {
@@ -620,7 +656,11 @@ document.addEventListener(`DOMContentLoaded`, async () => {
 
   // Get autocomplete data
   const autocompleteData = await (
-    await fetch(window.gameData.featherMode ? "/api/songData/autocomplete-feather" : "/api/songData/autocomplete")
+    await fetch(
+      window.gameData.featherMode
+        ? "/api/songData/autocomplete-feather"
+        : "/api/songData/autocomplete"
+    )
   ).json();
 
   window.autocompleteData = autocompleteData;
@@ -671,5 +711,25 @@ document.addEventListener(`DOMContentLoaded`, async () => {
         inputBox.dispatchEvent(new Event("internalSend"));
       }
     }, 500);
+  }
+
+  //
+  if (window.gameData.waveformMode) {
+    const widthBar = document.querySelector(`input[name="width"]`);
+    const heightBar = document.querySelector(`input[name="height"]`);
+    const waveformContainer = document.querySelector(`.waveformContainer`);
+    const waveform = document.querySelector(`.waveform img`);
+
+    widthBar.addEventListener(`input`, () => {
+      const beforeWidthScroll = waveformContainer.scrollLeft / waveform.clientWidth;
+
+      waveform.style.width = `${widthBar.value * 100}%`;
+
+      waveformContainer.scrollLeft = waveform.clientWidth * (beforeWidthScroll);
+    });
+    heightBar.addEventListener(
+      `input`,
+      () => (waveformContainer.style.height = `${heightBar.value * 300}px`)
+    );
   }
 });
