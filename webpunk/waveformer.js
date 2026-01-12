@@ -1,7 +1,7 @@
 const { promisify } = require(`util`)
 const fs = require(`fs`);
 const trackFiles = fs.readdirSync(`../webpunk/data/songs`);
-const { exec } = require(`child_process`);
+const { execSync } = require(`child_process`);
 
 /*async function generateWaveform(inputPath, outputPath) {
   return new Promise((resolve, reject) => {
@@ -20,7 +20,7 @@ const { exec } = require(`child_process`);
 }*/
 
 function generateWaveform(inputPath, outputPath) {
-  return exec(`audiowaveform -i ${inputPath} -o ${outputPath} --width 6000 -z auto -b 16 --height 300 --waveform-color 6561d0 --background-color c7f5ff --amplitude-scale 0.8 --no-axis-labels`) 
+  return execSync(`audiowaveform -i ${inputPath} -o ${outputPath} --width 20000 -z auto -b 16 --height 600 --waveform-color 6561d0 --background-color c7f5ff --amplitude-scale 0.8 --no-axis-labels`) 
 }
 
 // audiowaveform -i ../webpunk/data/downloadCache/antonymph.mp3 -o test2.png --width 6000 -z auto -b 16 --height 300 --waveform-color 6561d0 --background-color c7f5ff --amplitude-scale 0.8 --no-axis-labels 
@@ -36,7 +36,9 @@ module.exports = async () => {
     const location = `../webpunk/data/waveforms/${data.nameId}.png`
 
     if(!fs.existsSync(location)) {
+      console.log(1)
       await generateWaveform(`../webpunk/data/downloadCache/${data.nameId}.mp3`, location)
+      console.log(2)
     }
   }
 //})();

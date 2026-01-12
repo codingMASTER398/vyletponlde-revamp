@@ -4,7 +4,7 @@ const router = express.Router();
 const tracks = require(`../util/tracks`)
 
 router.get("/autocomplete", (req, res)=>{
-  res.set('Cache-Control', 'public, max-age=3600000');
+  res.set('Cache-Control', 'public, max-age=36000');
   res.send(Object.values(tracks).filter((track)=>!track.isFeatherSong).map((track)=>{
     return {
       n: track.title,
@@ -17,7 +17,7 @@ router.get("/autocomplete", (req, res)=>{
 
 
 router.get("/autocomplete-feather", (req, res)=>{
-  res.set('Cache-Control', 'public, max-age=3600000');
+  res.set('Cache-Control', 'public, max-age=36000');
   res.send(Object.values(tracks).filter((track)=>track.isFeatherSong).map((track)=>{
     return {
       n: track.title,
