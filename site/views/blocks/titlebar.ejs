@@ -30,7 +30,6 @@
       <label for="reduceAqua">reduce aquaness</label>
     </div>
     <div>
-      <label for="background">bg</label>
       <select name="background" id="background">
         <option value="none">none</option>
         <option value="maxresdefault.jpg">Silence in Ponyville</option>
@@ -46,11 +45,11 @@
         <option value="antonymph.png">ANTONYMPH</option>
       </select>
     </div>
+    <p id="backgroundArtist"></p>
   </div>
 </div>
 
 <style id="backgroundThemeStyle"></style>
-<p id="backgroundArtist"></p>
 
 <div class="center">
   <a href="/"
@@ -60,7 +59,10 @@
       class="logo"
       alt="Logo: Vylet Ponlde"
   /></a>
+  
+  <% if(locals.isHome) { %>
   <!-- H1 for search engine semantics -->
+
   <div class="navigation">
     <h1 class="tagline">
       the daily
@@ -82,6 +84,8 @@
         >coding398</a
       >
     </p>
+    <% } %>
+
     <br>
     <p>— †† —</p>
     <br>

@@ -11,7 +11,7 @@ document.addEventListener(`DOMContentLoaded`, () => {
 
     let score = 0;
 
-    const parsed = data ? JSON.parse(data) : {tracks:[]};
+    const parsed = data ? JSON.parse(data) : { tracks: [] };
 
     for (
       let ii = Number(element.getAttribute(`indicator-amount`)) - 1;
@@ -23,9 +23,9 @@ document.addEventListener(`DOMContentLoaded`, () => {
       indicators.push(indicator);
 
       if (!parsed.tracks[ii]) {
-        element.prepend(indicator)
+        element.prepend(indicator);
         continue;
-      };
+      }
 
       const guesses = parsed.tracks[ii].guesses;
 
@@ -47,10 +47,11 @@ document.addEventListener(`DOMContentLoaded`, () => {
       else if (best == "yellow") indicator.classList.add(`yellow`);
       else indicator.classList.add(`red`);
 
-      element.prepend(indicator)
+      element.prepend(indicator);
     }
 
-    element.querySelector(`.score`).innerText = `${String(Math.round(score * 2)).padStart(2, "0")}/30`;
+    element.querySelector(`.score`).innerText =
+      `${String(Math.round(score * 2)).padStart(2, "0")}/30`;
   }
 
   window.toLoad--;

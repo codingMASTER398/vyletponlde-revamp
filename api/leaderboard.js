@@ -63,7 +63,7 @@ router.post(`/:date/:mode/:score/:name`, (req, res) => {
   }
 
   if (dbData.scores.find((s) => s.name) == name) {
-    res.status(400).send(`Someone already submitted under ${name}!`);
+    res.status(400).send(`Someone already submitted under "${name}"!`);
     return;
   }
 

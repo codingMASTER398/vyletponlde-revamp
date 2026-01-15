@@ -126,7 +126,7 @@ function updateBackground() {
     background-size: cover;
     background-position: center;
   }`;
-  document.querySelector(`#backgroundArtist`).innerText = `background art by ` + artists[bgElem.value]
+  document.querySelector(`#backgroundArtist`).innerText = `art by ` + artists[bgElem.value]
 }
 
 bgElem.value =

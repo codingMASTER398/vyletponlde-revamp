@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include("blocks/preloads") %> <%- include("blocks/basicHead") %>
+
+    <link rel="stylesheet" href="/css/game.css" />
+    <link rel="stylesheet" href="/css/gameResults.css" />
+    <link rel="stylesheet" href="/css/leaderboard.css" />
+
+    <script>
+      // Ignore the EJS error. We do this instead of calling the API
+      // to save like 200ms. it's SO worth it.
+      window.correctID = <%=correct%>
+      window.guessID = "<%=id%>";
+      window.track = JSON.parse(<%- JSON.stringify(JSON.stringify(track)) %>);
+    </script>
+
+    <!-- Preload other content -->
+    <link rel="preload" href="/audio/click.ogg" as="audio" />
+    <link rel="preload" href="/audio/squee.ogg" as="audio" />
+    <link rel="preload" href="/audio/yay.ogg" as="audio" />
+    <link rel="preload" href="/api/songData/autocomplete" as="fetch" />
+  </head>
+  <body>
+    <%- include("blocks/loader/html") %> <%- include("blocks/loader/script") %>
+    <%- include("blocks/titlebar") %>
+
+    <div class="center gameArea" style="">
+      <h3 class="lyric" style="display: none;">Lyric</h3>
+      <div class="art" style="display: none;">
+        <img>
+      </div>
+
+      <h2>Think you can get it before Vylet?</h2>
+      <p>You only have one guess. Also, don't spoil it for her- just have fun :3</p>
+
+      <div class="songGuessList speedrun">
+        <div class="guessRight">
+          <input class="guessInput" type="text" placeholder="Guess here..." autocomplete="off"/>
+          <div class="resultBox" style="display: none;">
+            <p></p>
+          </div>
+        </div>
+      </div>
+
+      <br>
+    </div>
+
+    <!-- Circles things -->
+
+    <div class="center congrats" style="display: none;">
+      <h1>Nope!</h1>
+      <p>You were wrong.</p>
+      <p><b>Don't spoil it for her</b>, but DO keep this tab open for the next track to guess.</p>
+    </div>
+
+    <!-- Scripts -->
+
+    <script src="/js/minisearch.js"></script>
+    <script src="/js/gameCommunityGuess.js"></script>
+    <script src="/js/gameUI.js"></script>
+    <script src="/js/confetti.js"></script>
+  </body>
+</html>

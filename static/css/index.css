@@ -240,17 +240,18 @@ a:has(.logo) {
   border: 1px solid rgba(150, 150, 150, 0.5);
 }
 
+.indicator {
+  transition: 0.5s;
+}
+
 .indicator.red {
   background-color: #f55962 !important;
-  transition: 1s;
 }
 .indicator.yellow {
   background-color: #fda361 !important;
-  transition: 1s;
 }
 .indicator.green {
   background-color: #6ef4ad !important;
-  transition: 1s;
 }
 
 select {
@@ -261,14 +262,20 @@ select {
   border: 1px solid grey;
   margin-left: 0.5rem;
   border-radius: 4.5px;
-  box-shadow: 0 -3px 3px rgba(0, 0, 0, 0.2) inset,
-  0 3px 3px rgba(200, 200, 200, 0.2) inset;
+  box-shadow:
+    0 -3px 3px rgba(0, 0, 0, 0.2) inset,
+    0 3px 3px rgba(200, 200, 200, 0.2) inset;
 }
 
+/*
 #backgroundArtist {
   position: fixed;
   bottom: 0;
   left: 50%;
   transform: translate(-50%);
   font-family: monospace;
+}*/
+
+#backgroundArtist {
+  margin: 6px;
 }

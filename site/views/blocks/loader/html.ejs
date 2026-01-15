@@ -46,11 +46,12 @@
   }
 
   #loaderWrap.out {
-    animation: loaderOut 0.2s ease-out forwards;
+    animation: loaderOut 1s linear forwards;
   }
   @keyframes loaderOut {
     100% {
       opacity: 0;
+      appearance: none;
       display: none;
       pointer-events: none;
     }

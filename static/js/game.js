@@ -157,17 +157,32 @@ function setupAutoComplete(element) {
 function getRandomHint(data, index) {
   if (index === 2) {
     const minutes = Math.round(data.length / 60);
-    if(!minutes) return `title starts with "${data.title.trim().slice(0, 1).toUpperCase()}"`;
+    if (isNaN(minutes)) return `hint unavailable`;
 
-    return `around ${minutes} minute${minutes == 1 ? "" : "s"} long`;
+    if (minutes <= 1) return `0-1 minutes long`;
+    else if (minutes <= 3) return `2-3 minutes long`;
+    else if (minutes <= 5) return `4-5 minutes long`;
+    else return `more than 5 minutes long`;
   }
 
   if (index === 3) {
-    if (Math.random() > 0.5 || !data.length) {
-      return data.album;
-    } else {
-      return `title starts with "${data.title.trim().slice(0, 1).toUpperCase()}"`;
-    }
+    // Get the actual starting character, and a list of all characters
+    const actual = data.title.trim().slice(0, 1).toUpperCase();
+    const others = `αδ-†ABCDEFGHIJKLMNOPQRSTUVWXYZ`.split("");
+
+    // Get a random "other" character that isn't the actual one
+    const other = others
+      .filter((a) => a != actual)
+      .map((value) => ({ value, sort: Math.random() }))
+      .sort((a, b) => a.sort - b.sort)
+      .map(({ value }) => value)[0];
+
+    // Make a list of both, 50/50 to reverse it
+    let list = [actual, other];
+    if (Math.random() > 0.5) list = list.reverse();
+
+    // And display
+    return `title starts with "${list[0]}" or "${list[1]}"`;
   }
 }
 
@@ -723,11 +738,12 @@ document.addEventListener(`DOMContentLoaded`, async () => {
     const waveform = document.querySelector(`.waveform img`);
 
     widthBar.addEventListener(`input`, () => {
-      const beforeWidthScroll = waveformContainer.scrollLeft / waveform.clientWidth;
+      const beforeWidthScroll =
+        waveformContainer.scrollLeft / waveform.clientWidth;
 
       waveform.style.width = `${widthBar.value * 100}%`;
 
-      waveformContainer.scrollLeft = waveform.clientWidth * (beforeWidthScroll);
+      waveformContainer.scrollLeft = waveform.clientWidth * beforeWidthScroll;
     });
     heightBar.addEventListener(
       `input`,

@@ -16,6 +16,7 @@ const ponlde = require("./ponlde");
 const circlesOfHell = require("./circlesOfHell");
 //const ytChat = require("./youtubeChat");
 const discord = require("./discord");
+const communityGuess = require(`../api/communityGuess`)
 //const archives = require("./archives");
 const tracks = require(`../util/tracks`);
 
@@ -26,6 +27,7 @@ app.use(requestIp.mw());
 app.use("/api", api);
 //app.use("/yt", ytChat);
 app.use("/vyletDiscord", discord);
+app.use("/c", communityGuess)
 
 //app.use("/archive", archives);
 app.use("/", ponlde);
@@ -67,6 +69,7 @@ app.get("/", (_, res) => {
     generateRunID,
     config,
     tracks: Object.values(tracks).filter((s) => !s.isFeatherSong),
+    isHome: true
   });
 });
 //app.get("/homeold", (_, res) => res.render("home"));

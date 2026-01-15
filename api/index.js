@@ -5,5 +5,6 @@ router.use('/audio', require(`./audio`))
 router.use('/songData', require(`./songData`))
 router.use('/game', require(`./game`).router)
 router.use('/leaderboard', require(`./leaderboard`).router)
+router.use('/communityGuess', require(`./communityGuess`))
 
 module.exports = router

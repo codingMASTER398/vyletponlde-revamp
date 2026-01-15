@@ -141,6 +141,20 @@
       <button class="shinyButton blueButton">Next circle</button>
     </div>
 
+    <!-- Community guess -->
+    <% if(locals.gameData.waveformInfinite) { %>
+      <div id="communityGuess" style="display: none;">
+        <div id="qrcode"></div>
+        <div>
+          <p id="correctGuesses">???</p>
+          <p id="guessURL">p.cuti.tv/???</p>
+        </div>
+      </div>
+
+      <script src="/js/qrcode.js"></script>
+      <script src="/js/communityGuess.js" defer></script>
+    <% } %>
+
     <!-- Scripts -->
 
     <script src="/js/minisearch.js"></script>
@@ -148,5 +162,6 @@
     <script src="/js/gameUI.js"></script>
     <script src="/js/confetti.js"></script>
     <script src="/js/hey.js"></script>
+
   </body>
 </html>

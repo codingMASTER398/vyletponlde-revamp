@@ -14,7 +14,7 @@ const badWords = [
   "FAG", "FA6", "F4G", "PHAG",
   "DYKE", "DIKE", "DAIK",
   "CRAP", "CRVP", "CR4P",
-  "JIZZ", "J1ZZ", "JIZ", "JZ",
+  "JIZZ", "J1ZZ", "JIZ",
   "WANK", "WANC", "W4NK",
   "BLOW", "BL0W", "BLOH",
   "SUCK", "SUC", "SUKK",
@@ -24,8 +24,6 @@ const badWords = [
   "NIGG", "N1GG", "NI66", "NIG",
   "KILL", "K1LL", "KIL",
   "DEAD", "DED", "D34D",
-  "GAY", "G4Y", "GHEY",
-  "LESB", "LEZ", "LEZZ",
   "FAP", "F4P", "FOP",
   "DIE", "D1E", "D13",
   "SUIC", "SUI", "SUYK",
@@ -33,7 +31,7 @@ const badWords = [
   "MOAN", "M0AN", "M0N",
   "BDSM", "BDSM", "BDSN",
   "BANG", "BNG", "B4NG",
-  "SEXY", "SEXX", "S3XY", "SXY"
+  "SEXY", "SEX", "S3XY", "SXY"
 ];
 
 module.exports = (name)=>{

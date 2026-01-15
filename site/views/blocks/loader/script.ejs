@@ -84,7 +84,7 @@
     document.querySelector(`#loaderWrap`).classList.add(`dark`);
   }
 
-  window.toLoad = 3;
+  window.toLoad = 2;
 
   for (let i = 0; i < loadingColours.length; i++) {
     setTimeout(() => {
@@ -93,10 +93,6 @@
           return `<div style="background: ${Colour}"></div>`;
         })
         .join("");
-
-      if (i == loadingColours.length - 1) {
-        window.toLoad--;
-      }
     }, i * 60);
   }
 

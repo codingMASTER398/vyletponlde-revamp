@@ -6,6 +6,11 @@ const gameAPI = require(`../api/game`);
 const db = require(`../db/db`);
 const leaderboard = require(`../api/leaderboard.js`);
 
+router.use((req, res, next)=>{
+  res.set('Cache-Control', 'no-cache, must-revalidate');
+  next();
+})
+
 // Infinites
 router.get(`/infinite`, (req, res) => {
   const gameData = {
