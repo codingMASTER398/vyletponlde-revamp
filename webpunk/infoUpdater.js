@@ -293,10 +293,10 @@ async function updateSingles() {
 
 module.exports = async () => {
   console.log(`Updating albums list...`);
-  //await updateAlbumsList();
+  await updateAlbumsList();
 
   console.log(`Updating albums...`);
-  //await updateAlbums();
+  await updateAlbums();
 
   console.log(`Updating singles...`);
   await updateSingles();

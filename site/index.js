@@ -15,7 +15,6 @@ const api = require("../api/index");
 const ponlde = require("./ponlde");
 const circlesOfHell = require("./circlesOfHell");
 //const ytChat = require("./youtubeChat");
-const discord = require("./discord");
 const communityGuess = require(`../api/communityGuess`)
 //const archives = require("./archives");
 const tracks = require(`../util/tracks`);
@@ -26,7 +25,6 @@ app.use(requestIp.mw());
 
 app.use("/api", api);
 //app.use("/yt", ytChat);
-app.use("/vyletDiscord", discord);
 app.use("/c", communityGuess)
 
 //app.use("/archive", archives);
@@ -41,19 +39,21 @@ app.get("/", (_, res) => {
       .find({
         mode: "normal",
       })
-      .reverse(),
+      .reverse()
+      .slice(0, 100),
     archiveEasy: db
       .days()
       .find({
         mode: "easy",
       })
-      .reverse(),
+      .reverse()
+      .slice(0, 100),
     archiveLyric: db
       .days()
       .find({
         mode: "lyric",
       })
-      .reverse(),
+      .reverse().slice(0, 100),
     archiveArt: db
       .days()
       .find({
@@ -65,7 +65,7 @@ app.get("/", (_, res) => {
       .find({
         mode: "waveform",
       })
-      .reverse(),
+      .reverse().slice(0, 100),
     generateRunID,
     config,
     tracks: Object.values(tracks).filter((s) => !s.isFeatherSong),

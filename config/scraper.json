@@ -37,7 +37,11 @@
     "the-yak-song-demo1-22-august-2021",
     "atychiphobia-vylet-remix",
     "madeleines-2",
-    "get-sexy"
+    "get-sexy",
+    "flying-kites-and-something-normal",
+    "the-prince-of-sorrow-suite",
+    "snarl-at-your-friends-2",
+    "ni4ni-instrumental"
   ],
   "ALBUM_EXCLUDES": ["tempest-live-version", "little-dreams-live-2019"],
   "ACRONYMS": {
@@ -75,6 +79,7 @@
     "--12": ["morse", "morse code", "mc", "mystic"],
     "12-days-of-1337mas-as-performed-by-the-pilford-squadron-seasonal-choral-group": [
       "leetmas", "1337mas"
-    ]
+    ],
+    "--5": ["interrobang"]
   }
 }

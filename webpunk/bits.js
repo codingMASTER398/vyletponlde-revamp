@@ -37,9 +37,7 @@ async function process(inputName, outFile) {
     fadeClip, startClip
   ], `./data/bits/base/${outFile}.ogg`)
 
-  fs.rmdirSync(dir, {
-    recursive: true
-  })
+  fs.rmSync(dir, { recursive: true, force: true });
 }
 
 // Process the bits
@@ -49,9 +47,7 @@ function sleep(ms) {
 }
 
 module.exports =  (async () => {
-  fs.rmdirSync(`./data/processingWork`, {
-    recursive: true
-  })
+  fs.rmSync(`./data/processingWork`, { recursive: true, force: true });
   fs.mkdirSync(`./data/processingWork`)
 
   for (let i = 0; i < downloads.length; i++) {
